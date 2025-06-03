@@ -118,9 +118,18 @@ def load_data(
 
     return input_tensor, target_tensor
 
-input_features = ["TA_1_1_1", "RH_1_1_1", "VPD_1_1_1", "COND_WATER_1_1_1"]
-target_features = ["NEE", "GPP_U95_f"]
 
+file_name = "AMF_CA-DSM_BASE_HH_local_prepping.csv"
 
-input_tensor, target_tensor = load_data("AMF_CA-DSM_BASE_HH_local_prepping.csv", input_features, target_features)
-print(input_tensor.shape, target_tensor.shape)
+gpp_input_features = ["TA_1_1_1", "RH_1_1_1", "VPD_1_1_1", "COND_WATER_1_1_1"]
+gpp_target_features = ["NEE", "GPP_U95_f"]
+
+gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
+print(gpp_input_tensor.shape, gpp_target_tensor.shape)
+
+reco_input_features = ["COND_WATER_1_1_1"]
+reco_target_features = ["NEE"]
+
+reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
+print(reco_input_tensor.shape, reco_target_tensor.shape)
+
