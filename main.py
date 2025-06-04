@@ -27,7 +27,7 @@ class SNN_RECO(nn.Module):
         return self.net(x)
 
 
-def train(): 
+def fit(): 
   # Instantiate models
   input_dim_gpp = 10  # adjust based on your actual input features
   input_dim_reco = 5
@@ -127,9 +127,14 @@ gpp_target_features = ["NEE", "GPP_U95_f"]
 gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
 print(gpp_input_tensor.shape, gpp_target_tensor.shape)
 
-reco_input_features = ["COND_WATER_1_1_1"]
+
+reco_input_features = ["SW_IN_1_1_1"]
 reco_target_features = ["NEE"]
 
 reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
 print(reco_input_tensor.shape, reco_target_tensor.shape)
+
+torch.set_printoptions(profile="full")
+torch.set_printoptions(linewidth=200)
+print(f" The SW_IN_1_1_1 tensor was: {reco_input_tensor.t()}")
 
