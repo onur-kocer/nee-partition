@@ -125,16 +125,16 @@ def pair_plotter(data):
     # Takes in a torch tensor of shape n x 2 (where n is num data points)
     # example: data = your_tensor  # Shape: [87647, 2]
     measurement1 = data[:, 0].numpy()
-    # measurement2 = data[:, 1].numpy()
+    measurement2 = data[:, 1].numpy()
 
     plt.figure(figsize=(15, 5))
     # to see as individual lines
     plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1,  alpha=0.8)
-    # plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
+    plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
     
     # for comparing data distribution
     plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1')
-    # plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2')
+    plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2')
 
     plt.legend()
     plt.title("Time-Series of Measurements")
@@ -161,23 +161,43 @@ def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
         daily_avg (torch.Tensor): [N, D] — repeated daily average per block
         daily_diff (torch.Tensor): [N, D] — repeated daily difference per block
     """
+    
     N, D = data.shape
-    assert N % block_size == 0, "Data length must be divisible by block size"
-    num_blocks = N // block_size
+    num_full_blocks = N // block_size
+    remainder = N % block_size
 
     # === Half-hourly difference ===
     half_hourly_diff = torch.zeros_like(data)
     half_hourly_diff[1:] = data[1:] - data[:-1]
+    
 
+    # === Get full blocks (i.e of block size 48) ===
+    full_data = data[:num_full_blocks * block_size]
+    reshaped = full_data.view(num_full_blocks, block_size, D)
+    
     # === Daily averages ===
-    reshaped = data.view(num_blocks, block_size, D)
     block_means = reshaped.mean(dim=1)  # [num_blocks, D]
-    avg_expanded = block_means.unsqueeze(1).expand(-1, block_size, -1).reshape(N, D)
-
-    # === Daily differences ===
     block_diffs = torch.zeros_like(block_means)
-    block_diffs[1:] = block_means[1:] - block_means[:-1]
-    diff_expanded = block_diffs.unsqueeze(1).expand(-1, block_size, -1).reshape(N, D)
+    # === Daily differences ===
+    block_diffs[1:] = block_means[1:] - block_means[:-1]   # [num_blocks, D]
+
+    # === Expand to full part ===
+    avg_expanded = block_means.unsqueeze(1).expand(-1, block_size, -1).reshape(-1, D)
+    diff_expanded = block_diffs.unsqueeze(1).expand(-1, block_size, -1).reshape(-1, D)
+
+    # === Handle trailing part === 
+    # === Not mandatory. Just needed to ensure similar data set size for each feature ===
+    if remainder > 0:
+        # Use last full block's mean and diff for trailing entries
+        last_avg = block_means[-1].unsqueeze(0).expand(remainder, -1)
+        last_diff = block_diffs[-1].unsqueeze(0).expand(remainder, -1)
+
+        avg_expanded = torch.cat([avg_expanded, last_avg], dim=0)
+        diff_expanded = torch.cat([diff_expanded, last_diff], dim=0)
+
+    # Final check
+    assert avg_expanded.shape == data.shape
+    assert diff_expanded.shape == data.shape
 
     return half_hourly_diff, avg_expanded, diff_expanded
 
@@ -206,6 +226,7 @@ torch.set_printoptions(linewidth=200)
 # if block size 48, then makes sense to name it half_hourly_diff, or it could be made hourly for block size 24.
 half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
 all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
+print("okocer final vers Jun 16")
 print(all_catted.size())
 print(all_catted)
 # pair_plotter(all_catted)
@@ -214,3 +235,5 @@ print(all_catted)
 
 # import pdb; pdb.set_trace()
 # print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
+
+# pair_plotter(gpp_input_tensor)
