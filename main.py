@@ -124,16 +124,16 @@ def pair_plotter(data):
     # Plots two variables on the same graph.
     # Takes in a torch tensor of shape n x 2 (where n is num data points)
     # example: data = your_tensor  # Shape: [87647, 2]
-    # measurement1 = data[:, 0].numpy()
-    measurement2 = data[:, 1].numpy()
+    measurement1 = data[:, 0].numpy()
+    # measurement2 = data[:, 1].numpy()
 
     plt.figure(figsize=(15, 5))
     # to see as individual lines
-    # plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1,  alpha=0.8)
-    plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
+    plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1,  alpha=0.8)
+    # plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
     
     # for comparing data distribution
-    # plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1')
+    plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1')
     # plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2')
 
     plt.legend()
@@ -147,85 +147,70 @@ def pair_plotter(data):
 
 def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
     """
-    Computes blockwise averages and differences between consecutive blocks,
-    then expands both to the original shape.
+    Computes:
+    1. Half-hourly diffs (data[t+1] - data[t]) with 0 prepended.
+    2. Daily block averages, repeated to original shape.
+    3. Daily differences between block means, repeated to original shape.
 
     Args:
         data (torch.Tensor): Input tensor of shape [N, D]
-        block_size (int): Size of each block (e.g., 48 for daily averages if half-hourly)
+        block_size (int): Block size (e.g., 48 for half-hourly data to get daily stats)
 
     Returns:
-        avg_expanded (torch.Tensor): Tensor of shape [N, D] with blockwise averages repeated
-        diff_expanded (torch.Tensor): Tensor of shape [N, D] with blockwise day-to-day differences repeated
+        half_hourly_diff (torch.Tensor): [N, D] — difference between each time point and the previous
+        daily_avg (torch.Tensor): [N, D] — repeated daily average per block
+        daily_diff (torch.Tensor): [N, D] — repeated daily difference per block
     """
     N, D = data.shape
     assert N % block_size == 0, "Data length must be divisible by block size"
     num_blocks = N // block_size
 
-    # Step 1: Reshape to [num_blocks, block_size, D]
+    # === Half-hourly difference ===
+    half_hourly_diff = torch.zeros_like(data)
+    half_hourly_diff[1:] = data[1:] - data[:-1]
+
+    # === Daily averages ===
     reshaped = data.view(num_blocks, block_size, D)
+    block_means = reshaped.mean(dim=1)  # [num_blocks, D]
+    avg_expanded = block_means.unsqueeze(1).expand(-1, block_size, -1).reshape(N, D)
 
-    # Step 2: Compute block averages [num_blocks, D]
-    block_means = reshaped.mean(dim=1)  # shape: [num_blocks, D]
-
-    # Step 3: Compute daily differences [num_blocks, D]
-    # First difference will be 0 or can be NaN if preferred
+    # === Daily differences ===
     block_diffs = torch.zeros_like(block_means)
     block_diffs[1:] = block_means[1:] - block_means[:-1]
+    diff_expanded = block_diffs.unsqueeze(1).expand(-1, block_size, -1).reshape(N, D)
 
-    # Step 4: Expand both [num_blocks, D] -> [num_blocks, block_size, D]
-    avg_expanded = block_means.unsqueeze(1).expand(-1, block_size, -1)
-    diff_expanded = block_diffs.unsqueeze(1).expand(-1, block_size, -1)
-
-    # Step 5: Reshape back to [N, D]
-    return avg_expanded.reshape(N, D), diff_expanded.reshape(N, D)
+    return half_hourly_diff, avg_expanded, diff_expanded
 
 
 # file_name = "AMF_CA-DSM_BASE_HH_local_prepping.csv"
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 
-# gpp_input_features = ["TA_1_1_1", "RH_1_1_1", "VPD_1_1_1", "COND_WATER_1_1_1"]
-# gpp_target_features = ["NEE", "GPP_U95_f"]
+# GPP NN INPUT AND TARGET FEATURES.
+gpp_input_features = ["NEE_PI_SC_JSZ_MAD_RP_uStar_orig", "NEE_PI_SC_JSZ_MAD_RP_uStar_f"]
+gpp_target_features = ["NEE", "GPP_U95_f"]
+gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
+print("jpp", gpp_input_tensor.shape, gpp_target_tensor.shape)
 
-# gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
-# print(gpp_input_tensor.shape, gpp_target_tensor.shape)
 
-
+# RECO NN INPUT AND TARGET FEATURES.
 reco_input_features = ["PotRad_uStar"]
 reco_target_features = ["NEE"]
-
 reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
-print(reco_input_tensor.shape, reco_target_tensor.shape)
+print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
+
 
 
 torch.set_printoptions(profile="full")
 torch.set_printoptions(linewidth=200)
-# print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
 
-
-# pair_plotter(reco_input_tensor)
-# measurement1 = data[:, 0].numpy()
-# measurement2 = data[:, 1].numpy()
-# torch.Size([86160, 1])
-
-
-half_hourly_diff = torch.sub(reco_input_tensor[1:], reco_input_tensor[0:-1])
-# pad the half_hourly_diffative by one extra entry at the beginning as the output is one entry smaller.
-half_hourly_diff = torch.cat((torch.tensor([[0]]), half_hourly_diff), 0)
-print(half_hourly_diff.size())
-
-pair = torch.cat((reco_input_tensor, half_hourly_diff), 1)
-
-# import pdb; pdb.set_trace()
-# works.
-# print(pair)
-# pair_plotter(pair)
-
-
-daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
-
-
+# if block size 48, then makes sense to name it half_hourly_diff, or it could be made hourly for block size 24.
+half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
 all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
 print(all_catted.size())
 print(all_catted)
-# print(torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff)), 1)
+# pair_plotter(all_catted)
+
+
+
+# import pdb; pdb.set_trace()
+# print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
