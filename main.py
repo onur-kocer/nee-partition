@@ -143,6 +143,44 @@ def pair_plotter(data):
     plt.grid(True)
     plt.show()
 
+def quad_plotter(data) :
+    measurement1 = data[:, 0].numpy()
+    measurement2 = data[:, 1].numpy()
+    measurement3 = data[:, 2].numpy()
+    measurement4 = data[:, 3].numpy()
+
+    plt.figure(figsize=(15, 5))
+
+    # Line plots for each measurement
+    plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1, alpha=0.8)
+    plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1, alpha=0.8)
+    plt.plot(measurement3, label='Measurement 3', color='green', linewidth=1, alpha=0.8)
+    plt.plot(measurement4, label='Measurement 4', color='red', linewidth=1, alpha=0.8)
+
+    plt.legend()
+    plt.title("Line Plot of Measurements")
+    plt.xlabel("Index")
+    plt.ylabel("Value")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+    # Histogram comparison
+    plt.figure(figsize=(15, 5))
+    plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1', color='blue')
+    plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2', color='orange')
+    plt.hist(measurement3, bins=100, alpha=0.5, label='Measurement 3', color='green')
+    plt.hist(measurement4, bins=100, alpha=0.5, label='Measurement 4', color='red')
+
+    plt.legend()
+    plt.title("Histogram of Measurements")
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
 
 
 def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
@@ -229,7 +267,7 @@ all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_di
 print("okocer final vers Jun 16")
 print(all_catted.size())
 print(all_catted)
-# pair_plotter(all_catted)
+quad_plotter(all_catted)
 
 
 
