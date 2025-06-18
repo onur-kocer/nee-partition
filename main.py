@@ -4,6 +4,10 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import pandas as pd
 from typing import List, Tuple
+import pandas as pd
+from datetime import datetime
+
+
 
 class SNN_GPP(nn.Module):
     def __init__(self, input_dim):
@@ -68,14 +72,35 @@ def fit():
       print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
 
 
+def compute_doy_sin_cos(date_strings):
+    """
+    Given a 1D torch tensor of strings in format 'YYYY-MM-DD',
+    return DOY_sin and DOY_cos as torch tensors.
+    """
+    dates = [datetime.strptime(date_str, "%Y-%m-%d") for date_str in date_strings]
 
+    # Day of year
+    doy = torch.tensor([d.timetuple().tm_yday for d in dates], dtype=torch.float32)
+
+    # Days in year (handle leap years)
+    days_in_year = torch.tensor([366 if (d.year % 4 == 0 and (d.year % 100 != 0 or d.year % 400 == 0)) else 365 for d in dates], dtype=torch.float32)
+
+    # Compute angles
+    angle = 2 * torch.pi * doy / days_in_year
+
+    # Compute sin and cos
+    doy_sin = torch.sin(angle)
+    doy_cos = torch.cos(angle)
+
+    return doy_sin, doy_cos
 
 
 def load_data(
     file_path: str,
     input_features: List[str],
     target_features: List[str],
-    dropna: bool = False
+    dropna: bool = False,
+    prep_doy_sin_cos: bool = True
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     """
     Loads the dataset, processes it, and returns input and target tensors.
@@ -85,22 +110,25 @@ def load_data(
         input_features (List[str]): Features to be used as input to the model.
         target_features (List[str]): Features to be used as targets for loss calculation.
         dropna (bool): If True, drop rows with NaN in selected columns.
+        prep_doy_sin_cos (bool): If True, prep the DOY sin cos vals based on DATE (Dates are formatted as YYYY-MM-DD)
 
     Returns:
         Tuple[torch.Tensor, torch.Tensor]: Input and target tensors.
     """
     # Load the CSV
     df = pd.read_csv(file_path)
-    # df = pd.read_csv(file_path, delimiter=",", engine="python")
 
     # ignore for now
     # Replace -9999 with NaN
     # df.replace(-9999, pd.NA, inplace=True)
+    
+    if prep_doy_sin_cos:
+        df["DOY_sin"], df["DOY_cos"] = compute_doy_sin_cos(df["DATE"])
+        torch.set_printoptions(profile="full")
+        torch.set_printoptions(linewidth=200)
 
-    # Ignore for now.
-    # # Convert timestamps to datetime
-    # df["TIMESTAMP_START"] = pd.to_datetime(df["TIMESTAMP_START"], format="%Y%m%d%H%M")
-    # df["TIMESTAMP_END"] = pd.to_datetime(df["TIMESTAMP_END"], format="%Y%m%d%H%M")
+        # print(df["DOY_sin"], df["DOY_cos"])
+
 
     # Select only the required columns
     data = df[input_features + target_features]
@@ -129,19 +157,33 @@ def pair_plotter(data):
 
     plt.figure(figsize=(15, 5))
     # to see as individual lines
-    plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1,  alpha=0.8)
-    plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
-    
-    # for comparing data distribution
-    plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1')
-    plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2')
+    # plt.plot(measurement1, label='Measurement 1', color='blue', linewidth=1,  alpha=0.8)
+    # plt.plot(measurement2, label='Measurement 2', color='orange', linewidth=1,  alpha=0.8)
+    plt.scatter(range(len(measurement1)), measurement1, label='Measurement 1', color='blue', s=10, alpha=0.8)
+    # plt.scatter(range(len(measurement2)), measurement2, label='Measurement 2', color='orange', s=10, alpha=0.8)
 
+    
     plt.legend()
     plt.title("Time-Series of Measurements")
     plt.xlabel("Time")
     plt.ylabel("Measurement Value")
     plt.grid(True)
     plt.show()
+
+
+    # for comparing data distribution
+    plt.hist(measurement1, bins=100, alpha=0.5, label='Measurement 1')
+    plt.hist(measurement2, bins=100, alpha=0.5, label='Measurement 2')
+
+    plt.legend()
+    plt.title("Histogram of Measurements")
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
 
 def quad_plotter(data) :
     measurement1 = data[:, 0].numpy()
@@ -240,6 +282,8 @@ def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
     return half_hourly_diff, avg_expanded, diff_expanded
 
 
+
+
 # file_name = "AMF_CA-DSM_BASE_HH_local_prepping.csv"
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 
@@ -251,7 +295,7 @@ print("jpp", gpp_input_tensor.shape, gpp_target_tensor.shape)
 
 
 # RECO NN INPUT AND TARGET FEATURES.
-reco_input_features = ["PotRad_uStar"]
+reco_input_features = ["DOY_sin", "DOY_cos"]
 reco_target_features = ["NEE"]
 reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
 print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
@@ -261,17 +305,19 @@ print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
 torch.set_printoptions(profile="full")
 torch.set_printoptions(linewidth=200)
 
+# getting  the block_average_and_diff_expand
 # if block size 48, then makes sense to name it half_hourly_diff, or it could be made hourly for block size 24.
-half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
-all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
-print("okocer final vers Jun 16")
-print(all_catted.size())
-print(all_catted)
-quad_plotter(all_catted)
+# half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
+# all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
+# print("okocer final vers Jun 16")
+# print(all_catted.size())
+# quad_plotter(all_catted)
 
 
-
+print(reco_input_tensor[0::48])
 # import pdb; pdb.set_trace()
-# print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
+# DOY_sin, DOY_cos = get_doy_sin_cos(reco_input_tensor)
 
+# print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
+# print(gpp_input_tensor)
 # pair_plotter(gpp_input_tensor)
