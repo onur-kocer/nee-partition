@@ -184,7 +184,6 @@ def pair_plotter(data):
     plt.show()
 
 
-
 def quad_plotter(data) :
     measurement1 = data[:, 0].numpy()
     measurement2 = data[:, 1].numpy()
@@ -226,8 +225,6 @@ def quad_plotter(data) :
     plt.grid(True)
     plt.tight_layout()
     plt.show()
-
-
 
 
 def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
@@ -286,7 +283,8 @@ def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
 
     return half_hourly_diff, avg_expanded, diff_expanded
 
-def compute_gpp_prox (sw_in, nee, block_size: int = 48):
+
+def compute_gpp_prox_and_nightly_nee_avg (sw_in, nee, block_size: int = 48):
     """
     Computes GPP_prox from half-hourly SW_IN and NEE data.
         GPP_PROX = (NEEDAY − NEENIGHT ) ∗ k 
@@ -324,20 +322,19 @@ def compute_gpp_prox (sw_in, nee, block_size: int = 48):
 
     # Compute daily averages
     nee_day_avg = (nee * is_day).sum(dim=1) / day_counts
-    nee_night_avg = (nee * is_night).sum(dim=1) / night_counts
+    nee_night_avg = (nee * is_night).sum(dim=1) / night_counts  # shape [D]
 
     # Final GPP_prox
-    gpp_prox_daily = (nee_day_avg - nee_night_avg) * k
+    gpp_prox_daily = (nee_day_avg - nee_night_avg) * k  # shape [D]
     
-    gpp_prox_full = gpp_prox_daily.repeat_interleave(block_size)
+    gpp_prox_full = gpp_prox_daily.repeat_interleave(block_size)    # shape [N]
+    nee_night_full = nee_night_avg.repeat_interleave(block_size)    # shape [N]
 
-    return gpp_prox_full
+    return gpp_prox_full, nee_night_full
 
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
 
-
-# def 
 
 
 # file_name = "AMF_CA-DSM_BASE_HH_local_prepping.csv"
@@ -348,13 +345,9 @@ file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 gpp_input_features = ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
 gpp_target_features = []
 gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
+# you get back a torch tensor
 print("jpp", gpp_input_tensor.shape, gpp_target_tensor.shape)
 
-
-# prep_gpp_prox = True
-# if prep_gpp_prox:
-#     print("... Calculating GPPprox")
-#     df = compute_gpp_prox(df["SW_IN"], df["NEE"])
 
 
 
@@ -364,11 +357,11 @@ reco_target_features = ["SW_IN", "NEE"]
 reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
 # print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
 # pair_plotter(reco_target_tensor)
-gpp_prox = compute_gpp_prox(reco_target_tensor[:,0], reco_target_tensor[:,1])
+gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(reco_target_tensor[:,0], reco_target_tensor[:,1])
 # import pdb; pdb.set_trace()
 
 
-# quad_plotter(torch.cat((reco_input_tensor, reco_input_tensor, gpp_target_tensor), 1))
+pair_plotter(torch.stack((gpp_prox, nightly_nee_average), 1))
 
 
 
@@ -376,15 +369,13 @@ torch.set_printoptions(profile="full")
 torch.set_printoptions(linewidth=200)
 print(gpp_prox)
 print(gpp_prox.shape)
-pair_plotter(torch.stack((gpp_prox, gpp_prox), 1))
+# pair_plotter(torch.stack((gpp_prox, gpp_prox), 1))
 
 # getting  the block_average_and_diff_expand
 # if block size 48, then makes sense to name it half_hourly_diff, or it could be made hourly for block size 24.
 # half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
 # all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
-# print("okocer final vers Jun 16")
-# print(all_catted.size())
-# quad_plotter(all_catted)
+
 
 
 # import pdb; pdb.set_trace()
