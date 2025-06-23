@@ -6,7 +6,7 @@ import pandas as pd
 from typing import List, Tuple
 import pandas as pd
 from datetime import datetime
-
+import math
 
 
 class SNN_GPP(nn.Module):
@@ -332,6 +332,30 @@ def compute_gpp_prox_and_nightly_nee_avg (sw_in, nee, block_size: int = 48):
 
     return gpp_prox_full, nee_night_full
 
+
+def wind_direction_to_cos_sin (wind_deg: torch.Tensor) -> torch.Tensor:
+    """
+    Converts wind direction in degrees to a 2D unit vector (cos, sin) representation.
+
+    Args:
+        wind_deg (torch.Tensor): Wind directions in degrees, shape [N]
+
+    Returns:
+        torch.Tensor: Tensor of shape [N, 2], where [:,0] is cos(deg), [:,1] is sin(deg)
+    """
+    # Convert degrees to radians
+    wind_rad = wind_deg * math.pi / 180.0
+
+    # Compute cosine and sine
+    cos_vals = torch.cos(wind_rad)
+    sin_vals = torch.sin(wind_rad)
+
+    # Combine into a single tensor
+    wind_vec = torch.stack((cos_vals, sin_vals), dim=1)
+
+    return wind_vec
+
+
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
 
@@ -361,14 +385,20 @@ gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(reco_target
 # import pdb; pdb.set_trace()
 
 
-pair_plotter(torch.stack((gpp_prox, nightly_nee_average), 1))
+reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "NEEnight"]
+reco_target_features = ["WD"]
+reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
+print(reco_target_tensor.shape)
 
 
+wd_cos_sin = wind_direction_to_cos_sin(reco_target_tensor)
+
+pair_plotter(torch.stack((reco_target_tensor, reco_target_tensor), 1))
 
 torch.set_printoptions(profile="full")
 torch.set_printoptions(linewidth=200)
-print(gpp_prox)
-print(gpp_prox.shape)
+# print(gpp_prox)
+# print(gpp_prox.shape)
 # pair_plotter(torch.stack((gpp_prox, gpp_prox), 1))
 
 # getting  the block_average_and_diff_expand
