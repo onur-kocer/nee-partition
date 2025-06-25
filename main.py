@@ -130,6 +130,7 @@ def load_data(
 
         # print(df["DOY_sin"], df["DOY_cos"])
 
+
     # Select only the required columns
     data = df[input_features + target_features] 
 
@@ -236,7 +237,7 @@ def block_average_and_diff_expand(data: torch.Tensor, block_size: int):
 
     Args:
         data (torch.Tensor): Input tensor of shape [N, D]
-        block_size (int): Block size (e.g., 48 for half-hourly data to get daily stats)
+        block_size (int): Block size (e.g., 48 for half-hourly data to get daily stats, or 24 for hourly data)
 
     Returns:
         half_hourly_diff (torch.Tensor): [N, D] — difference between each time point and the previous
@@ -356,62 +357,78 @@ def wind_direction_to_cos_sin (wind_deg: torch.Tensor) -> torch.Tensor:
     return wind_vec
 
 
+
+
+
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
 
+def prepare_data_using_csv (file_name):
+    # 1. First prep the pot radiation half hourly diff, daily average, and daily average diff
+    
+    pot_rad_half_hourly, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
+    half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size=48)
+    all_pot_rad_data = torch.cat((pot_rad_half_hourly, half_hourly_diff, daily_avg, daily_diff), 1)
 
 
-# file_name = "AMF_CA-DSM_BASE_HH_local_prepping.csv"
+    # 2. For wind direction, convert degrees (0 to 360) into sin/cos representation
+    wd, _ = load_data("data/{}".format(file_name), ["WD"], [])
+    wd_cos_sin = wind_direction_to_cos_sin(wd) # returns an N x 2 torch tensor. Column [:,0] is cos, [:,1] is sin representation.
+
+    
+    # 3. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE
+    sw_in, _ = load_data("data/{}".format(file_name), ["SW_IN"], [])
+    nee, _ = load_data("data/{}".format(file_name), ["NEE"], [])
+    gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
+
+    # 4. Calculate Day of Year Cos/Sine
+    doy_cos_sin, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
+
+
+    import pdb; pdb.set_trace()
+    # GPP NN INPUT AND TARGET FEATURES. 
+    gpp_input_features = ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
+    gpp_target_features = []
+    gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
+    # you get back a torch tensor
+    print("GPP CSV tensors", gpp_input_tensor.shape, gpp_target_tensor.shape)
+
+    
+
+
+    # RECO NN INPUT AND TARGET FEATURES.
+    reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEEnight"]
+    reco_target_features = ["SW_IN", "NEE"]
+    reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
+    # print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
+    # pair_plotter(reco_target_tensor)
+    gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(reco_target_tensor[:,0], reco_target_tensor[:,1])
+    pair_plotter(torch.stack((gpp_prox, nightly_nee_average), 1))
+
+
+    reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "NEEnight"]
+    reco_target_features = ["WD"]
+    reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
+    # print(reco_target_tensor.shape)
+
+
+    
+
+    # pair_plotter(torch.stack((reco_target_tensor, reco_target_tensor), 1))
+
+    torch.set_printoptions(profile="full")
+    torch.set_printoptions(linewidth=200)
+
+
+
+
+
+
+
+    # print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
+    # print(gpp_input_tensor)
+    # pair_plotter(gpp_input_tensor)
+    # # print(reco_input_tensor[0::48]) # printing every 48th element
+
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-# prep_data_using_third_stage_csv() 
-
-# GPP NN INPUT AND TARGET FEATURES.
-gpp_input_features = ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
-gpp_target_features = []
-gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
-# you get back a torch tensor
-print("jpp", gpp_input_tensor.shape, gpp_target_tensor.shape)
-
-
-
-
-# RECO NN INPUT AND TARGET FEATURES.
-reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEEnight"]
-reco_target_features = ["SW_IN", "NEE"]
-reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
-# print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
-# pair_plotter(reco_target_tensor)
-gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(reco_target_tensor[:,0], reco_target_tensor[:,1])
-# import pdb; pdb.set_trace()
-
-
-reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "NEEnight"]
-reco_target_features = ["WD"]
-reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
-print(reco_target_tensor.shape)
-
-
-wd_cos_sin = wind_direction_to_cos_sin(reco_target_tensor)
-
-pair_plotter(torch.stack((reco_target_tensor, reco_target_tensor), 1))
-
-torch.set_printoptions(profile="full")
-torch.set_printoptions(linewidth=200)
-# print(gpp_prox)
-# print(gpp_prox.shape)
-# pair_plotter(torch.stack((gpp_prox, gpp_prox), 1))
-
-# getting  the block_average_and_diff_expand
-# if block size 48, then makes sense to name it half_hourly_diff, or it could be made hourly for block size 24.
-# half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(reco_input_tensor, block_size=48)
-# all_catted = torch.cat((reco_input_tensor, half_hourly_diff, daily_avg, daily_diff), 1)
-
-
-
-# import pdb; pdb.set_trace()
-# DOY_sin, DOY_cos = get_doy_sin_cos(reco_input_tensor)
-
-# print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
-# print(gpp_input_tensor)
-# pair_plotter(gpp_input_tensor)
-# # print(reco_input_tensor[0::48]) # printing every 48th element
+prepare_data_using_csv(file_name)
