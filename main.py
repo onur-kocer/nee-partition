@@ -357,7 +357,28 @@ def wind_direction_to_cos_sin (wind_deg: torch.Tensor) -> torch.Tensor:
     return wind_vec
 
 
+def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Normalizes each feature in X independently using:
+        X_norm = 2 * ((X - X_min) / (X_max - X_min) - 0.5)
 
+    Args:
+        X (torch.Tensor): Input tensor of shape [N, D]
+
+    Returns:
+        X_norm (torch.Tensor): Normalized tensor of shape [N, D]
+        X_min (torch.Tensor): Minimum values per feature [D]
+        X_max (torch.Tensor): Maximum values per feature [D]
+    """
+    X_min = X.min(dim=0).values
+    X_max = X.max(dim=0).values
+
+    # Prevent division by zero
+    range_ = (X_max - X_min).clamp(min=1e-8)
+
+    X_norm = 2 * ((X - X_min) / range_ - 0.5)
+
+    return X_norm, X_min, X_max
 
 
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
@@ -384,18 +405,26 @@ def prepare_data_using_csv (file_name):
     # 4. Calculate Day of Year Cos/Sine
     doy_cos_sin, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
 
+    
+    # All looks good above. Now do some normalization.
 
-    import pdb; pdb.set_trace()
-    # GPP NN INPUT AND TARGET FEATURES. 
-    gpp_input_features = ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
-    gpp_target_features = []
-    gpp_input_tensor, gpp_target_tensor = load_data("data/{}".format(file_name), gpp_input_features, gpp_target_features)
+
+    # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
+    # Collect all variables that haven't been normalized yet:
+    gpp_input_features_raw = ["SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
+    gpp_input_tensor_raw, _ = load_data("data/{}".format(file_name), gpp_input_features_raw, [])
     # you get back a torch tensor
-    print("GPP CSV tensors", gpp_input_tensor.shape, gpp_target_tensor.shape)
+    print("GPP CSV tensors", gpp_input_tensor_raw.shape)
 
+    gpp_input_tensor_norm, _, _ = normalize_features(gpp_input_tensor_raw)
+    print("GPP CSV tensors", gpp_input_tensor_norm.shape)
+    import pdb; pdb.set_trace()
+
+
+    nee_raw = load_data("data/{}".format(file_name), ["NEE"], [])
     
 
-
+    #
     # RECO NN INPUT AND TARGET FEATURES.
     reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEEnight"]
     reco_target_features = ["SW_IN", "NEE"]
@@ -432,3 +461,13 @@ def prepare_data_using_csv (file_name):
 
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 prepare_data_using_csv(file_name)
+
+X = torch.tensor([[1.0, 100.0],
+                  [2.0, 300.0],
+                  [3.0, 450.0]])
+
+X_norm, X_min, X_max = normalize_features(X)
+
+print("X_norm:\n", X_norm)
+print("X_min:", X_min)
+print("X_max:", X_max)
