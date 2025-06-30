@@ -140,9 +140,9 @@ def load_data(
     # Select only the required columns
     data = df[input_features + target_features] 
 
-    # Optionally drop rows with missing values. Not tested yet.
-    if dropna:
-        data = data.dropna()
+    # # Optionally drop rows with missing values. Not tested yet.
+    # if dropna:
+    #     data = data.dropna()
 
     # Split into input and target
     inputs = data[input_features].astype(float).values
@@ -399,14 +399,18 @@ def prepare_data_using_csv (file_name):
     # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
     # ALL NECESSARY RECO FEATURES = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
     
-    # 1. Collect all variables that haven't been normalized yet. 
+    # 1. Calculate Day of Year Cos/Sine
+    doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
+    all_feature_names.extend(feature_name)
+
+    # 2. Collect all variables that haven't been normalized yet. 
     #    These will be normalized later once the gaps have been dealt with.
     measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
 
-    # 2. Prep the pot radiation half hourly diff, daily average, and daily average diff
+    # 3. Prep the pot radiation half hourly diff, daily average, and daily average diff
     pot_rad_half_hourly, _, feature_name, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
     half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size=48)
     all_pot_rad_data = torch.cat((pot_rad_half_hourly, half_hourly_diff, daily_avg, daily_diff), 1)
@@ -415,54 +419,110 @@ def prepare_data_using_csv (file_name):
     all_feature_names.extend(["PotRadHalfHourlyDiff", "PotRadDailyAvg", "PotRadDailyDiff"])
 
 
-    # 3. For wind direction, convert degrees (0 to 360) into sin/cos representation
+    # 4. For wind direction, convert degrees (0 to 360) into sin/cos representation
     wd, _, feature_name, _ = load_data("data/{}".format(file_name), ["WD"], []);
     wd_cos_sin = wind_direction_to_cos_sin(wd) # returns an N x 2 torch tensor. Column [:,0] is cos, [:,1] is sin representation.
     all_feature_names.extend(["WD_COS", "WD_SIN"])
 
     
-    # 4. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE
+    # 5. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE.
+    #    The values we receive are NOT NORMALIZED, and later-in-the-pipeline will be normalized.  
     sw_in, _, feature_name, _ = load_data("data/{}".format(file_name), ["SW_IN"], [])
     nee, _, feature_name, _ = load_data("data/{}".format(file_name), ["NEE"], [])
     gpp_prox_and_nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
     all_feature_names.extend(["GPP_PROX", "NIGHTLY_NEE_AVG"])
 
-
-    # 5. Calculate Day of Year Cos/Sine
-    doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
-    all_feature_names.extend(feature_name)
-
-    print("GPP CSV tensors", measured_features_tensor_raw.shape)
-
-    # import pdb; pdb.set_trace()
-    return torch.cat((all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average, doy_cos_sin, measured_features_tensor_raw), 1), \
+    return torch.cat((doy_cos_sin, measured_features_tensor_raw, all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average), 1), \
             all_feature_names
     
 
     torch.set_printoptions(profile="full")
     torch.set_printoptions(linewidth=200)
-    # NORMALIZATION
-    # gpp_input_tensor_norm, _, _ = normalize_features(gpp_input_tensor_raw)
-    # # print(reco_input_tensor[0::48]) # printing every 48th element
 
+import pandas as pd
+
+def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFrame:
+    """
+    Loads a CSV file, drops rows where any value equals `drop_value`.
+
+    Args:
+        file_path (str): Path to the CSV file
+        drop_value (float): Value to treat as missing (default: -9999)
+
+    Returns:
+        pd.DataFrame: Cleaned DataFrame with no -9999s
+    """
+    df = pd.read_csv(file_path)
+
+    # Drop rows where any column contains the drop_value
+    clean_df = df[~(df == drop_value).any(axis=1)].reset_index(drop=True)
+
+    return clean_df
+
+pre_processing = False
+drop_na = False
+normalize_raw_features = True
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-prepped_data, feature_names = prepare_data_using_csv(file_name)
-print("prepped data shape was", prepped_data.shape)
-print("feature_names", feature_names)
-
-X_df = pd.DataFrame(prepped_data.numpy(), columns=feature_names)
-X_df.to_csv("processed_data.csv", index=False)
-
-
-
+processed_file_name = "Processed_{}".format(file_name)
+clean_file_name = "Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
+if pre_processing:
+    print("pre-processing the third stage file to obtain/calculate the necessary features")
+    prepped_data, feature_names = prepare_data_using_csv(file_name)
+    print("prepped data shape was", prepped_data.shape)
+    print("feature_names", feature_names)
 
 
-# X = torch.tensor([[1.0, 100.0],
-#                   [2.0, 300.0],
-#                   [3.0, 450.0]])
+    X_df = pd.DataFrame(prepped_data.numpy(), columns=feature_names)
+    processed_file_name = "Processed_{}".format(file_name)
+    X_df.to_csv(processed_file_name, index=False)
 
-# X_norm, X_min, X_max = normalize_features(X)
 
-# print("X_norm:\n", X_norm)
-# print("X_min:", X_min)
-# print("X_max:", X_max)
+if drop_na:
+    # load_and_clean will drop all rows at least one missing value (ie. -9999)
+    df_clean = load_and_clean_csv(processed_file_name)
+
+    print(f"Original rows: {len(pd.read_csv(processed_file_name))}")
+    print(f"Cleaned rows:  {len(df_clean)}")
+    """
+    Original rows: 87600
+    Cleaned rows:  56870
+    Ratio: 56870/87600 = %~64.9 preserved! (and even more considering I included data till the end of 2025)
+    Let me calculate the true preservation rate because it is actually relevant and important.
+    bc my orig csv has data till 2025-12-31 (ie empty)
+    and the orig has data till 2025-05-31. Need to delete a lot of data points.
+    so for CADSM- delete everything after row 77338.
+    Then run load_and_clean_csv. Result:
+    Original rows: 77336
+    Cleaned rows:  56870
+    Ratio: %~73.5 preserved.
+    """
+
+    df_clean.to_csv(clean_file_name, index=False)
+
+# then take the clean file, and normalize all that has to be normalized.
+if normalize_raw_features:
+    # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+    
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+    # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
+    raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
+    
+    # Normalize Raw Features:
+    normalized_raw_features, _, _ = normalize_features(raw_features)
+    
+
+    
+    already_normalized_feature_names = ['DOY_sin', 'DOY_cos', 'WD_COS', 'WD_SIN']
+    already_normalized_features, _, already_normalized_feature_names, _ = \
+            load_data("{}".format(clean_file_name), already_normalized_feature_names, [], prep_doy_sin_cos = False);
+
+    
+    all_feature
+
+
+# normalization complete. Backprop magic time.
+
+
+
+
+
