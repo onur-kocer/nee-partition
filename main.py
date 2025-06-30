@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Tuple, Union
 import pandas as pd
 from datetime import datetime
 import math
@@ -101,9 +101,14 @@ def load_data(
     target_features: List[str],
     dropna: bool = False,
     prep_doy_sin_cos: bool = True,
-) -> Tuple[torch.Tensor, torch.Tensor]:
+    return_feature_names: bool = True,
+) -> Union[ # Either return the feature name lists or not.
+    Tuple[torch.Tensor, torch.Tensor],
+    Tuple[torch.Tensor, torch.Tensor, List[str], List[str]]
+]:    
     """
     Loads the dataset, processes it, and returns input and target tensors.
+    Optionally returns input and target feature names.
     By default, this function will compute DOY_sin, DOY_cos.
 
     Args:
@@ -114,7 +119,11 @@ def load_data(
         prep_doy_sin_cos (bool): If True, prep the DOY sin cos vals based on DATE (Dates are formatted as YYYY-MM-DD)
 
     Returns:
-        Tuple[torch.Tensor, torch.Tensor]: Input and target tensors.
+        Tuple containing:
+            - input_tensor (torch.Tensor)
+            - target_tensor (torch.Tensor)
+            - (optional) input_features (List[str])
+            - (optional) target_features (List[str])        
     """
     # Load the CSV
     df = pd.read_csv(file_path)
@@ -125,16 +134,13 @@ def load_data(
     
     if prep_doy_sin_cos:
         df["DOY_sin"], df["DOY_cos"] = compute_doy_sin_cos(df["DATE"])
-        torch.set_printoptions(profile="full")
-        torch.set_printoptions(linewidth=200)
-
         # print(df["DOY_sin"], df["DOY_cos"])
 
 
     # Select only the required columns
     data = df[input_features + target_features] 
 
-    # Optionally drop rows with missing values
+    # Optionally drop rows with missing values. Not tested yet.
     if dropna:
         data = data.dropna()
 
@@ -146,8 +152,10 @@ def load_data(
     input_tensor = torch.tensor(inputs, dtype=torch.float32)
     target_tensor = torch.tensor(targets, dtype=torch.float32)
 
-    return input_tensor, target_tensor
-
+    if return_feature_names:
+        return input_tensor, target_tensor, input_features, target_features
+    else:
+        return input_tensor, target_tensor
 
 def pair_plotter(data):
     # Plots two variables on the same graph.
@@ -330,8 +338,9 @@ def compute_gpp_prox_and_nightly_nee_avg (sw_in, nee, block_size: int = 48):
     
     gpp_prox_full = gpp_prox_daily.repeat_interleave(block_size)    # shape [N]
     nee_night_full = nee_night_avg.repeat_interleave(block_size)    # shape [N]
-
-    return gpp_prox_full, nee_night_full
+    
+    gpp_and_nee = torch.stack((gpp_prox_full, nee_night_full),1)
+    return gpp_and_nee
 
 
 def wind_direction_to_cos_sin (wind_deg: torch.Tensor) -> torch.Tensor:
@@ -352,7 +361,7 @@ def wind_direction_to_cos_sin (wind_deg: torch.Tensor) -> torch.Tensor:
     sin_vals = torch.sin(wind_rad)
 
     # Combine into a single tensor
-    wind_vec = torch.stack((cos_vals, sin_vals), dim=1)
+    wind_vec = torch.cat((cos_vals, sin_vals),1)
 
     return wind_vec
 
@@ -385,89 +394,75 @@ def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, tor
 # the same data will be pulled two times to both tensors.
 
 def prepare_data_using_csv (file_name):
-    # 1. First prep the pot radiation half hourly diff, daily average, and daily average diff
+    all_feature_names = []
+    # TODO: Variable-ize the gpp features and the reco features for ease of use
+    # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
+    # ALL NECESSARY RECO FEATURES = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
     
-    pot_rad_half_hourly, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
+    # 1. Collect all variables that haven't been normalized yet. 
+    #    These will be normalized later once the gaps have been dealt with.
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
+    measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
+    all_feature_names.extend(feature_name)
+
+
+    # 2. Prep the pot radiation half hourly diff, daily average, and daily average diff
+    pot_rad_half_hourly, _, feature_name, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
     half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size=48)
     all_pot_rad_data = torch.cat((pot_rad_half_hourly, half_hourly_diff, daily_avg, daily_diff), 1)
+    
+    all_feature_names.extend(feature_name)
+    all_feature_names.extend(["PotRadHalfHourlyDiff", "PotRadDailyAvg", "PotRadDailyDiff"])
 
 
-    # 2. For wind direction, convert degrees (0 to 360) into sin/cos representation
-    wd, _ = load_data("data/{}".format(file_name), ["WD"], [])
+    # 3. For wind direction, convert degrees (0 to 360) into sin/cos representation
+    wd, _, feature_name, _ = load_data("data/{}".format(file_name), ["WD"], []);
     wd_cos_sin = wind_direction_to_cos_sin(wd) # returns an N x 2 torch tensor. Column [:,0] is cos, [:,1] is sin representation.
+    all_feature_names.extend(["WD_COS", "WD_SIN"])
 
     
-    # 3. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE
-    sw_in, _ = load_data("data/{}".format(file_name), ["SW_IN"], [])
-    nee, _ = load_data("data/{}".format(file_name), ["NEE"], [])
-    gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
+    # 4. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE
+    sw_in, _, feature_name, _ = load_data("data/{}".format(file_name), ["SW_IN"], [])
+    nee, _, feature_name, _ = load_data("data/{}".format(file_name), ["NEE"], [])
+    gpp_prox_and_nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
+    all_feature_names.extend(["GPP_PROX", "NIGHTLY_NEE_AVG"])
 
-    # 4. Calculate Day of Year Cos/Sine
-    doy_cos_sin, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
 
+    # 5. Calculate Day of Year Cos/Sine
+    doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
+    all_feature_names.extend(feature_name)
+
+    print("GPP CSV tensors", measured_features_tensor_raw.shape)
+
+    # import pdb; pdb.set_trace()
+    return torch.cat((all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average, doy_cos_sin, measured_features_tensor_raw), 1), \
+            all_feature_names
     
-    # All looks good above. Now do some normalization.
-
-
-    # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
-    # Collect all variables that haven't been normalized yet:
-    gpp_input_features_raw = ["SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
-    gpp_input_tensor_raw, _ = load_data("data/{}".format(file_name), gpp_input_features_raw, [])
-    # you get back a torch tensor
-    print("GPP CSV tensors", gpp_input_tensor_raw.shape)
-
-    gpp_input_tensor_norm, _, _ = normalize_features(gpp_input_tensor_raw)
-    print("GPP CSV tensors", gpp_input_tensor_norm.shape)
-    import pdb; pdb.set_trace()
-
-
-    nee_raw = load_data("data/{}".format(file_name), ["NEE"], [])
-    
-
-    #
-    # RECO NN INPUT AND TARGET FEATURES.
-    reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEEnight"]
-    reco_target_features = ["SW_IN", "NEE"]
-    reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
-    # print("reco", reco_input_tensor.shape, reco_target_tensor.shape)
-    # pair_plotter(reco_target_tensor)
-    gpp_prox, nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(reco_target_tensor[:,0], reco_target_tensor[:,1])
-    pair_plotter(torch.stack((gpp_prox, nightly_nee_average), 1))
-
-
-    reco_input_features = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "NEEnight"]
-    reco_target_features = ["WD"]
-    reco_input_tensor, reco_target_tensor = load_data("data/{}".format(file_name), reco_input_features, reco_target_features)
-    # print(reco_target_tensor.shape)
-
-
-    
-
-    # pair_plotter(torch.stack((reco_target_tensor, reco_target_tensor), 1))
 
     torch.set_printoptions(profile="full")
     torch.set_printoptions(linewidth=200)
-
-
-
-
-
-
-
-    # print(f" The PotRad_U95 and PotRad_uStar tensor was: {reco_input_tensor.t()}")
-    # print(gpp_input_tensor)
-    # pair_plotter(gpp_input_tensor)
+    # NORMALIZATION
+    # gpp_input_tensor_norm, _, _ = normalize_features(gpp_input_tensor_raw)
     # # print(reco_input_tensor[0::48]) # printing every 48th element
 
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-prepare_data_using_csv(file_name)
+prepped_data, feature_names = prepare_data_using_csv(file_name)
+print("prepped data shape was", prepped_data.shape)
+print("feature_names", feature_names)
 
-X = torch.tensor([[1.0, 100.0],
-                  [2.0, 300.0],
-                  [3.0, 450.0]])
+X_df = pd.DataFrame(prepped_data.numpy(), columns=feature_names)
+X_df.to_csv("processed_data.csv", index=False)
 
-X_norm, X_min, X_max = normalize_features(X)
 
-print("X_norm:\n", X_norm)
-print("X_min:", X_min)
-print("X_max:", X_max)
+
+
+
+# X = torch.tensor([[1.0, 100.0],
+#                   [2.0, 300.0],
+#                   [3.0, 450.0]])
+
+# X_norm, X_min, X_max = normalize_features(X)
+
+# print("X_norm:\n", X_norm)
+# print("X_min:", X_min)
+# print("X_max:", X_max)
