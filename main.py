@@ -34,10 +34,10 @@ class SNN_RECO(nn.Module):
         return self.net(x)
 
 
-def fit(): 
+def fit(gpp_inputs, reco_inputs, true_nee): 
   # Instantiate models
-  input_dim_gpp = 10  # adjust based on your actual input features
-  input_dim_reco = 5
+  input_dim_gpp = 12  # adjust based on your actual input features
+  input_dim_reco = 12
 
   gpp_model = SNN_GPP(input_dim_gpp)
   reco_model = SNN_RECO(input_dim_reco)
@@ -49,14 +49,14 @@ def fit():
   criterion = nn.MSELoss()
 
   # Example training loop
-  for epoch in range(100):
+  for epoch in range(10000):
       gpp_model.train()
       reco_model.train()
 
       # Batch of inputs (replace with your actual data loader)
-      gpp_inputs = torch.randn(32, input_dim_gpp)
-      reco_inputs = torch.randn(32, input_dim_reco)
-      true_nee = torch.randn(32, 1)  # Measured NEE
+    #   gpp_inputs = torch.randn(32, input_dim_gpp)
+    #   reco_inputs = torch.randn(32, input_dim_reco)
+    #   true_nee = torch.randn(32, 1)  # Measured NEE
 
       # Forward pass
       gpp_pred = gpp_model(gpp_inputs)
@@ -396,8 +396,9 @@ def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, tor
 def prepare_data_using_csv (file_name):
     all_feature_names = []
     # TODO: Variable-ize the gpp features and the reco features for ease of use
-    # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
-    # ALL NECESSARY RECO FEATURES = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD", "NEE"]
+    # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD"]
+    # ALL NECESSARY RECO FEATURES = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD"]
+    # ALL NECESSARY OUTPUT FEATURES = ["NEE"]
     
     # 1. Calculate Day of Year Cos/Sine
     doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
@@ -461,10 +462,14 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
 
 pre_processing = False
 drop_na = False
-normalize_raw_features = True
+normalize_raw_features = False
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 processed_file_name = "Processed_{}".format(file_name)
 clean_file_name = "Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
+
+# ONLY NORMALIZE THE CLEAN FILE. Otherwise -9999's will affect the normalization.
+normalized_file_name = "Normalized_{}".format(file_name)
+
 if pre_processing:
     print("pre-processing the third stage file to obtain/calculate the necessary features")
     prepped_data, feature_names = prepare_data_using_csv(file_name)
@@ -509,18 +514,50 @@ if normalize_raw_features:
     
     # Normalize Raw Features:
     normalized_raw_features, _, _ = normalize_features(raw_features)
-    
 
-    
     already_normalized_feature_names = ['DOY_sin', 'DOY_cos', 'WD_COS', 'WD_SIN']
     already_normalized_features, _, already_normalized_feature_names, _ = \
             load_data("{}".format(clean_file_name), already_normalized_feature_names, [], prep_doy_sin_cos = False);
 
     
-    all_feature
+    all_feature_names = []
+    all_feature_names.extend(already_normalized_feature_names)
+    all_feature_names.extend(raw_feature_names)
+
+    all_features = torch.cat((already_normalized_features, normalized_raw_features), 1)
+
+    df_normalized = pd.DataFrame(all_features.numpy(), columns=all_feature_names)
+    df_normalized.to_csv(normalized_file_name, index=False)    
+
+    
+
+# Read normalized values file then do backprop magic time.
+# all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+NEE = ['NEE']
+
+# normalized_file_name
+gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
+reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
+true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
+print(f"gpp_input_names,  {gpp_input_names} \n"
+      f"reco_input_names,  {reco_input_names} \n"
+      f"true_nee_name,  {true_nee_name} \n")
+
+fit(gpp_inputs=gpp_inputs, reco_inputs=reco_inputs, true_nee=true_nee)
+
+"""
+gpp_inputs = torch.randn(32, input_dim_gpp)
+reco_inputs = torch.randn(32, input_dim_reco)
+true_nee = torch.randn(32, 1)  # Measured NEE
+"""
 
 
-# normalization complete. Backprop magic time.
+
+
+
+
 
 
 
