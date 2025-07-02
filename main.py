@@ -7,6 +7,8 @@ from typing import List, Tuple, Union
 import pandas as pd
 from datetime import datetime
 import math
+from torcheval.metrics import R2Score
+# from torchmetrics.functional import r2_score
 
 
 class SNN_GPP(nn.Module):
@@ -34,42 +36,113 @@ class SNN_RECO(nn.Module):
         return self.net(x)
 
 
-def fit(gpp_inputs, reco_inputs, true_nee): 
-  # Instantiate models
-  input_dim_gpp = 12  # adjust based on your actual input features
-  input_dim_reco = 12
+def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
+    ss_res = ((y_true - y_pred) ** 2).sum()
+    ss_tot = ((y_true - y_true.mean()) ** 2).sum()
+    return 1 - ss_res / ss_tot
 
-  gpp_model = SNN_GPP(input_dim_gpp)
-  reco_model = SNN_RECO(input_dim_reco)
 
-  # Optimizers (can be separate or joint)
-  optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=1e-3)
+def better_fit(X_gpp_train, X_reco_train, y_train, 
+        X_gpp_val, X_reco_val, y_val,
+        epochs=10000, lr=1e-3):
 
-  # Loss function
-  criterion = nn.MSELoss()
 
-  # Example training loop
-  for epoch in range(10000):
-      gpp_model.train()
-      reco_model.train()
+    # Instantiate models
+    gpp_model = SNN_GPP(X_gpp_train.shape[1])
+    reco_model = SNN_RECO(X_reco_train.shape[1])
+    print("input size for gpp was", X_gpp_train.shape[1])
+    print("input size for reco was", X_reco_train.shape[1])
+    # import pdb; pdb.set_trace()
 
-      # Batch of inputs (replace with your actual data loader)
-    #   gpp_inputs = torch.randn(32, input_dim_gpp)
-    #   reco_inputs = torch.randn(32, input_dim_reco)
-    #   true_nee = torch.randn(32, 1)  # Measured NEE
+    # Optimizer
+    optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=lr)
 
-      # Forward pass
-      gpp_pred = gpp_model(gpp_inputs)
-      reco_pred = reco_model(reco_inputs)
-      nee_pred = gpp_pred + reco_pred
+    # Loss function
+    criterion = nn.MSELoss()
 
-      # Loss and backward
-      loss = criterion(nee_pred, true_nee)
-      optimizer.zero_grad()
-      loss.backward()
-      optimizer.step()
+    for epoch in range(epochs):
+        gpp_model.train()
+        reco_model.train()
 
-      print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+        # Forward pass
+        gpp_pred = gpp_model(X_gpp_train)
+        reco_pred = reco_model(X_reco_train)
+        nee_pred = gpp_pred + reco_pred
+
+        # Training loss
+        loss = criterion(nee_pred, y_train)
+
+        # Backprop
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Evaluation
+        gpp_model.eval()
+        reco_model.eval()
+        with torch.no_grad():
+            # Validation predictions
+            val_gpp_pred = gpp_model(X_gpp_val)
+            val_reco_pred = reco_model(X_reco_val)
+            val_nee_pred = val_gpp_pred + val_reco_pred
+
+            # R² and losses
+            train_r2 = r2_score(y_train, nee_pred)
+            val_r2 = r2_score(y_val, val_nee_pred)
+            val_loss = criterion(val_nee_pred, y_val)
+
+        if epoch % 500 == 0 or epoch == epochs - 1:
+            print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
+                  f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+
+    return gpp_model, reco_model
+    
+    
+
+def fit(gpp_inputs, reco_inputs, true_nee):
+    # Instantiate models
+    input_dim_gpp = 12  # adjust based on your actual input features
+    input_dim_reco = 12
+
+    gpp_model = SNN_GPP(input_dim_gpp)
+    reco_model = SNN_RECO(input_dim_reco)
+
+    # Optimizers (can be separate or joint)
+    optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=1e-3)
+
+    # Loss function
+    criterion = nn.MSELoss()
+
+    # Example training loop
+    for epoch in range(10000):
+        gpp_model.train()
+        reco_model.train()
+
+        # Batch of inputs (replace with your actual data loader)
+        # gpp_inputs = torch.randn(32, input_dim_gpp)
+        # reco_inputs = torch.randn(32, input_dim_reco)
+        # true_nee = torch.randn(32, 1)  # Measured NEE
+
+        # Forward pass
+        gpp_pred = gpp_model(gpp_inputs)
+        reco_pred = reco_model(reco_inputs)
+        nee_pred = gpp_pred + reco_pred
+
+        # Loss and backward  MSE WORKING
+        loss = criterion(nee_pred, true_nee)
+
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+
+        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+        gpp_model.eval()
+        reco_model.eval()
+        with torch.no_grad():
+            r2 = r2_score(true_nee, nee_pred)
+            print("R²:", r2.item())      
 
 
 def compute_doy_sin_cos(date_strings):
@@ -529,7 +602,45 @@ if normalize_raw_features:
     df_normalized = pd.DataFrame(all_features.numpy(), columns=all_feature_names)
     df_normalized.to_csv(normalized_file_name, index=False)    
 
+
+def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
+    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
     
+    N = gpp_inputs.shape[0]
+    torch.manual_seed(seed)
+    
+    # Shuffle indices
+    indices = torch.randperm(N)
+
+    # Compute split sizes
+    n_train = int(N * train_ratio)
+    n_val = int(N * val_ratio)
+    n_test = N - n_train - n_val
+
+    # Split indices
+    train_idx = indices[:n_train]
+    val_idx = indices[n_train:n_train + n_val]
+    test_idx = indices[n_train + n_val:]
+
+    # Return split tensors
+    return {
+        'train': {
+            'gpp': gpp_inputs[train_idx],
+            'reco': reco_inputs[train_idx],
+            'nee': true_nee[train_idx]
+        },
+        'val': {
+            'gpp': gpp_inputs[val_idx],
+            'reco': reco_inputs[val_idx],
+            'nee': true_nee[val_idx]
+        },
+        'test': {
+            'gpp': gpp_inputs[test_idx],
+            'reco': reco_inputs[test_idx],
+            'nee': true_nee[test_idx]
+        }
+    }
+
 
 # Read normalized values file then do backprop magic time.
 # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
@@ -545,21 +656,43 @@ print(f"gpp_input_names,  {gpp_input_names} \n"
       f"reco_input_names,  {reco_input_names} \n"
       f"true_nee_name,  {true_nee_name} \n")
 
-fit(gpp_inputs=gpp_inputs, reco_inputs=reco_inputs, true_nee=true_nee)
+# fit(gpp_inputs=gpp_inputs, reco_inputs=reco_inputs, true_nee=true_nee)
+
+# Not sure if this is the cleanest way. But keep for now as we need to validate.
+splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+
+# X_gpp_train = splits['train']['gpp']
+# X_reco_train = splits['train']['reco']
+# y_train = splits['train']['nee']
+
+# X_gpp_val = splits['val']['gpp']
+# X_reco_val = splits['val']['reco']
+# y_val = splits['val']['nee']
+
+# X_gpp_test = splits['test']['gpp']
+# X_reco_test = splits['test']['reco']
+# y_test = splits['test']['nee']
+gpp_model, reco_model = better_fit(
+    X_gpp_train=splits['train']['gpp'],
+    X_reco_train=splits['train']['reco'],
+    y_train=splits['train']['nee'],
+    X_gpp_val=splits['val']['gpp'],
+    X_reco_val=splits['val']['reco'],
+    y_val=splits['val']['nee'],
+)
+
+
+
 
 """
+
+All data just training used.
+Epoch 9999, Loss: 0.0014
+R²: 0.9495583772659302
+
 gpp_inputs = torch.randn(32, input_dim_gpp)
 reco_inputs = torch.randn(32, input_dim_reco)
 true_nee = torch.randn(32, 1)  # Measured NEE
+
+
 """
-
-
-
-
-
-
-
-
-
-
-
