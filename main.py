@@ -4,10 +4,9 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 import pandas as pd
 from typing import List, Tuple, Union
-import pandas as pd
 from datetime import datetime
 import math
-from torcheval.metrics import R2Score
+# from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
 
@@ -50,9 +49,6 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
     # Instantiate models
     gpp_model = SNN_GPP(X_gpp_train.shape[1])
     reco_model = SNN_RECO(X_reco_train.shape[1])
-    print("input size for gpp was", X_gpp_train.shape[1])
-    print("input size for reco was", X_reco_train.shape[1])
-    # import pdb; pdb.set_trace()
 
     # Optimizer
     optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=lr)
@@ -510,11 +506,6 @@ def prepare_data_using_csv (file_name):
             all_feature_names
     
 
-    torch.set_printoptions(profile="full")
-    torch.set_printoptions(linewidth=200)
-
-import pandas as pd
-
 def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFrame:
     """
     Loads a CSV file, drops rows where any value equals `drop_value`.
@@ -532,6 +523,45 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
     clean_df = df[~(df == drop_value).any(axis=1)].reset_index(drop=True)
 
     return clean_df
+
+def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
+    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
+    
+    N = gpp_inputs.shape[0]
+    torch.manual_seed(seed)
+    
+    # Shuffle indices
+    indices = torch.randperm(N)
+
+    # Compute split sizes
+    n_train = int(N * train_ratio)
+    n_val = int(N * val_ratio)
+    n_test = N - n_train - n_val
+
+    # Split indices
+    train_idx = indices[:n_train]
+    val_idx = indices[n_train:n_train + n_val]
+    test_idx = indices[n_train + n_val:]
+
+    # Return split tensors
+    return {
+        'train': {
+            'gpp': gpp_inputs[train_idx],
+            'reco': reco_inputs[train_idx],
+            'nee': true_nee[train_idx]
+        },
+        'val': {
+            'gpp': gpp_inputs[val_idx],
+            'reco': reco_inputs[val_idx],
+            'nee': true_nee[val_idx]
+        },
+        'test': {
+            'gpp': gpp_inputs[test_idx],
+            'reco': reco_inputs[test_idx],
+            'nee': true_nee[test_idx]
+        }
+    }
+
 
 pre_processing = False
 drop_na = False
@@ -603,43 +633,6 @@ if normalize_raw_features:
     df_normalized.to_csv(normalized_file_name, index=False)    
 
 
-def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
-    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
-    
-    N = gpp_inputs.shape[0]
-    torch.manual_seed(seed)
-    
-    # Shuffle indices
-    indices = torch.randperm(N)
-
-    # Compute split sizes
-    n_train = int(N * train_ratio)
-    n_val = int(N * val_ratio)
-    n_test = N - n_train - n_val
-
-    # Split indices
-    train_idx = indices[:n_train]
-    val_idx = indices[n_train:n_train + n_val]
-    test_idx = indices[n_train + n_val:]
-
-    # Return split tensors
-    return {
-        'train': {
-            'gpp': gpp_inputs[train_idx],
-            'reco': reco_inputs[train_idx],
-            'nee': true_nee[train_idx]
-        },
-        'val': {
-            'gpp': gpp_inputs[val_idx],
-            'reco': reco_inputs[val_idx],
-            'nee': true_nee[val_idx]
-        },
-        'test': {
-            'gpp': gpp_inputs[test_idx],
-            'reco': reco_inputs[test_idx],
-            'nee': true_nee[test_idx]
-        }
-    }
 
 
 # Read normalized values file then do backprop magic time.
@@ -694,5 +687,6 @@ gpp_inputs = torch.randn(32, input_dim_gpp)
 reco_inputs = torch.randn(32, input_dim_reco)
 true_nee = torch.randn(32, 1)  # Measured NEE
 
-
+    torch.set_printoptions(profile="full")
+    torch.set_printoptions(linewidth=200)
 """
