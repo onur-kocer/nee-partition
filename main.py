@@ -10,6 +10,33 @@ import math
 # from torchmetrics.functional import r2_score
 
 
+class SNN_GPP_Tram(nn.Module):
+    def __init__(self, input_dim):
+        super(SNN_GPP_Tram, self).__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, 32),
+            nn.Tanh(),
+            nn.Linear(32, 1),
+            nn.Sigmoid(),
+            # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+class SNN_RECO_Tram(nn.Module):
+    def __init__(self, input_dim):
+        super(SNN_RECO_Tram, self).__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, 32),
+            nn.Tanh(),
+            nn.Linear(32, 1),
+            nn.Sigmoid(),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
 class SNN_GPP(nn.Module):
     def __init__(self, input_dim):
         super(SNN_GPP, self).__init__()
@@ -45,10 +72,14 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
         X_gpp_val, X_reco_val, y_val,
         epochs=10000, lr=1e-3):
 
-
+    tram = True
     # Instantiate models
-    gpp_model = SNN_GPP(X_gpp_train.shape[1])
-    reco_model = SNN_RECO(X_reco_train.shape[1])
+    if tram:
+        gpp_model = SNN_GPP_Tram(X_gpp_train.shape[1])
+        reco_model = SNN_RECO_Tram(X_reco_train.shape[1])
+    else:
+        gpp_model = SNN_GPP(X_gpp_train.shape[1])
+        reco_model = SNN_RECO(X_reco_train.shape[1])
 
     # Optimizer
     optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=lr)
@@ -62,6 +93,11 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
 
         # Forward pass
         gpp_pred = gpp_model(X_gpp_train)
+        if tram:
+            # import pdb; pdb.set_trace()
+            gpp_pred = gpp_pred * X_gpp_train[:,0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
+            gpp_pred = torch.relu(gpp_pred) # pos lin that they use in the paper.
+
         reco_pred = reco_model(X_reco_train)
         nee_pred = gpp_pred + reco_pred
 
@@ -79,6 +115,10 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
         with torch.no_grad():
             # Validation predictions
             val_gpp_pred = gpp_model(X_gpp_val)
+            if tram:
+                val_gpp_pred = val_gpp_pred * X_gpp_val[:,0].unsqueeze(1)
+                val_gpp_pred = torch.relu(val_gpp_pred)
+
             val_reco_pred = reco_model(X_reco_val)
             val_nee_pred = val_gpp_pred + val_reco_pred
 
