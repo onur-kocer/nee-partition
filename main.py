@@ -11,12 +11,12 @@ import math
 
 
 class SNN_GPP_Tram(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, hidden_layer_size):
         super(SNN_GPP_Tram, self).__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
+            nn.Linear(input_dim, hidden_layer_size),
             nn.Tanh(),
-            nn.Linear(32, 1),
+            nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
         )
@@ -25,12 +25,12 @@ class SNN_GPP_Tram(nn.Module):
         return self.net(x)
 
 class SNN_RECO_Tram(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, hidden_layer_size):
         super(SNN_RECO_Tram, self).__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
+            nn.Linear(input_dim, hidden_layer_size),
             nn.Tanh(),
-            nn.Linear(32, 1),
+            nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
         )
 
@@ -38,24 +38,24 @@ class SNN_RECO_Tram(nn.Module):
         return self.net(x)
 
 class SNN_GPP(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, hidden_layer_size):
         super(SNN_GPP, self).__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
+            nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
-            nn.Linear(32, 1)
+            nn.Linear(hidden_layer_size, 1)
         )
 
     def forward(self, x):
         return self.net(x)
 
 class SNN_RECO(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, input_dim, hidden_layer_size):
         super(SNN_RECO, self).__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 32),
+            nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
-            nn.Linear(32, 1)
+            nn.Linear(hidden_layer_size, 1)
         )
 
     def forward(self, x):
@@ -67,6 +67,90 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
     ss_tot = ((y_true - y_true.mean()) ** 2).sum()
     return 1 - ss_res / ss_tot
 
+def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
+        X_gpp_val, X_reco_val, y_val,
+        epochs=10000, lr=1e-3):
+    hidden_layer_size = 12
+    tram = True
+    run_info = "Tramontana" if tram else "Custom"
+
+    # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size)
+    else:
+        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size)
+
+    # __Move data to device__
+    X_gpp_train = X_gpp_train.to(device)
+    X_reco_train = X_reco_train.to(device)
+    y_train = y_train.to(device)
+    X_gpp_val = X_gpp_val.to(device)
+    X_reco_val = X_reco_val.to(device)
+    y_val = y_val.to(device)
+
+    # Instantiate models
+    if tram:
+        gpp_model = SNN_GPP_Tram(X_gpp_train.shape[1], hidden_layer_size)
+        reco_model = SNN_RECO_Tram(X_reco_train.shape[1], hidden_layer_size)
+    else:
+        gpp_model = SNN_GPP(X_gpp_train.shape[1], hidden_layer_size)
+        reco_model = SNN_RECO(X_reco_train.shape[1], hidden_layer_size)
+
+    # __Move models to device__
+    gpp_model = gpp_model.to(device)
+    reco_model = reco_model.to(device)
+
+    # Optimizer
+    optimizer = optim.Adam(list(gpp_model.parameters()) + list(reco_model.parameters()), lr=lr)
+
+    # Loss function
+    criterion = nn.MSELoss()
+
+    for epoch in range(epochs):
+        gpp_model.train()
+        reco_model.train()
+
+        # Forward pass
+        gpp_pred = gpp_model(X_gpp_train)
+        if tram:
+            gpp_pred = gpp_pred * X_gpp_train[:, 0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
+            gpp_pred = torch.relu(gpp_pred) # pos lin that they use in the paper.
+
+        reco_pred = reco_model(X_reco_train)
+        nee_pred = gpp_pred + reco_pred
+
+        # Training loss
+        loss = criterion(nee_pred, y_train)
+
+        # Backprop
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Evaluation
+        gpp_model.eval()
+        reco_model.eval()
+        with torch.no_grad():
+            # Validation predictions
+            val_gpp_pred = gpp_model(X_gpp_val)
+            if tram:
+                val_gpp_pred = val_gpp_pred * X_gpp_val[:, 0].unsqueeze(1)
+                val_gpp_pred = torch.relu(val_gpp_pred)
+
+            val_reco_pred = reco_model(X_reco_val)
+            val_nee_pred = val_gpp_pred + val_reco_pred
+
+            # __Move results to CPU before computing metrics__
+            train_r2 = r2_score(y_train.cpu(), nee_pred.cpu())
+            val_r2 = r2_score(y_val.cpu(), val_nee_pred.cpu())
+            val_loss = criterion(val_nee_pred, y_val)
+
+        if epoch % 500 == 0 or epoch == epochs - 1:
+            print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
+                  f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+
+    return gpp_model, reco_model
 
 def better_fit(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
@@ -94,8 +178,7 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
         # Forward pass
         gpp_pred = gpp_model(X_gpp_train)
         if tram:
-            # import pdb; pdb.set_trace()
-            gpp_pred = gpp_pred * X_gpp_train[:,0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
+            gpp_pred = gpp_pred * X_gpp_train[:, 0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
             gpp_pred = torch.relu(gpp_pred) # pos lin that they use in the paper.
 
         reco_pred = reco_model(X_reco_train)
@@ -116,7 +199,7 @@ def better_fit(X_gpp_train, X_reco_train, y_train,
             # Validation predictions
             val_gpp_pred = gpp_model(X_gpp_val)
             if tram:
-                val_gpp_pred = val_gpp_pred * X_gpp_val[:,0].unsqueeze(1)
+                val_gpp_pred = val_gpp_pred * X_gpp_val[:, 0].unsqueeze(1)
                 val_gpp_pred = torch.relu(val_gpp_pred)
 
             val_reco_pred = reco_model(X_reco_val)
@@ -236,10 +319,6 @@ def load_data(
     """
     # Load the CSV
     df = pd.read_csv(file_path)
-
-    # ignore for now
-    # Replace -9999 with NaN
-    # df.replace(-9999, pd.NA, inplace=True)
     
     if prep_doy_sin_cos:
         df["DOY_sin"], df["DOY_cos"] = compute_doy_sin_cos(df["DATE"])
@@ -247,11 +326,7 @@ def load_data(
 
 
     # Select only the required columns
-    data = df[input_features + target_features] 
-
-    # # Optionally drop rows with missing values. Not tested yet.
-    # if dropna:
-    #     data = data.dropna()
+    data = df[input_features + target_features]
 
     # Split into input and target
     inputs = data[input_features].astype(float).values
@@ -705,7 +780,7 @@ splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_rati
 # X_gpp_test = splits['test']['gpp']
 # X_reco_test = splits['test']['reco']
 # y_test = splits['test']['nee']
-gpp_model, reco_model = better_fit(
+gpp_model, reco_model = better_fit_gpu(
     X_gpp_train=splits['train']['gpp'],
     X_reco_train=splits['train']['reco'],
     y_train=splits['train']['nee'],
