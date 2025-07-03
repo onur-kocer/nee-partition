@@ -69,7 +69,7 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
 
 def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
-        epochs=10000, lr=1e-3):
+        epochs=100000, lr=1e-3):
     hidden_layer_size = 12
     tram = True
     run_info = "Tramontana" if tram else "Custom"
@@ -77,9 +77,9 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.is_available():
-        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size)
+        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs)
     else:
-        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size)
+        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs)
 
     # __Move data to device__
     X_gpp_train = X_gpp_train.to(device)
