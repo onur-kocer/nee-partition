@@ -77,9 +77,9 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.is_available():
-        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs)
+        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr)
     else:
-        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs)
+        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr)
 
     # __Move data to device__
     X_gpp_train = X_gpp_train.to(device)
