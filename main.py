@@ -89,6 +89,8 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     X_gpp_val = X_gpp_val.to(device)
     X_reco_val = X_reco_val.to(device)
     y_val = y_val.to(device)
+    SW_IN_RAW_train = SW_IN_RAW_train.to(device)
+    SW_IN_RAW_val = SW_IN_RAW_val.to(device)
 
     # Instantiate models
     if tram:
