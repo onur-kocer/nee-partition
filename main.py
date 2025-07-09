@@ -69,7 +69,8 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
 
 def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
-        epochs=100000, lr=1e-3):
+        SW_IN_RAW_train, SW_IN_RAW_val,
+        epochs=10000, lr=1e-3):
     hidden_layer_size = 12
     tram = True
     run_info = "Tramontana" if tram else "Custom"
@@ -114,7 +115,8 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         # Forward pass
         gpp_pred = gpp_model(X_gpp_train)
         if tram:
-            gpp_pred = gpp_pred * X_gpp_train[:, 0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
+            # gpp_pred = gpp_pred * X_gpp_train[:, 0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
+            gpp_pred = gpp_pred * SW_IN_RAW_train
             gpp_pred = torch.relu(gpp_pred) # pos lin that they use in the paper.
 
         reco_pred = reco_model(X_reco_train)
@@ -135,7 +137,8 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
             # Validation predictions
             val_gpp_pred = gpp_model(X_gpp_val)
             if tram:
-                val_gpp_pred = val_gpp_pred * X_gpp_val[:, 0].unsqueeze(1)
+                # val_gpp_pred = val_gpp_pred * X_gpp_val[:, 0].unsqueeze(1)
+                val_gpp_pred = val_gpp_pred * SW_IN_RAW_val
                 val_gpp_pred = torch.relu(val_gpp_pred)
 
             val_reco_pred = reco_model(X_reco_val)
@@ -641,6 +644,10 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
 
 def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
     assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
+
+    # Split SW_IN_RAW from the rest
+    sw_in_raw = gpp_inputs[:, 0].unsqueeze(1)           # shape [N, 1]
+    gpp_inputs_trimmed = gpp_inputs[:, 1:]              # remove SW_IN_RAW (model shouldn't see it)
     
     N = gpp_inputs.shape[0]
     torch.manual_seed(seed)
@@ -661,19 +668,22 @@ def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2
     # Return split tensors
     return {
         'train': {
-            'gpp': gpp_inputs[train_idx],
+            'gpp': gpp_inputs_trimmed[train_idx],
             'reco': reco_inputs[train_idx],
-            'nee': true_nee[train_idx]
+            'nee': true_nee[train_idx],
+            'sw_in_raw': sw_in_raw[train_idx]
         },
         'val': {
-            'gpp': gpp_inputs[val_idx],
+            'gpp': gpp_inputs_trimmed[val_idx],
             'reco': reco_inputs[val_idx],
-            'nee': true_nee[val_idx]
+            'nee': true_nee[val_idx],
+            'sw_in_raw': sw_in_raw[val_idx]
         },
         'test': {
-            'gpp': gpp_inputs[test_idx],
+            'gpp': gpp_inputs_trimmed[test_idx],
             'reco': reco_inputs[test_idx],
-            'nee': true_nee[test_idx]
+            'nee': true_nee[test_idx],
+            'sw_in_raw': sw_in_raw[test_idx]
         }
     }
 
@@ -760,11 +770,25 @@ NEE = ['NEE']
 gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
+
+tramontana = True # then pass in the raw sw_in for the multiplication
+if tramontana:
+    tram_gpp_input_names = []
+    # READING FROM THE CLEAN FILE
+    sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
+    sw_in_raw_name = ['SW_IN_RAW']
+    tram_gpp_input_names.extend(sw_in_raw_name)
+    tram_gpp_input_names.extend(gpp_input_names)
+    
+    gpp_inputs = torch.cat((sw_in_raw, gpp_inputs), 1)
+    gpp_input_names = tram_gpp_input_names
+    
+
+
 print(f"gpp_input_names,  {gpp_input_names} \n"
       f"reco_input_names,  {reco_input_names} \n"
       f"true_nee_name,  {true_nee_name} \n")
 
-# fit(gpp_inputs=gpp_inputs, reco_inputs=reco_inputs, true_nee=true_nee)
 
 # Not sure if this is the cleanest way. But keep for now as we need to validate.
 splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
@@ -780,6 +804,7 @@ splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_rati
 # X_gpp_test = splits['test']['gpp']
 # X_reco_test = splits['test']['reco']
 # y_test = splits['test']['nee']
+
 gpp_model, reco_model = better_fit_gpu(
     X_gpp_train=splits['train']['gpp'],
     X_reco_train=splits['train']['reco'],
@@ -787,6 +812,8 @@ gpp_model, reco_model = better_fit_gpu(
     X_gpp_val=splits['val']['gpp'],
     X_reco_val=splits['val']['reco'],
     y_val=splits['val']['nee'],
+    SW_IN_RAW_train=splits['train']['sw_in_raw'],
+    SW_IN_RAW_val=splits['val']['sw_in_raw']
 )
 
 
