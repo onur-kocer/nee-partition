@@ -1,0 +1,248 @@
+created virtual environment CPython3.10.13.final.0-64 in 15330ms
+  creator CPython3Posix(dest=/localscratch/onurk.63908315.0/env, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/onurk/.local/share/virtualenv)
+    added seed packages: pip==25.1.1, setuptools==80.9.0, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.6.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.18.0+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: typing-extensions>=4.10.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.10/site-packages (from torch) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.5+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.5.1+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sympy-1.13.1+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages (from sympy==1.13.1->torch) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/MarkupSafe-2.1.5+computecanada-cp310-cp310-linux_x86_64.whl (from jinja2->torch)
+INFO: pip is looking at multiple versions of networkx to determine which version is compatible with other requirements. This could take a while.
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.4.2+computecanada-py3-none-any.whl (from torch)
+Installing collected packages: sympy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
+  Attempting uninstall: sympy
+    Found existing installation: sympy 1.13.3+computecanada
+    Not uninstalling sympy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages, outside environment /localscratch/onurk.63908315.0/env
+    Can't uninstall 'sympy'. No files were found to uninstall.
+
+Successfully installed MarkupSafe-2.1.5+computecanada filelock-3.18.0+computecanada fsspec-2025.5.1+computecanada jinja2-3.1.6+computecanada networkx-3.4.2+computecanada sympy-1.13.1+computecanada torch-2.6.0+computecanada
+gpp_input_names,  ['SW_IN_RAW', 'SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+On Tramontana model definition. Except avoid multiplying by SW_IN_RAW!
+Tramontana False
+Epoch     0 | Train Loss: 0.852661 | Val Loss: 0.846543 | Train R²: -28.8571 | Val R²: -27.4383
+Epoch   500 | Train Loss: 0.036587 | Val Loss: 0.038079 | Train R²: -0.2811 | Val R²: -0.2792
+Epoch  1000 | Train Loss: 0.029757 | Val Loss: 0.031091 | Train R²: -0.0420 | Val R²: -0.0445
+Epoch  1500 | Train Loss: 0.028141 | Val Loss: 0.029389 | Train R²: 0.0146 | Val R²: 0.0127
+Epoch  2000 | Train Loss: 0.027186 | Val Loss: 0.028358 | Train R²: 0.0481 | Val R²: 0.0473
+Epoch  2500 | Train Loss: 0.026739 | Val Loss: 0.027883 | Train R²: 0.0637 | Val R²: 0.0633
+Epoch  3000 | Train Loss: 0.026470 | Val Loss: 0.027596 | Train R²: 0.0731 | Val R²: 0.0729
+Epoch  3500 | Train Loss: 0.026232 | Val Loss: 0.027344 | Train R²: 0.0814 | Val R²: 0.0814
+Epoch  4000 | Train Loss: 0.025723 | Val Loss: 0.026828 | Train R²: 0.0993 | Val R²: 0.0988
+Epoch  4500 | Train Loss: 0.024293 | Val Loss: 0.025398 | Train R²: 0.1494 | Val R²: 0.1468
+Epoch  5000 | Train Loss: 0.023751 | Val Loss: 0.024854 | Train R²: 0.1683 | Val R²: 0.1651
+Epoch  5500 | Train Loss: 0.023515 | Val Loss: 0.024616 | Train R²: 0.1766 | Val R²: 0.1731
+Epoch  6000 | Train Loss: 0.023373 | Val Loss: 0.024475 | Train R²: 0.1816 | Val R²: 0.1778
+Epoch  6500 | Train Loss: 0.023277 | Val Loss: 0.024383 | Train R²: 0.1849 | Val R²: 0.1809
+Epoch  7000 | Train Loss: 0.023198 | Val Loss: 0.024315 | Train R²: 0.1877 | Val R²: 0.1832
+Epoch  7500 | Train Loss: 0.023131 | Val Loss: 0.024248 | Train R²: 0.1900 | Val R²: 0.1854
+Epoch  8000 | Train Loss: 0.023072 | Val Loss: 0.024188 | Train R²: 0.1921 | Val R²: 0.1874
+Epoch  8500 | Train Loss: 0.023022 | Val Loss: 0.024139 | Train R²: 0.1938 | Val R²: 0.1891
+Epoch  9000 | Train Loss: 0.022980 | Val Loss: 0.024098 | Train R²: 0.1953 | Val R²: 0.1905
+Epoch  9500 | Train Loss: 0.022943 | Val Loss: 0.024061 | Train R²: 0.1966 | Val R²: 0.1917
+Epoch 10000 | Train Loss: 0.022909 | Val Loss: 0.024027 | Train R²: 0.1978 | Val R²: 0.1928
+Epoch 10500 | Train Loss: 0.022879 | Val Loss: 0.023997 | Train R²: 0.1988 | Val R²: 0.1939
+Epoch 11000 | Train Loss: 0.022852 | Val Loss: 0.023968 | Train R²: 0.1998 | Val R²: 0.1948
+Epoch 11500 | Train Loss: 0.022828 | Val Loss: 0.023941 | Train R²: 0.2007 | Val R²: 0.1957
+Epoch 12000 | Train Loss: 0.022802 | Val Loss: 0.023912 | Train R²: 0.2016 | Val R²: 0.1967
+Epoch 12500 | Train Loss: 0.022777 | Val Loss: 0.023886 | Train R²: 0.2024 | Val R²: 0.1976
+Epoch 13000 | Train Loss: 0.022757 | Val Loss: 0.023866 | Train R²: 0.2031 | Val R²: 0.1982
+Epoch 13500 | Train Loss: 0.022743 | Val Loss: 0.023853 | Train R²: 0.2036 | Val R²: 0.1987
+Epoch 14000 | Train Loss: 0.022734 | Val Loss: 0.023842 | Train R²: 0.2040 | Val R²: 0.1991
+Epoch 14500 | Train Loss: 0.022724 | Val Loss: 0.023832 | Train R²: 0.2043 | Val R²: 0.1994
+Epoch 15000 | Train Loss: 0.022716 | Val Loss: 0.023825 | Train R²: 0.2046 | Val R²: 0.1996
+Epoch 15500 | Train Loss: 0.022710 | Val Loss: 0.023819 | Train R²: 0.2048 | Val R²: 0.1998
+Epoch 16000 | Train Loss: 0.022704 | Val Loss: 0.023814 | Train R²: 0.2050 | Val R²: 0.2000
+Epoch 16500 | Train Loss: 0.022699 | Val Loss: 0.023808 | Train R²: 0.2052 | Val R²: 0.2002
+Epoch 17000 | Train Loss: 0.022694 | Val Loss: 0.023802 | Train R²: 0.2053 | Val R²: 0.2004
+Epoch 17500 | Train Loss: 0.022689 | Val Loss: 0.023797 | Train R²: 0.2055 | Val R²: 0.2006
+Epoch 18000 | Train Loss: 0.022685 | Val Loss: 0.023793 | Train R²: 0.2056 | Val R²: 0.2007
+Epoch 18500 | Train Loss: 0.022681 | Val Loss: 0.023790 | Train R²: 0.2058 | Val R²: 0.2008
+Epoch 19000 | Train Loss: 0.022679 | Val Loss: 0.023788 | Train R²: 0.2059 | Val R²: 0.2009
+Epoch 19500 | Train Loss: 0.022676 | Val Loss: 0.023786 | Train R²: 0.2060 | Val R²: 0.2009
+Epoch 20000 | Train Loss: 0.022675 | Val Loss: 0.023785 | Train R²: 0.2060 | Val R²: 0.2010
+Epoch 20500 | Train Loss: 0.022673 | Val Loss: 0.023784 | Train R²: 0.2061 | Val R²: 0.2010
+Epoch 21000 | Train Loss: 0.022672 | Val Loss: 0.023783 | Train R²: 0.2061 | Val R²: 0.2010
+Epoch 21500 | Train Loss: 0.022670 | Val Loss: 0.023782 | Train R²: 0.2062 | Val R²: 0.2011
+Epoch 22000 | Train Loss: 0.022669 | Val Loss: 0.023782 | Train R²: 0.2062 | Val R²: 0.2011
+Epoch 22500 | Train Loss: 0.022668 | Val Loss: 0.023781 | Train R²: 0.2063 | Val R²: 0.2011
+Epoch 23000 | Train Loss: 0.022667 | Val Loss: 0.023780 | Train R²: 0.2063 | Val R²: 0.2011
+Epoch 23500 | Train Loss: 0.022666 | Val Loss: 0.023780 | Train R²: 0.2063 | Val R²: 0.2012
+Epoch 24000 | Train Loss: 0.022665 | Val Loss: 0.023779 | Train R²: 0.2064 | Val R²: 0.2012
+Epoch 24500 | Train Loss: 0.022664 | Val Loss: 0.023779 | Train R²: 0.2064 | Val R²: 0.2012
+Epoch 25000 | Train Loss: 0.022663 | Val Loss: 0.023779 | Train R²: 0.2064 | Val R²: 0.2012
+Epoch 25500 | Train Loss: 0.022663 | Val Loss: 0.023779 | Train R²: 0.2064 | Val R²: 0.2012
+Epoch 26000 | Train Loss: 0.022662 | Val Loss: 0.023778 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 26500 | Train Loss: 0.022662 | Val Loss: 0.023778 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 27000 | Train Loss: 0.022661 | Val Loss: 0.023778 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 27500 | Train Loss: 0.022661 | Val Loss: 0.023778 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 28000 | Train Loss: 0.022660 | Val Loss: 0.023777 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 28500 | Train Loss: 0.022660 | Val Loss: 0.023778 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 29000 | Train Loss: 0.022660 | Val Loss: 0.023777 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 29500 | Train Loss: 0.022660 | Val Loss: 0.023777 | Train R²: 0.2065 | Val R²: 0.2012
+Epoch 30000 | Train Loss: 0.022659 | Val Loss: 0.023777 | Train R²: 0.2066 | Val R²: 0.2012
+Epoch 30500 | Train Loss: 0.022659 | Val Loss: 0.023777 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 31000 | Train Loss: 0.022658 | Val Loss: 0.023777 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 31500 | Train Loss: 0.022658 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 32000 | Train Loss: 0.022658 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 32500 | Train Loss: 0.022658 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 33000 | Train Loss: 0.022657 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 33500 | Train Loss: 0.022657 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 34000 | Train Loss: 0.022657 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 34500 | Train Loss: 0.022657 | Val Loss: 0.023776 | Train R²: 0.2066 | Val R²: 0.2013
+Epoch 35000 | Train Loss: 0.022656 | Val Loss: 0.023776 | Train R²: 0.2067 | Val R²: 0.2013
+Epoch 35500 | Train Loss: 0.022656 | Val Loss: 0.023776 | Train R²: 0.2067 | Val R²: 0.2013
+Epoch 36000 | Train Loss: 0.022655 | Val Loss: 0.023776 | Train R²: 0.2067 | Val R²: 0.2013
+Epoch 36500 | Train Loss: 0.022655 | Val Loss: 0.023776 | Train R²: 0.2067 | Val R²: 0.2013
+Epoch 37000 | Train Loss: 0.022655 | Val Loss: 0.023776 | Train R²: 0.2067 | Val R²: 0.2013
+Epoch 37500 | Train Loss: 0.022654 | Val Loss: 0.023777 | Train R²: 0.2067 | Val R²: 0.2012
+Epoch 38000 | Train Loss: 0.022654 | Val Loss: 0.023778 | Train R²: 0.2068 | Val R²: 0.2012
+Epoch 38500 | Train Loss: 0.022653 | Val Loss: 0.023779 | Train R²: 0.2068 | Val R²: 0.2012
+Epoch 39000 | Train Loss: 0.022652 | Val Loss: 0.023782 | Train R²: 0.2068 | Val R²: 0.2011
+Epoch 39500 | Train Loss: 0.022650 | Val Loss: 0.023786 | Train R²: 0.2069 | Val R²: 0.2009
+Epoch 40000 | Train Loss: 0.022647 | Val Loss: 0.023793 | Train R²: 0.2070 | Val R²: 0.2007
+Epoch 40500 | Train Loss: 0.022645 | Val Loss: 0.023802 | Train R²: 0.2071 | Val R²: 0.2004
+Epoch 41000 | Train Loss: 0.022642 | Val Loss: 0.023812 | Train R²: 0.2072 | Val R²: 0.2001
+Epoch 41500 | Train Loss: 0.022640 | Val Loss: 0.023823 | Train R²: 0.2072 | Val R²: 0.1997
+Epoch 42000 | Train Loss: 0.022637 | Val Loss: 0.023834 | Train R²: 0.2073 | Val R²: 0.1993
+Epoch 42500 | Train Loss: 0.022636 | Val Loss: 0.023844 | Train R²: 0.2074 | Val R²: 0.1990
+Epoch 43000 | Train Loss: 0.022634 | Val Loss: 0.023854 | Train R²: 0.2074 | Val R²: 0.1987
+Epoch 43500 | Train Loss: 0.022632 | Val Loss: 0.023863 | Train R²: 0.2075 | Val R²: 0.1984
+Epoch 44000 | Train Loss: 0.022631 | Val Loss: 0.023871 | Train R²: 0.2075 | Val R²: 0.1981
+Epoch 44500 | Train Loss: 0.022630 | Val Loss: 0.023879 | Train R²: 0.2076 | Val R²: 0.1978
+Epoch 45000 | Train Loss: 0.022629 | Val Loss: 0.023886 | Train R²: 0.2076 | Val R²: 0.1976
+Epoch 45500 | Train Loss: 0.022628 | Val Loss: 0.023892 | Train R²: 0.2077 | Val R²: 0.1974
+Epoch 46000 | Train Loss: 0.022627 | Val Loss: 0.023897 | Train R²: 0.2077 | Val R²: 0.1972
+Epoch 46500 | Train Loss: 0.022626 | Val Loss: 0.023902 | Train R²: 0.2077 | Val R²: 0.1971
+Epoch 47000 | Train Loss: 0.022625 | Val Loss: 0.023906 | Train R²: 0.2077 | Val R²: 0.1969
+Epoch 47500 | Train Loss: 0.022625 | Val Loss: 0.023910 | Train R²: 0.2078 | Val R²: 0.1968
+Epoch 48000 | Train Loss: 0.022624 | Val Loss: 0.023913 | Train R²: 0.2078 | Val R²: 0.1967
+Epoch 48500 | Train Loss: 0.022624 | Val Loss: 0.023916 | Train R²: 0.2078 | Val R²: 0.1966
+Epoch 49000 | Train Loss: 0.022623 | Val Loss: 0.023918 | Train R²: 0.2078 | Val R²: 0.1965
+Epoch 49500 | Train Loss: 0.022623 | Val Loss: 0.023920 | Train R²: 0.2078 | Val R²: 0.1964
+Epoch 50000 | Train Loss: 0.022623 | Val Loss: 0.023922 | Train R²: 0.2078 | Val R²: 0.1964
+Epoch 50500 | Train Loss: 0.022622 | Val Loss: 0.023924 | Train R²: 0.2078 | Val R²: 0.1963
+Epoch 51000 | Train Loss: 0.022622 | Val Loss: 0.023925 | Train R²: 0.2078 | Val R²: 0.1963
+Epoch 51500 | Train Loss: 0.022622 | Val Loss: 0.023925 | Train R²: 0.2079 | Val R²: 0.1963
+Epoch 52000 | Train Loss: 0.022622 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 52500 | Train Loss: 0.022621 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 53000 | Train Loss: 0.022621 | Val Loss: 0.023927 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 53500 | Train Loss: 0.022621 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 54000 | Train Loss: 0.022621 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 54500 | Train Loss: 0.022621 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1962
+Epoch 55000 | Train Loss: 0.022621 | Val Loss: 0.023926 | Train R²: 0.2079 | Val R²: 0.1963
+Epoch 55500 | Train Loss: 0.022621 | Val Loss: 0.023925 | Train R²: 0.2079 | Val R²: 0.1963
+Epoch 56000 | Train Loss: 0.022620 | Val Loss: 0.023924 | Train R²: 0.2079 | Val R²: 0.1963
+Epoch 56500 | Train Loss: 0.022620 | Val Loss: 0.023924 | Train R²: 0.2079 | Val R²: 0.1963
+Epoch 57000 | Train Loss: 0.022620 | Val Loss: 0.023923 | Train R²: 0.2079 | Val R²: 0.1964
+Epoch 57500 | Train Loss: 0.022620 | Val Loss: 0.023922 | Train R²: 0.2079 | Val R²: 0.1964
+Epoch 58000 | Train Loss: 0.022620 | Val Loss: 0.023921 | Train R²: 0.2079 | Val R²: 0.1964
+Epoch 58500 | Train Loss: 0.022620 | Val Loss: 0.023919 | Train R²: 0.2079 | Val R²: 0.1965
+Epoch 59000 | Train Loss: 0.022620 | Val Loss: 0.023918 | Train R²: 0.2079 | Val R²: 0.1965
+Epoch 59500 | Train Loss: 0.022620 | Val Loss: 0.023917 | Train R²: 0.2079 | Val R²: 0.1966
+Epoch 60000 | Train Loss: 0.022620 | Val Loss: 0.023915 | Train R²: 0.2079 | Val R²: 0.1966
+Epoch 60500 | Train Loss: 0.022619 | Val Loss: 0.023913 | Train R²: 0.2079 | Val R²: 0.1967
+Epoch 61000 | Train Loss: 0.022619 | Val Loss: 0.023912 | Train R²: 0.2079 | Val R²: 0.1967
+Epoch 61500 | Train Loss: 0.022619 | Val Loss: 0.023910 | Train R²: 0.2080 | Val R²: 0.1968
+Epoch 62000 | Train Loss: 0.022619 | Val Loss: 0.023908 | Train R²: 0.2080 | Val R²: 0.1968
+Epoch 62500 | Train Loss: 0.022619 | Val Loss: 0.023906 | Train R²: 0.2080 | Val R²: 0.1969
+Epoch 63000 | Train Loss: 0.022619 | Val Loss: 0.023905 | Train R²: 0.2080 | Val R²: 0.1970
+Epoch 63500 | Train Loss: 0.022619 | Val Loss: 0.023903 | Train R²: 0.2080 | Val R²: 0.1970
+Epoch 64000 | Train Loss: 0.022619 | Val Loss: 0.023901 | Train R²: 0.2080 | Val R²: 0.1971
+Epoch 64500 | Train Loss: 0.022619 | Val Loss: 0.023899 | Train R²: 0.2080 | Val R²: 0.1971
+Epoch 65000 | Train Loss: 0.022619 | Val Loss: 0.023898 | Train R²: 0.2080 | Val R²: 0.1972
+Epoch 65500 | Train Loss: 0.022619 | Val Loss: 0.023895 | Train R²: 0.2080 | Val R²: 0.1973
+Epoch 66000 | Train Loss: 0.022619 | Val Loss: 0.023894 | Train R²: 0.2080 | Val R²: 0.1973
+Epoch 66500 | Train Loss: 0.022619 | Val Loss: 0.023892 | Train R²: 0.2080 | Val R²: 0.1974
+Epoch 67000 | Train Loss: 0.022619 | Val Loss: 0.023890 | Train R²: 0.2080 | Val R²: 0.1974
+Epoch 67500 | Train Loss: 0.022618 | Val Loss: 0.023889 | Train R²: 0.2080 | Val R²: 0.1975
+Epoch 68000 | Train Loss: 0.022618 | Val Loss: 0.023888 | Train R²: 0.2080 | Val R²: 0.1975
+Epoch 68500 | Train Loss: 0.022618 | Val Loss: 0.023886 | Train R²: 0.2080 | Val R²: 0.1976
+Epoch 69000 | Train Loss: 0.022618 | Val Loss: 0.023885 | Train R²: 0.2080 | Val R²: 0.1976
+Epoch 69500 | Train Loss: 0.022618 | Val Loss: 0.023884 | Train R²: 0.2080 | Val R²: 0.1976
+Epoch 70000 | Train Loss: 0.022618 | Val Loss: 0.023884 | Train R²: 0.2080 | Val R²: 0.1977
+Epoch 70500 | Train Loss: 0.022618 | Val Loss: 0.023883 | Train R²: 0.2080 | Val R²: 0.1977
+Epoch 71000 | Train Loss: 0.022618 | Val Loss: 0.023882 | Train R²: 0.2080 | Val R²: 0.1977
+Epoch 71500 | Train Loss: 0.022618 | Val Loss: 0.023881 | Train R²: 0.2080 | Val R²: 0.1977
+Epoch 72000 | Train Loss: 0.022618 | Val Loss: 0.023881 | Train R²: 0.2080 | Val R²: 0.1978
+Epoch 72500 | Train Loss: 0.022618 | Val Loss: 0.023880 | Train R²: 0.2080 | Val R²: 0.1978
+Epoch 73000 | Train Loss: 0.022618 | Val Loss: 0.023880 | Train R²: 0.2080 | Val R²: 0.1978
+Epoch 73500 | Train Loss: 0.022618 | Val Loss: 0.023879 | Train R²: 0.2080 | Val R²: 0.1978
+Epoch 74000 | Train Loss: 0.022618 | Val Loss: 0.023878 | Train R²: 0.2080 | Val R²: 0.1978
+Epoch 74500 | Train Loss: 0.022618 | Val Loss: 0.023878 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 75000 | Train Loss: 0.022618 | Val Loss: 0.023878 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 75500 | Train Loss: 0.022617 | Val Loss: 0.023877 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 76000 | Train Loss: 0.022617 | Val Loss: 0.023877 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 76500 | Train Loss: 0.022617 | Val Loss: 0.023877 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 77000 | Train Loss: 0.022617 | Val Loss: 0.023876 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 77500 | Train Loss: 0.022617 | Val Loss: 0.023876 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 78000 | Train Loss: 0.022617 | Val Loss: 0.023875 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 78500 | Train Loss: 0.022617 | Val Loss: 0.023876 | Train R²: 0.2080 | Val R²: 0.1979
+Epoch 79000 | Train Loss: 0.022617 | Val Loss: 0.023875 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 79500 | Train Loss: 0.022617 | Val Loss: 0.023874 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 80000 | Train Loss: 0.022617 | Val Loss: 0.023874 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 80500 | Train Loss: 0.022617 | Val Loss: 0.023874 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 81000 | Train Loss: 0.022617 | Val Loss: 0.023873 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 81500 | Train Loss: 0.022617 | Val Loss: 0.023873 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 82000 | Train Loss: 0.022617 | Val Loss: 0.023873 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 82500 | Train Loss: 0.022617 | Val Loss: 0.023873 | Train R²: 0.2080 | Val R²: 0.1980
+Epoch 83000 | Train Loss: 0.022617 | Val Loss: 0.023872 | Train R²: 0.2080 | Val R²: 0.1981
+Epoch 83500 | Train Loss: 0.022617 | Val Loss: 0.023872 | Train R²: 0.2080 | Val R²: 0.1981
+Epoch 84000 | Train Loss: 0.022617 | Val Loss: 0.023871 | Train R²: 0.2080 | Val R²: 0.1981
+Epoch 84500 | Train Loss: 0.022617 | Val Loss: 0.023871 | Train R²: 0.2080 | Val R²: 0.1981
+Epoch 85000 | Train Loss: 0.022617 | Val Loss: 0.023871 | Train R²: 0.2080 | Val R²: 0.1981
+Epoch 85500 | Train Loss: 0.022616 | Val Loss: 0.023870 | Train R²: 0.2081 | Val R²: 0.1981
+Epoch 86000 | Train Loss: 0.022616 | Val Loss: 0.023870 | Train R²: 0.2081 | Val R²: 0.1981
+Epoch 86500 | Train Loss: 0.022616 | Val Loss: 0.023869 | Train R²: 0.2081 | Val R²: 0.1981
+Epoch 87000 | Train Loss: 0.022616 | Val Loss: 0.023869 | Train R²: 0.2081 | Val R²: 0.1982
+Epoch 87500 | Train Loss: 0.022616 | Val Loss: 0.023868 | Train R²: 0.2081 | Val R²: 0.1982
+Epoch 88000 | Train Loss: 0.022616 | Val Loss: 0.023868 | Train R²: 0.2081 | Val R²: 0.1982
+Epoch 88500 | Train Loss: 0.022616 | Val Loss: 0.023867 | Train R²: 0.2081 | Val R²: 0.1982
+Epoch 89000 | Train Loss: 0.022616 | Val Loss: 0.023867 | Train R²: 0.2081 | Val R²: 0.1982
+Epoch 89500 | Train Loss: 0.022616 | Val Loss: 0.023866 | Train R²: 0.2081 | Val R²: 0.1983
+Epoch 90000 | Train Loss: 0.022616 | Val Loss: 0.023865 | Train R²: 0.2081 | Val R²: 0.1983
+Epoch 90500 | Train Loss: 0.022616 | Val Loss: 0.023865 | Train R²: 0.2081 | Val R²: 0.1983
+Epoch 91000 | Train Loss: 0.022616 | Val Loss: 0.023864 | Train R²: 0.2081 | Val R²: 0.1983
+Epoch 91500 | Train Loss: 0.022616 | Val Loss: 0.023863 | Train R²: 0.2081 | Val R²: 0.1983
+Epoch 92000 | Train Loss: 0.022616 | Val Loss: 0.023863 | Train R²: 0.2081 | Val R²: 0.1984
+Epoch 92500 | Train Loss: 0.022616 | Val Loss: 0.023862 | Train R²: 0.2081 | Val R²: 0.1984
+Epoch 93000 | Train Loss: 0.022616 | Val Loss: 0.023861 | Train R²: 0.2081 | Val R²: 0.1984
+Epoch 93500 | Train Loss: 0.022616 | Val Loss: 0.023860 | Train R²: 0.2081 | Val R²: 0.1984
+Epoch 94000 | Train Loss: 0.022616 | Val Loss: 0.023860 | Train R²: 0.2081 | Val R²: 0.1985
+Epoch 94500 | Train Loss: 0.022616 | Val Loss: 0.023859 | Train R²: 0.2081 | Val R²: 0.1985
+Epoch 95000 | Train Loss: 0.022616 | Val Loss: 0.023858 | Train R²: 0.2081 | Val R²: 0.1985
+Epoch 95500 | Train Loss: 0.022616 | Val Loss: 0.023857 | Train R²: 0.2081 | Val R²: 0.1986
+Epoch 96000 | Train Loss: 0.022616 | Val Loss: 0.023857 | Train R²: 0.2081 | Val R²: 0.1986
+Epoch 96500 | Train Loss: 0.022616 | Val Loss: 0.023856 | Train R²: 0.2081 | Val R²: 0.1986
+Epoch 97000 | Train Loss: 0.022616 | Val Loss: 0.023855 | Train R²: 0.2081 | Val R²: 0.1986
+Epoch 97500 | Train Loss: 0.022616 | Val Loss: 0.023854 | Train R²: 0.2081 | Val R²: 0.1987
+Epoch 98000 | Train Loss: 0.022616 | Val Loss: 0.023854 | Train R²: 0.2081 | Val R²: 0.1987
+Epoch 98500 | Train Loss: 0.022615 | Val Loss: 0.023852 | Train R²: 0.2081 | Val R²: 0.1987
+Epoch 99000 | Train Loss: 0.022615 | Val Loss: 0.023852 | Train R²: 0.2081 | Val R²: 0.1987
+Epoch 99500 | Train Loss: 0.022615 | Val Loss: 0.023851 | Train R²: 0.2081 | Val R²: 0.1988
+Epoch 99999 | Train Loss: 0.022615 | Val Loss: 0.023850 | Train R²: 0.2081 | Val R²: 0.1988
