@@ -71,8 +71,10 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         X_gpp_val, X_reco_val, y_val,
         SW_IN_RAW_train, SW_IN_RAW_val,
         tram = False,
-        epochs=100000, lr=1e-3):
-    hidden_layer_size = 12
+        epochs=100000, lr=1e-3,
+        hidden_layers_size = 12
+        ):
+
     run_info = "Tramontana" if tram else "Custom"
 
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
@@ -564,7 +566,7 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
 
     return clean_df
 
-def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
+def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
     assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
 
     # Split SW_IN_RAW from the rest
@@ -616,6 +618,24 @@ def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
+train_models = True
+save_models = True
+hidden_layer_size = 12
+
+##############################################
+#### Use Tramontana model or Custom Model ####
+##############################################
+tramontana_run = False
+
+print(f"pre_processing: {pre_processing}\
+      drop_na: {drop_na} \
+      normalize_raw_features: {normalize_raw_features} \
+      train_models: {train_models} \
+      save_models: {save_models} \
+      hidden_layer_size: {hidden_layer_size} \
+      tramontana_run: {tramontana_run} \
+      ")
+
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 processed_file_name = "data/Processed_{}".format(file_name)
 clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
@@ -690,16 +710,13 @@ RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4
 NEE = ['NEE']
 TIME = ['TIME']
 
-# normalized_file_name
+# Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
 gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
 time, _, time_name, _ = load_data("{}".format(normalized_file_name), TIME, [], prep_doy_sin_cos = False)
 
-"""
-#### Use Tramontana model or Custom Model ####
-"""
-tramontana_run = True #
+
 if tramontana_run:
     tram_gpp_input_names = []
     # READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
@@ -733,18 +750,42 @@ splits = split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, va
 # X_reco_test = splits['test']['reco']
 # y_test = splits['test']['nee']
 
-gpp_model, reco_model = better_fit_gpu(
-    tram=tramontana_run,
-    X_gpp_train=splits['train']['gpp'],
-    X_reco_train=splits['train']['reco'],
-    y_train=splits['train']['nee'],
-    X_gpp_val=splits['val']['gpp'],
-    X_reco_val=splits['val']['reco'],
-    y_val=splits['val']['nee'],
-    SW_IN_RAW_train=splits['train']['sw_in_raw'],
-    SW_IN_RAW_val=splits['val']['sw_in_raw'],
-)
+if train_models:
+    gpp_model, reco_model = better_fit_gpu(
+        tram=tramontana_run,
+        hidden_layers_size=hidden_layer_size,
+        X_gpp_train=splits['train']['gpp'],
+        X_reco_train=splits['train']['reco'],
+        y_train=splits['train']['nee'],
+        X_gpp_val=splits['val']['gpp'],
+        X_reco_val=splits['val']['reco'],
+        y_val=splits['val']['nee'],
+        SW_IN_RAW_train=splits['train']['sw_in_raw'],
+        SW_IN_RAW_val=splits['val']['sw_in_raw'],
+    )
 
+run_type_str = "Tramontana" if tramontana_run else "Custom"
+if save_models:
+    torch.save(gpp_model.state_dict(), f"trained_models/CADSM_gpp_model_{run_type_str}.pth")
+    torch.save(reco_model.state_dict(), f"trained_models/CADSM_reco_model_{run_type_str}.pth")
+
+
+print("Unpickling models")
+trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_layer_size)
+trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_layer_size)
+
+trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
+trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
+
+
+print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
+
+print(f"Parameters")
+for param in trained_gpp_model.parameters():
+    print(param)
+for param in trained_reco_model.parameters():
+    print(param)
+    
 
 
 
