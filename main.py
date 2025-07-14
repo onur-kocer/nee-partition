@@ -618,8 +618,8 @@ def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_rat
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-train_models = True
-save_models = True
+train_models = False
+save_models = False
 hidden_size = 12
 
 ##############################################
@@ -772,11 +772,11 @@ if save_models:
 
 print("Unpickling models")
 if tramontana_run:
-    trained_gpp_model = SNN_GPP_Tram(splits['train']['gpp'].shape[1], hidden_layer_size)
-    trained_reco_model = SNN_GPP_Tram(splits['train']['reco'].shape[1], hidden_layer_size)
+    trained_gpp_model = SNN_GPP_Tram(splits['train']['gpp'].shape[1], hidden_size)
+    trained_reco_model = SNN_GPP_Tram(splits['train']['reco'].shape[1], hidden_size)
 else:
-    trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_layer_size)
-    trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_layer_size)
+    trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_size)
+    trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_size)
 
 trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
 trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
@@ -789,8 +789,49 @@ for param in trained_gpp_model.parameters():
     print(param)
 for param in trained_reco_model.parameters():
     print(param)
-    
 
+# Time for eval.
+trained_gpp_model.eval()
+trained_reco_model.eval()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+with torch.no_grad():
+    gpp_pred = trained_gpp_model(splits['test']['gpp'].to(device))
+    reco_pred = trained_reco_model(splits['test']['reco'].to(device))
+
+df = pd.DataFrame({
+    'hour': splits['test']['time'].squeeze().cpu().numpy(),
+    'gpp': gpp_pred.squeeze().cpu().numpy(),
+    'reco': reco_pred.squeeze().cpu().numpy(),
+})
+
+# Group and compute mean ± std
+gpp_stats = df.groupby('hour')['gpp'].agg(['mean', 'std'])
+reco_stats = df.groupby('hour')['reco'].agg(['mean', 'std'])
+
+fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+# GPP plot
+ax[0].plot(gpp_stats.index, gpp_stats['mean'], label='GPP Mean')
+ax[0].fill_between(gpp_stats.index,
+                   gpp_stats['mean'] - gpp_stats['std'],
+                   gpp_stats['mean'] + gpp_stats['std'],
+                   alpha=0.3, label='±1 Std Dev')
+ax[0].set_ylabel("GPP")
+ax[0].legend()
+
+# RECO plot
+ax[1].plot(reco_stats.index, reco_stats['mean'], label='RECO Mean', color='green')
+ax[1].fill_between(reco_stats.index,
+                   reco_stats['mean'] - reco_stats['std'],
+                   reco_stats['mean'] + reco_stats['std'],
+                   alpha=0.3, label='±1 Std Dev', color='green')
+ax[1].set_xlabel("Hour of Day")
+ax[1].set_ylabel("RECO")
+ax[1].legend()
+
+plt.tight_layout()
+plt.show()
 
 
 """
