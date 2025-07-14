@@ -70,7 +70,7 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
 def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
         SW_IN_RAW_train, SW_IN_RAW_val,
-        epochs=10000, lr=1e-3):
+        epochs=100000, lr=1e-3):
     hidden_layer_size = 12
     tram = True
     run_info = "Tramontana" if tram else "Custom"
@@ -89,8 +89,10 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     X_gpp_val = X_gpp_val.to(device)
     X_reco_val = X_reco_val.to(device)
     y_val = y_val.to(device)
-    SW_IN_RAW_train = SW_IN_RAW_train.to(device)
-    SW_IN_RAW_val = SW_IN_RAW_val.to(device)
+    if tram:
+        SW_IN_RAW_train = SW_IN_RAW_train.to(device)
+        SW_IN_RAW_val = SW_IN_RAW_val.to(device)
+    # Else these variables do not need to be moved to the GPU.
 
     # Instantiate models
     if tram:
@@ -100,7 +102,11 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         gpp_model = SNN_GPP(X_gpp_train.shape[1], hidden_layer_size)
         reco_model = SNN_RECO(X_reco_train.shape[1], hidden_layer_size)
 
-    # __Move models to device__
+    # Show what the model looks like for output tracking purposes.
+    print(gpp_model)
+    print(reco_model)
+
+    # Move models to device
     gpp_model = gpp_model.to(device)
     reco_model = reco_model.to(device)
 
@@ -117,12 +123,12 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         # Forward pass
         gpp_pred = gpp_model(X_gpp_train)
         if tram:
-            # gpp_pred = gpp_pred * X_gpp_train[:, 0].unsqueeze(1) # X_gpp_train[:,0] has the SW_IN!
             gpp_pred = gpp_pred * SW_IN_RAW_train
             gpp_pred = torch.relu(gpp_pred) # pos lin that they use in the paper.
 
         reco_pred = reco_model(X_reco_train)
-        nee_pred = gpp_pred + reco_pred
+        # nee_pred = gpp_pred + reco_pred # THIS IS THE WRONG APPROACH.
+        nee_pred =  reco_pred - gpp_pred
 
         # Training loss
         loss = criterion(nee_pred, y_train)
@@ -144,7 +150,8 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
                 val_gpp_pred = torch.relu(val_gpp_pred)
 
             val_reco_pred = reco_model(X_reco_val)
-            val_nee_pred = val_gpp_pred + val_reco_pred
+            # val_nee_pred = val_gpp_pred + val_reco_pred # THIS IS THE WRONG APPROACH.
+            val_nee_pred = val_reco_pred - val_gpp_pred
 
             # __Move results to CPU before computing metrics__
             train_r2 = r2_score(y_train.cpu(), nee_pred.cpu())
