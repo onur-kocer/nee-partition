@@ -70,9 +70,9 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
 def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
         SW_IN_RAW_train, SW_IN_RAW_val,
+        tram = False,
         epochs=100000, lr=1e-3):
     hidden_layer_size = 12
-    tram = True
     run_info = "Tramontana" if tram else "Custom"
 
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
@@ -188,6 +188,23 @@ def compute_doy_sin_cos(date_strings):
     return doy_sin, doy_cos
 
 
+def convert_hhmm_to_float_hour(time_tensor: torch.Tensor) -> torch.Tensor:
+    """
+    Converts a tensor of HHMM-style times (e.g., 30, 1330, 0) into float hours (e.g., 0.5, 13.5, 0.0).
+    
+    Args:
+        time_tensor (torch.Tensor): shape [N, 1] or [N], containing times in HHMM format
+    
+    Returns:
+        torch.Tensor: shape [N], times as float hours in [0, 23.5]
+    """
+    time_tensor = time_tensor.squeeze()  # [N, 1] → [N] if needed
+    hours = torch.floor(time_tensor / 100)
+    minutes = time_tensor % 100
+    float_hours = hours + (minutes / 60.0)
+    return float_hours.unsqueeze(dim = 1)
+
+
 def load_data(
     file_path: str,
     input_features: List[str],
@@ -241,6 +258,7 @@ def load_data(
         return input_tensor, target_tensor, input_features, target_features
     else:
         return input_tensor, target_tensor
+
 
 def pair_plotter(data):
     # Plots two variables on the same graph.
@@ -489,14 +507,19 @@ def prepare_data_using_csv (file_name):
     doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
     all_feature_names.extend(feature_name)
 
-    # 2. Collect all variables that haven't been normalized yet. 
+    # 2. Just import the time of day variable. Currently, will only be used for visualization.
+    time_hhmm, _, feature_name, _ = load_data("data/{}".format(file_name), ["TIME"] , [])
+    time_float = convert_hhmm_to_float_hour(time_hhmm)
+    all_feature_names.extend(feature_name)
+
+    # 3. Collect all variables that haven't been normalized yet. 
     #    These will be normalized later once the gaps have been dealt with.
     measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
 
-    # 3. Prep the pot radiation half hourly diff, daily average, and daily average diff
+    # 4. Prep the pot radiation half hourly diff, daily average, and daily average diff
     pot_rad_half_hourly, _, feature_name, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
     half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size=48)
     all_pot_rad_data = torch.cat((pot_rad_half_hourly, half_hourly_diff, daily_avg, daily_diff), 1)
@@ -505,21 +528,22 @@ def prepare_data_using_csv (file_name):
     all_feature_names.extend(["PotRadHalfHourlyDiff", "PotRadDailyAvg", "PotRadDailyDiff"])
 
 
-    # 4. For wind direction, convert degrees (0 to 360) into sin/cos representation
+    # 5. For wind direction, convert degrees (0 to 360) into sin/cos representation
     wd, _, feature_name, _ = load_data("data/{}".format(file_name), ["WD"], []);
     wd_cos_sin = wind_direction_to_cos_sin(wd) # returns an N x 2 torch tensor. Column [:,0] is cos, [:,1] is sin representation.
     all_feature_names.extend(["WD_COS", "WD_SIN"])
 
     
-    # 5. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE.
+    # 6. Calculate GPP_prox, and nightly NEE average using SW_IN and the NEE.
     #    The values we receive are NOT NORMALIZED, and later-in-the-pipeline will be normalized.  
     sw_in, _, feature_name, _ = load_data("data/{}".format(file_name), ["SW_IN"], [])
     nee, _, feature_name, _ = load_data("data/{}".format(file_name), ["NEE"], [])
     gpp_prox_and_nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
     all_feature_names.extend(["GPP_PROX", "NIGHTLY_NEE_AVG"])
 
-    return torch.cat((doy_cos_sin, measured_features_tensor_raw, all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average), 1), \
-            all_feature_names
+    return torch.cat((doy_cos_sin, time_float, measured_features_tensor_raw, \
+                      all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average), 1), \
+                        all_feature_names
     
 
 def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFrame:
@@ -569,19 +593,22 @@ def split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2
             'gpp': gpp_inputs_trimmed[train_idx],
             'reco': reco_inputs[train_idx],
             'nee': true_nee[train_idx],
-            'sw_in_raw': sw_in_raw[train_idx]
+            'sw_in_raw': sw_in_raw[train_idx],
+            'time': time[train_idx]
         },
         'val': {
             'gpp': gpp_inputs_trimmed[val_idx],
             'reco': reco_inputs[val_idx],
             'nee': true_nee[val_idx],
-            'sw_in_raw': sw_in_raw[val_idx]
+            'sw_in_raw': sw_in_raw[val_idx],
+            'time': time[val_idx]
         },
         'test': {
             'gpp': gpp_inputs_trimmed[test_idx],
             'reco': reco_inputs[test_idx],
             'nee': true_nee[test_idx],
-            'sw_in_raw': sw_in_raw[test_idx]
+            'sw_in_raw': sw_in_raw[test_idx],
+            'time': time[test_idx]
         }
     }
 
@@ -590,26 +617,25 @@ pre_processing = False
 drop_na = False
 normalize_raw_features = False
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-processed_file_name = "Processed_{}".format(file_name)
-clean_file_name = "Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
+processed_file_name = "data/Processed_{}".format(file_name)
+clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
 
 # ONLY NORMALIZE THE CLEAN FILE. Otherwise -9999's will affect the normalization.
-normalized_file_name = "Normalized_{}".format(file_name)
+normalized_file_name = "data/Normalized_{}".format(file_name)
 
 if pre_processing:
     print("pre-processing the third stage file to obtain/calculate the necessary features")
     prepped_data, feature_names = prepare_data_using_csv(file_name)
     print("prepped data shape was", prepped_data.shape)
-    print("feature_names", feature_names)
-
+    print("saving the following features", feature_names)
 
     X_df = pd.DataFrame(prepped_data.numpy(), columns=feature_names)
-    processed_file_name = "Processed_{}".format(file_name)
     X_df.to_csv(processed_file_name, index=False)
 
 
 if drop_na:
     # load_and_clean will drop all rows at least one missing value (ie. -9999)
+    print("dropping rows with missing values")
     df_clean = load_and_clean_csv(processed_file_name)
 
     print(f"Original rows: {len(pd.read_csv(processed_file_name))}")
@@ -630,6 +656,7 @@ if drop_na:
 
     df_clean.to_csv(clean_file_name, index=False)
 
+
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
@@ -641,7 +668,7 @@ if normalize_raw_features:
     # Normalize Raw Features:
     normalized_raw_features, _, _ = normalize_features(raw_features)
 
-    already_normalized_feature_names = ['DOY_sin', 'DOY_cos', 'WD_COS', 'WD_SIN']
+    already_normalized_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN',]
     already_normalized_features, _, already_normalized_feature_names, _ = \
             load_data("{}".format(clean_file_name), already_normalized_feature_names, [], prep_doy_sin_cos = False);
 
@@ -656,23 +683,26 @@ if normalize_raw_features:
     df_normalized.to_csv(normalized_file_name, index=False)    
 
 
-
-
 # Read normalized values file then do backprop magic time.
 # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
 GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
 RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
 NEE = ['NEE']
+TIME = ['TIME']
 
 # normalized_file_name
 gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
 true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
+time, _, time_name, _ = load_data("{}".format(normalized_file_name), TIME, [], prep_doy_sin_cos = False)
 
-tramontana = True # then pass in the raw sw_in for the multiplication
-if tramontana:
+"""
+#### Use Tramontana model or Custom Model ####
+"""
+tramontana_run = True #
+if tramontana_run:
     tram_gpp_input_names = []
-    # READING FROM THE CLEAN FILE
+    # READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
     sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
     sw_in_raw_name = ['SW_IN_RAW']
     tram_gpp_input_names.extend(sw_in_raw_name)
@@ -689,7 +719,7 @@ print(f"gpp_input_names,  {gpp_input_names} \n"
 
 
 # Not sure if this is the cleanest way. But keep for now as we need to validate.
-splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+splits = split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
 
 # X_gpp_train = splits['train']['gpp']
 # X_reco_train = splits['train']['reco']
@@ -704,6 +734,7 @@ splits = split_data(gpp_inputs, reco_inputs, true_nee, train_ratio=0.6, val_rati
 # y_test = splits['test']['nee']
 
 gpp_model, reco_model = better_fit_gpu(
+    tram=tramontana_run,
     X_gpp_train=splits['train']['gpp'],
     X_reco_train=splits['train']['reco'],
     y_train=splits['train']['nee'],
@@ -711,7 +742,7 @@ gpp_model, reco_model = better_fit_gpu(
     X_reco_val=splits['val']['reco'],
     y_val=splits['val']['nee'],
     SW_IN_RAW_train=splits['train']['sw_in_raw'],
-    SW_IN_RAW_val=splits['val']['sw_in_raw']
+    SW_IN_RAW_val=splits['val']['sw_in_raw'],
 )
 
 
