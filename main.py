@@ -15,7 +15,7 @@ class SNN_GPP_Tram(nn.Module):
         super(SNN_GPP_Tram, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
-            nn.Tanh(),
+            nn.ReLU(),
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
@@ -29,7 +29,7 @@ class SNN_RECO_Tram(nn.Module):
         super(SNN_RECO_Tram, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
-            nn.Tanh(),
+            nn.ReLU(),
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
         )
@@ -625,7 +625,7 @@ hidden_layer_size = 12
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = False
+tramontana_run = True
 
 print(f"pre_processing: {pre_processing}\
       drop_na: {drop_na} \
@@ -716,23 +716,23 @@ reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name
 true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
 time, _, time_name, _ = load_data("{}".format(normalized_file_name), TIME, [], prep_doy_sin_cos = False)
 
-
-if tramontana_run:
-    tram_gpp_input_names = []
-    # READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
-    sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
-    sw_in_raw_name = ['SW_IN_RAW']
-    tram_gpp_input_names.extend(sw_in_raw_name)
-    tram_gpp_input_names.extend(gpp_input_names)
-    
-    gpp_inputs = torch.cat((sw_in_raw, gpp_inputs), 1)
-    gpp_input_names = tram_gpp_input_names
-    
-
-
 print(f"gpp_input_names,  {gpp_input_names} \n"
       f"reco_input_names,  {reco_input_names} \n"
       f"true_nee_name,  {true_nee_name} \n")
+
+
+# READ THE SW_IN EVEN IF IT IS NOT A TRAMONTANA RUN.
+tram_gpp_input_names = []
+# READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
+sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
+sw_in_raw_name = ['SW_IN_RAW']
+tram_gpp_input_names.extend(sw_in_raw_name)
+tram_gpp_input_names.extend(gpp_input_names)
+
+gpp_inputs = torch.cat((sw_in_raw, gpp_inputs), 1)
+gpp_input_names = tram_gpp_input_names
+
+
 
 
 # Not sure if this is the cleanest way. But keep for now as we need to validate.
