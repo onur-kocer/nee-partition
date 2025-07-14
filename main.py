@@ -72,7 +72,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         SW_IN_RAW_train, SW_IN_RAW_val,
         tram = False,
         epochs=100000, lr=1e-3,
-        hidden_layers_size = 12
+        hidden_layer_size = 12
         ):
 
     run_info = "Tramontana" if tram else "Custom"
@@ -620,7 +620,7 @@ drop_na = False
 normalize_raw_features = False
 train_models = True
 save_models = True
-hidden_layer_size = 12
+hidden_size = 12
 
 ##############################################
 #### Use Tramontana model or Custom Model ####
@@ -632,7 +632,7 @@ print(f"pre_processing: {pre_processing}\
       normalize_raw_features: {normalize_raw_features} \
       train_models: {train_models} \
       save_models: {save_models} \
-      hidden_layer_size: {hidden_layer_size} \
+      hidden_size: {hidden_size} \
       tramontana_run: {tramontana_run} \
       ")
 
@@ -753,7 +753,7 @@ splits = split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, va
 if train_models:
     gpp_model, reco_model = better_fit_gpu(
         tram=tramontana_run,
-        hidden_layers_size=hidden_layer_size,
+        hidden_layer_size=hidden_size,
         X_gpp_train=splits['train']['gpp'],
         X_reco_train=splits['train']['reco'],
         y_train=splits['train']['nee'],
@@ -771,8 +771,12 @@ if save_models:
 
 
 print("Unpickling models")
-trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_layer_size)
-trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_layer_size)
+if tramontana_run:
+    trained_gpp_model = SNN_GPP_Tram(splits['train']['gpp'].shape[1], hidden_layer_size)
+    trained_reco_model = SNN_GPP_Tram(splits['train']['reco'].shape[1], hidden_layer_size)
+else:
+    trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_layer_size)
+    trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_layer_size)
 
 trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
 trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
