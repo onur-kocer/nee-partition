@@ -494,6 +494,22 @@ def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, tor
 
     return X_norm, X_min, X_max
 
+def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch.Tensor) -> torch.Tensor:
+    """
+    Un-normalizes a normalized tensor using:
+        X = ((X_norm / 2) + 0.5) * (X_max - X_min) + X_min
+
+    Args:
+        X_norm (torch.Tensor): Normalized tensor of shape [N, D]
+        X_min (torch.Tensor): Minimums per feature [D]
+        X_max (torch.Tensor): Maximums per feature [D]
+
+    Returns:
+        X (torch.Tensor): Un-normalized tensor of shape [N, D]
+    """
+    range_ = (X_max - X_min).clamp(min=1e-8)
+    return ((X_norm / 2) + 0.5) * range_ + X_min
+
 
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
@@ -778,60 +794,96 @@ else:
     trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_size)
     trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_size)
 
-trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
-trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.cuda.is_available():
+    trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
+    trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
+else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
+    trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+    trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
 
 
 print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
 
-print(f"Parameters")
-for param in trained_gpp_model.parameters():
-    print(param)
-for param in trained_reco_model.parameters():
-    print(param)
+# print(f"Parameters")
+# for param in trained_gpp_model.parameters():
+#     print(param)
+# for param in trained_reco_model.parameters():
+#     print(param)
+
 
 # Time for eval.
 trained_gpp_model.eval()
 trained_reco_model.eval()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
+test_or_train = "train"
 with torch.no_grad():
-    gpp_pred = trained_gpp_model(splits['test']['gpp'].to(device))
-    reco_pred = trained_reco_model(splits['test']['reco'].to(device))
+    gpp_pred = trained_gpp_model(splits[test_or_train]['gpp'].to(device))
+    reco_pred = trained_reco_model(splits[test_or_train]['reco'].to(device))
+    if tramontana_run:
+        SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
+        gpp_pred = gpp_pred * SW_IN_RAW_train
+        gpp_pred = torch.relu(gpp_pred)
+
+
+
+# The network is trained on the normalized NEE values. That means that the subnetwork predictions are also normalized.
+# So before plotting them, the values need to be un-normalized. For this we need the Raw NEE values from the clean file(clean_file_name)
+raw_nee_name =  ['NEE']
+# WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
+raw_nee, _, _, _ = load_data("{}".format(clean_file_name), raw_nee_name, [], prep_doy_sin_cos = False);
+
+# Normalize Raw Features just to get the nee_min and nee_max vals.
+_, nee_min, nee_max = normalize_features(raw_nee)
+print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NEE max: {nee_max}')
+
+reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
+gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
+gpp_pred_raw = -gpp_pred_raw # just to flip the view
+
+
 
 df = pd.DataFrame({
-    'hour': splits['test']['time'].squeeze().cpu().numpy(),
-    'gpp': gpp_pred.squeeze().cpu().numpy(),
-    'reco': reco_pred.squeeze().cpu().numpy(),
+    'hour': splits[test_or_train]['time'].squeeze().cpu().numpy(),
+    'gpp': gpp_pred_raw.squeeze().cpu().numpy(),
+    'reco': reco_pred_raw.squeeze().cpu().numpy(),
 })
 
+mean_or_median = 'mean'
 # Group and compute mean ± std
-gpp_stats = df.groupby('hour')['gpp'].agg(['mean', 'std'])
-reco_stats = df.groupby('hour')['reco'].agg(['mean', 'std'])
+gpp_stats = df.groupby('hour')['gpp'].agg([mean_or_median, 'std'])
+reco_stats = df.groupby('hour')['reco'].agg([mean_or_median, 'std'])
 
 fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+fig.suptitle(f'{run_type_str} Model GPP and RECO predictions', fontsize=16, fontweight='bold')
+
 
 # GPP plot
-ax[0].plot(gpp_stats.index, gpp_stats['mean'], label='GPP Mean')
+ax[0].plot(gpp_stats.index, gpp_stats[mean_or_median], label=f'GPP {mean_or_median}')
 ax[0].fill_between(gpp_stats.index,
-                   gpp_stats['mean'] - gpp_stats['std'],
-                   gpp_stats['mean'] + gpp_stats['std'],
+                   gpp_stats[mean_or_median] - gpp_stats['std'],
+                   gpp_stats[mean_or_median] + gpp_stats['std'],
                    alpha=0.3, label='±1 Std Dev')
 ax[0].set_ylabel("GPP")
 ax[0].legend()
+ax[0].grid(True)
 
 # RECO plot
-ax[1].plot(reco_stats.index, reco_stats['mean'], label='RECO Mean', color='green')
+ax[1].plot(reco_stats.index, reco_stats[mean_or_median], label=f'RECO {mean_or_median}', color='green')
 ax[1].fill_between(reco_stats.index,
-                   reco_stats['mean'] - reco_stats['std'],
-                   reco_stats['mean'] + reco_stats['std'],
+                   reco_stats[mean_or_median] - reco_stats['std'],
+                   reco_stats[mean_or_median] + reco_stats['std'],
                    alpha=0.3, label='±1 Std Dev', color='green')
 ax[1].set_xlabel("Hour of Day")
 ax[1].set_ylabel("RECO")
 ax[1].legend()
+ax[1].grid(True)
 
 plt.tight_layout()
 plt.show()
+
 
 
 """
