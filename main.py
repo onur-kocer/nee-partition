@@ -15,7 +15,7 @@ class SNN_GPP_Tram(nn.Module):
         super(SNN_GPP_Tram, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
-            nn.ReLU(),
+            nn.Tanh(),
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
@@ -29,7 +29,7 @@ class SNN_RECO_Tram(nn.Module):
         super(SNN_RECO_Tram, self).__init__()
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
-            nn.ReLU(),
+            nn.Tanh(),
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
         )
