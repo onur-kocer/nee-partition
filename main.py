@@ -43,7 +43,8 @@ class SNN_GPP(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
-            nn.Linear(hidden_layer_size, 1)
+            nn.Linear(hidden_layer_size, 1),
+            nn.Softplus()
         )
 
     def forward(self, x):
@@ -55,7 +56,8 @@ class SNN_RECO(nn.Module):
         self.net = nn.Sequential(
             nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
-            nn.Linear(hidden_layer_size, 1)
+            nn.Linear(hidden_layer_size, 1),
+            nn.Softplus()
         )
 
     def forward(self, x):
@@ -634,14 +636,14 @@ def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_rat
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-train_models = False
-save_models = False
+train_models = True
+save_models = True
 hidden_size = 12
 
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = True
+tramontana_run = False
 
 print(f"pre_processing: {pre_processing}\
       drop_na: {drop_na} \
