@@ -120,6 +120,10 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     # Loss function
     criterion = nn.MSELoss()
 
+    best_val_r2 = -float('inf')
+    patience = 1000
+    epochs_since_improvement = 0
+
     for epoch in range(epochs):
         gpp_model.train()
         reco_model.train()
@@ -161,6 +165,24 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
             train_r2 = r2_score(y_train.cpu(), nee_pred.cpu())
             val_r2 = r2_score(y_val.cpu(), val_nee_pred.cpu())
             val_loss = criterion(val_nee_pred, y_val)
+
+        ####################################
+        ##### EARLY STOPPING CONDITION #####
+        ####################################
+        if val_r2 - best_val_r2 > 0.01 :
+            best_val_r2 = val_r2
+            epochs_since_improvement = 0
+        else:
+            epochs_since_improvement += 1
+
+        if epochs_since_improvement >= patience:
+            print(f"Early stopping at epoch {epoch}")
+            print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
+                  f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+            break
+        ####################################
+        ### EARLY STOPPING CONDITION END ###
+        ####################################
 
         if epoch % 500 == 0 or epoch == epochs - 1:
             print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
@@ -636,8 +658,8 @@ def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_rat
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-train_models = True
-save_models = True
+train_models = False
+save_models = False
 hidden_size = 12
 
 ##############################################
@@ -806,6 +828,7 @@ else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
     trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
 
 
+
 print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
 
 # print(f"Parameters")
@@ -843,7 +866,7 @@ print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NE
 
 reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
 gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
-gpp_pred_raw = -gpp_pred_raw # just to flip the view
+# gpp_pred_raw = -gpp_pred_raw # just to flip the view #ignore for now
 
 
 
@@ -859,7 +882,7 @@ gpp_stats = df.groupby('hour')['gpp'].agg([mean_or_median, 'std'])
 reco_stats = df.groupby('hour')['reco'].agg([mean_or_median, 'std'])
 
 fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-fig.suptitle(f'{run_type_str} Model GPP and RECO predictions', fontsize=16, fontweight='bold')
+fig.suptitle(f'{run_type_str} - GPP and RECO predictions with the {test_or_train} split', fontsize=16, fontweight='bold')
 
 
 # GPP plot
