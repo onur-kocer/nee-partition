@@ -626,13 +626,9 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
 
     return clean_df
 
-def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
-    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0], "Inputs must have same number of rows"
+def split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
+    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0] == time.shape[0] == sw_in_raw.shape[0], "Inputs must have same number of rows"
 
-    # Split SW_IN_RAW from the rest
-    sw_in_raw = gpp_inputs[:, 0].unsqueeze(1)           # shape [N, 1]
-    gpp_inputs_trimmed = gpp_inputs[:, 1:]              # remove SW_IN_RAW (model shouldn't see it)
-    
     N = gpp_inputs.shape[0]
     torch.manual_seed(seed)
     
@@ -652,21 +648,21 @@ def split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_rat
     # Return split tensors
     return {
         'train': {
-            'gpp': gpp_inputs_trimmed[train_idx],
+            'gpp': gpp_inputs[train_idx],
             'reco': reco_inputs[train_idx],
             'nee': true_nee[train_idx],
             'sw_in_raw': sw_in_raw[train_idx],
             'time': time[train_idx]
         },
         'val': {
-            'gpp': gpp_inputs_trimmed[val_idx],
+            'gpp': gpp_inputs[val_idx],
             'reco': reco_inputs[val_idx],
             'nee': true_nee[val_idx],
             'sw_in_raw': sw_in_raw[val_idx],
             'time': time[val_idx]
         },
         'test': {
-            'gpp': gpp_inputs_trimmed[test_idx],
+            'gpp': gpp_inputs[test_idx],
             'reco': reco_inputs[test_idx],
             'nee': true_nee[test_idx],
             'sw_in_raw': sw_in_raw[test_idx],
@@ -782,33 +778,15 @@ print(f"gpp_input_names,  {gpp_input_names} \n"
 
 
 # READ THE SW_IN EVEN IF IT IS NOT A TRAMONTANA RUN.
-tram_gpp_input_names = []
 # READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
+# CLEAN FILE AND THE NORMALIZED FILE SHOULD HAVE THE EXACT SAME ROWS FOR THIS TO WORK PROPERLY
 sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
-sw_in_raw_name = ['SW_IN_RAW']
-tram_gpp_input_names.extend(sw_in_raw_name)
-tram_gpp_input_names.extend(gpp_input_names)
-
-gpp_inputs = torch.cat((sw_in_raw, gpp_inputs), 1)
-gpp_input_names = tram_gpp_input_names
-
-
+# sw_in_raw_name = ['SW_IN_RAW']
 
 
 # Not sure if this is the cleanest way. But keep for now as we need to validate.
-splits = split_data(gpp_inputs, reco_inputs, true_nee, time, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
 
-# X_gpp_train = splits['train']['gpp']
-# X_reco_train = splits['train']['reco']
-# y_train = splits['train']['nee']
-
-# X_gpp_val = splits['val']['gpp']
-# X_reco_val = splits['val']['reco']
-# y_val = splits['val']['nee']
-
-# X_gpp_test = splits['test']['gpp']
-# X_reco_test = splits['test']['reco']
-# y_test = splits['test']['nee']
 
 if train_models:
     gpp_model, reco_model = better_fit_gpu(
@@ -862,27 +840,30 @@ print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_rec
 trained_gpp_model.eval()
 trained_reco_model.eval()
 
-
-test_or_train = "train"
+# test_or_train = "train"
+# test_or_train = "test"
+# test_or_train = "val"
 test_or_train = "full"
-if test_or_train is "full":
+assert test_or_train == "full" or test_or_train == "test" or test_or_train == "train" or test_or_train == "val", "Pick a split, or full dataset."
 
-    with torch.no_grad():
-        gpp_pred = trained_gpp_model(gpp_inputs.to(device))
-        reco_pred = trained_reco_model(reco_inputs.to(device))
-        if tramontana_run:
-            SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
-            gpp_pred = gpp_pred * SW_IN_RAW_train
-            gpp_pred = torch.relu(gpp_pred)
+if test_or_train == "full":
+    # do nothing
+    print("using full data set for visualization")
+else: # grab the corresponding splits. Whether it is train/test.
+    time = splits[test_or_train]['time']
+    gpp_inputs = splits[test_or_train]['gpp']
+    reco_inputs = splits[test_or_train]['reco']
+    sw_in_raw = splits[test_or_train]['sw_in_raw']
 
-else:
-    with torch.no_grad():
-        gpp_pred = trained_gpp_model(splits[test_or_train]['gpp'].to(device))
-        reco_pred = trained_reco_model(splits[test_or_train]['reco'].to(device))
-        if tramontana_run:
-            SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
-            gpp_pred = gpp_pred * SW_IN_RAW_train
-            gpp_pred = torch.relu(gpp_pred)
+
+with torch.no_grad():
+    # with full time is just the time var.
+    gpp_pred = trained_gpp_model(gpp_inputs.to(device))
+    reco_pred = trained_reco_model(reco_inputs.to(device))
+    if tramontana_run:
+        SW_IN_RAW_values = sw_in_raw.to(device)
+        gpp_pred = gpp_pred * SW_IN_RAW_values
+        gpp_pred = torch.relu(gpp_pred)
 
 
 
@@ -901,12 +882,12 @@ gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
 # gpp_pred_raw = -gpp_pred_raw # just to flip the view #ignore for now
 
 
-
 df = pd.DataFrame({
-    'hour': splits[test_or_train]['time'].squeeze().cpu().numpy(),
+    'hour': time.squeeze().cpu().numpy(),
     'gpp': gpp_pred_raw.squeeze().cpu().numpy(),
     'reco': reco_pred_raw.squeeze().cpu().numpy(),
 })
+
 
 mean_or_median = 'mean'
 # Group and compute mean ± std
