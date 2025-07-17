@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.nn.init as init
 import matplotlib.pyplot as plt
 import pandas as pd
 from typing import List, Tuple, Union
@@ -37,6 +38,8 @@ class SNN_RECO_Tram(nn.Module):
     def forward(self, x):
         return self.net(x)
 
+
+
 class SNN_GPP(nn.Module):
     def __init__(self, input_dim, hidden_layer_size):
         super(SNN_GPP, self).__init__()
@@ -44,8 +47,16 @@ class SNN_GPP(nn.Module):
             nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
             nn.Linear(hidden_layer_size, 1),
-            nn.Softplus()
+            nn.ReLU() # WORKS!
         )
+        self._init_weights()
+
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)
 
     def forward(self, x):
         return self.net(x)
@@ -57,8 +68,16 @@ class SNN_RECO(nn.Module):
             nn.Linear(input_dim, hidden_layer_size),
             nn.ReLU(),
             nn.Linear(hidden_layer_size, 1),
-            nn.Softplus()
+            nn.ReLU() # WORKS!
         )
+        self._init_weights()
+
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)
 
     def forward(self, x):
         return self.net(x)
@@ -170,6 +189,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         ##### EARLY STOPPING CONDITION #####
         ####################################
         if val_r2 - best_val_r2 > 0.01 :
+        # if val_r2 > best_val_r2:
             best_val_r2 = val_r2
             epochs_since_improvement = 0
         else:
@@ -844,13 +864,25 @@ trained_reco_model.eval()
 
 
 test_or_train = "train"
-with torch.no_grad():
-    gpp_pred = trained_gpp_model(splits[test_or_train]['gpp'].to(device))
-    reco_pred = trained_reco_model(splits[test_or_train]['reco'].to(device))
-    if tramontana_run:
-        SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
-        gpp_pred = gpp_pred * SW_IN_RAW_train
-        gpp_pred = torch.relu(gpp_pred)
+test_or_train = "full"
+if test_or_train is "full":
+
+    with torch.no_grad():
+        gpp_pred = trained_gpp_model(gpp_inputs.to(device))
+        reco_pred = trained_reco_model(reco_inputs.to(device))
+        if tramontana_run:
+            SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
+            gpp_pred = gpp_pred * SW_IN_RAW_train
+            gpp_pred = torch.relu(gpp_pred)
+
+else:
+    with torch.no_grad():
+        gpp_pred = trained_gpp_model(splits[test_or_train]['gpp'].to(device))
+        reco_pred = trained_reco_model(splits[test_or_train]['reco'].to(device))
+        if tramontana_run:
+            SW_IN_RAW_train = splits[test_or_train]['sw_in_raw'].to(device)
+            gpp_pred = gpp_pred * SW_IN_RAW_train
+            gpp_pred = torch.relu(gpp_pred)
 
 
 
