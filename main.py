@@ -459,7 +459,7 @@ def compute_gpp_prox_and_nightly_nee_avg (sw_in, nee, block_size: int = 48):
     """
 
     assert sw_in.shape == nee.shape, "SW_IN and NEE must have the same shape"
-    assert sw_in.shape[0] % block_size == 0, f"Length must be multiple of block_size={block_size}"
+    assert sw_in.shape[0] % block_size == 0, f"Number of data rows must be multiple of block_size={block_size}"
 
     # Reshape to [days, block_size]
     D = sw_in.shape[0] // block_size
@@ -558,7 +558,7 @@ def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
 
-def prepare_data_using_csv (file_name):
+def prepare_data_using_csv (file_name, block_size):
     all_feature_names = []
     # TODO: Variable-ize the gpp features and the reco features for ease of use
     # ALL NECESSARY GPP FEATURES ["SW_IN", "PotRad", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD"]
@@ -569,14 +569,18 @@ def prepare_data_using_csv (file_name):
     doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
     all_feature_names.extend(feature_name)
 
+    # 1.5 Ensure that all we have a multiple of 48 (ie. every single day is covered completely.)
+    assert doy_cos_sin.shape[0] % block_size == 0, f"Number of data rows must be multiple of block_size={block_size}"
+
     # 2. Just import the time of day variable. Currently, will only be used for visualization.
     time_hhmm, _, feature_name, _ = load_data("data/{}".format(file_name), ["TIME"] , [])
     time_float = convert_hhmm_to_float_hour(time_hhmm)
     all_feature_names.extend(feature_name)
 
     # 3. Collect all variables that haven't been normalized yet. 
-    #    These will be normalized later once the gaps have been dealt with.
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS"] 
+    #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
+    #    The remaining raw features will be normalized later, once the gaps have been dealt with.
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
@@ -700,13 +704,22 @@ clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that 
 normalized_file_name = "data/Normalized_{}".format(file_name)
 
 if pre_processing:
+    block_size = 48 #half hourly data leads to 48 data points per day.
     print("pre-processing the third stage file to obtain/calculate the necessary features")
-    prepped_data, feature_names = prepare_data_using_csv(file_name)
+    try:
+        prepped_data, feature_names = prepare_data_using_csv(file_name, block_size)
+    except ValueError:
+        raise Exception(f"\n\n\n\n\nEnsure that the {file_name} file doesn't have units! \
+                        \nIt should only have the feature names, and the corresponding values.\n\n\n\n\n")
+    except Exception as e:
+        raise e
+
     print("prepped data shape was", prepped_data.shape)
     print("saving the following features", feature_names)
 
     X_df = pd.DataFrame(prepped_data.numpy(), columns=feature_names)
     X_df.to_csv(processed_file_name, index=False)
+
 
 
 if drop_na:
@@ -733,6 +746,7 @@ if drop_na:
     df_clean.to_csv(clean_file_name, index=False)
 
 
+
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
@@ -744,16 +758,18 @@ if normalize_raw_features:
     # Normalize Raw Features:
     normalized_raw_features, _, _ = normalize_features(raw_features)
 
-    already_normalized_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN',]
-    already_normalized_features, _, already_normalized_feature_names, _ = \
-            load_data("{}".format(clean_file_name), already_normalized_feature_names, [], prep_doy_sin_cos = False);
+    # 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN' do not need to be normalized as the are already normalized.
+    # 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO' will only be used for metrics. We don't need to normalize them.
+    other_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
+    other_features, _, other_feature_names, _ = \
+            load_data("{}".format(clean_file_name), other_feature_names, [], prep_doy_sin_cos = False);
 
     
     all_feature_names = []
-    all_feature_names.extend(already_normalized_feature_names)
+    all_feature_names.extend(other_feature_names)
     all_feature_names.extend(raw_feature_names)
 
-    all_features = torch.cat((already_normalized_features, normalized_raw_features), 1)
+    all_features = torch.cat((other_features, normalized_raw_features), 1)
 
     df_normalized = pd.DataFrame(all_features.numpy(), columns=all_feature_names)
     df_normalized.to_csv(normalized_file_name, index=False)    
