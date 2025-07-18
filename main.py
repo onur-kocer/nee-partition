@@ -88,6 +88,10 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
     ss_tot = ((y_true - y_true.mean()) ** 2).sum()
     return 1 - ss_res / ss_tot
 
+def rmse(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
+    mse = torch.mean((y_true - y_pred) ** 2)
+    return torch.sqrt(mse).item()
+
 def better_fit_gpu(X_gpp_train, X_reco_train, y_train, 
         X_gpp_val, X_reco_val, y_val,
         SW_IN_RAW_train, SW_IN_RAW_val,
@@ -938,9 +942,41 @@ ax[1].grid(True)
 plt.tight_layout()
 plt.show()
 
+run_metrics = True
+if run_metrics:
+
+    # reco_pred_raw and gpp_pred_raw has the NN predicted raw values
+    DT_GPP = ['DT_GPP']
+    dt_gpp, _, DT_GPP_name, _ = load_data("{}".format(normalized_file_name), DT_GPP, [], prep_doy_sin_cos = False)
+    NT_GPP = ['NT_GPP']
+    nt_gpp, _, NT_GPP_name, _ = load_data("{}".format(normalized_file_name), NT_GPP, [], prep_doy_sin_cos = False)
+    DT_RECO = ['DT_RECO']
+    dt_reco, _, DT_RECO_name, _ = load_data("{}".format(normalized_file_name), DT_RECO, [], prep_doy_sin_cos = False)
+    NT_RECO = ['NT_RECO']
+    nt_reco, _, NT_RECO_name, _ = load_data("{}".format(normalized_file_name), NT_RECO, [], prep_doy_sin_cos = False)
+
+
+    print(f"DT_GPP vs {run_type_str}_GPP R²={r2_score(dt_gpp, gpp_pred_raw):.2f} RMSE={rmse(dt_gpp, gpp_pred_raw):.2f}\n"
+          f"NT_GPP vs {run_type_str}_GPP R²={r2_score(nt_gpp, gpp_pred_raw):.2f} RMSE={rmse(nt_gpp, gpp_pred_raw):.2f}\n"
+          f"DT_RECO vs {run_type_str}_RECO R²={r2_score(dt_reco, reco_pred_raw):.2f} RMSE={rmse(dt_reco, reco_pred_raw):.2f}\n"
+          f"NT_RECO vs {run_type_str}_RECO R²={r2_score(nt_reco, reco_pred_raw):.2f} RMSE={rmse(nt_reco, reco_pred_raw):.2f}\n"
+          )
+
+
 
 
 """
+DT_GPP vs Custom_GPP    R²=0.95 RMSE=1.57
+NT_GPP vs Custom_GPP    R²=0.94 RMSE=1.79
+DT_RECO vs Custom_RECO  R²=0.78 RMSE=1.08
+NT_RECO vs Custom_RECO  R²=0.83 RMSE=0.82
+
+
+DT_GPP vs Tramontana_GPP    R²=0.94 RMSE=1.76
+NT_GPP vs Tramontana_GPP    R²=0.91 RMSE=2.09
+DT_RECO vs Tramontana_RECO  R²=0.59 RMSE=1.49
+NT_RECO vs Tramontana_RECO  R²=0.51 RMSE=1.41
+
 
 All data just training used.
 Epoch 9999, Loss: 0.0014
