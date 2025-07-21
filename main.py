@@ -102,12 +102,16 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
 
     run_info = "Tramontana" if tram else "Custom"
 
+    # Early stopping conditions
+    patience = 500
+    min_delta = 1e-4
+
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if torch.cuda.is_available():
-        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr)
+        print(run_info, "Running on GPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr, "patience:", patience, "min_delta", min_delta)
     else:
-        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr)
+        print(run_info, "Running on CPU", "With hidden layer size of", hidden_layer_size, "Total epochs:", epochs, "lr:", lr, "patience:", patience, "min_delta", min_delta)
 
     # __Move data to device__
     X_gpp_train = X_gpp_train.to(device)
@@ -143,9 +147,11 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     # Loss function
     criterion = nn.MSELoss()
 
+    # Early stopping variables:
     best_val_r2 = -float('inf')
-    patience = 1000
     epochs_since_improvement = 0
+    best_gpp_model_state = None
+    best_reco_model_state = None
 
     for epoch in range(epochs):
         gpp_model.train()
@@ -192,10 +198,13 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         ####################################
         ##### EARLY STOPPING CONDITION #####
         ####################################
-        if val_r2 - best_val_r2 > 0.01 :
-        # if val_r2 > best_val_r2:
+        if val_r2 > best_val_r2 + min_delta :
             best_val_r2 = val_r2
             epochs_since_improvement = 0
+
+            # Preserve the best model in case training goes bad.
+            best_gpp_model_state = gpp_model.state_dict()
+            best_reco_model_state = reco_model.state_dict()
         else:
             epochs_since_improvement += 1
 
@@ -211,6 +220,11 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         if epoch % 500 == 0 or epoch == epochs - 1:
             print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
                   f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+
+    if best_gpp_model_state is not None and \
+        best_reco_model_state is not None: # Second condition is not needed. Just here for clarity.
+        gpp_model.load_state_dict(best_gpp_model_state)
+        reco_model.load_state_dict(best_reco_model_state)
 
     return gpp_model, reco_model
 
@@ -960,31 +974,109 @@ if run_metrics:
           f"NT_GPP vs {run_type_str}_GPP R²={r2_score(nt_gpp, gpp_pred_raw):.2f} RMSE={rmse(nt_gpp, gpp_pred_raw):.2f}\n"
           f"DT_RECO vs {run_type_str}_RECO R²={r2_score(dt_reco, reco_pred_raw):.2f} RMSE={rmse(dt_reco, reco_pred_raw):.2f}\n"
           f"NT_RECO vs {run_type_str}_RECO R²={r2_score(nt_reco, reco_pred_raw):.2f} RMSE={rmse(nt_reco, reco_pred_raw):.2f}\n"
+          f"DT_GPP vs NT_GPP R²={r2_score(dt_gpp, nt_gpp):.2f} RMSE={rmse(dt_gpp, nt_gpp):.2f}\n"
+          f"DT_RECO vs NT_RECO R²={r2_score(dt_reco, nt_reco):.2f} RMSE={rmse(dt_reco, nt_reco):.2f}\n"
           )
 
 
 
 
 """
-DT_GPP vs Custom_GPP    R²=0.95 RMSE=1.57
-NT_GPP vs Custom_GPP    R²=0.94 RMSE=1.79
-DT_RECO vs Custom_RECO  R²=0.78 RMSE=1.08
-NT_RECO vs Custom_RECO  R²=0.83 RMSE=0.82
+Tramontana - A LOT SLOWER OF IMPROVEMENT OVER TIME:
+Early stopping at epoch 12413
+    patience = 500
+    min_delta = 1e-1
+Epoch 12413 | Train Loss: 0.015983 | Val Loss: 0.016003 | Train R²: 0.4403 | Val R²: 0.4624
+Tramontana benefits from higher patience:
+    patience = 1000
+    min_delta = 1e-1
+Early stopping at epoch 14199
+Epoch 14199 | Train Loss: 0.010570 | Val Loss: 0.010720 | Train R²: 0.6299 | Val R²: 0.6399
 
 
-DT_GPP vs Tramontana_GPP    R²=0.94 RMSE=1.76
-NT_GPP vs Tramontana_GPP    R²=0.91 RMSE=2.09
-DT_RECO vs Tramontana_RECO  R²=0.59 RMSE=1.49
-NT_RECO vs Tramontana_RECO  R²=0.51 RMSE=1.41
+    patience = 500
+    min_delta = 1e-2
+Early stopping at epoch 23590    
+DT_GPP vs Tramontana_GPP R²=0.91 RMSE=2.17
+NT_GPP vs Tramontana_GPP R²=0.87 RMSE=2.50
+DT_RECO vs Tramontana_RECO R²=0.34 RMSE=1.88
+NT_RECO vs Tramontana_RECO R²=0.15 RMSE=1.85
+
+    patience = 1000
+    min_delta = 1e-2
+Early stopping at epoch 24873
+Epoch 24873 | Train Loss: 0.002007 | Val Loss: 0.002173 | Train R²: 0.9297 | Val R²: 0.9270
+DT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.82
+NT_GPP vs Tramontana_GPP R²=0.91 RMSE=2.15
+DT_RECO vs Tramontana_RECO R²=0.56 RMSE=1.55
+NT_RECO vs Tramontana_RECO R²=0.46 RMSE=1.48
 
 
-All data just training used.
-Epoch 9999, Loss: 0.0014
-R²: 0.9495583772659302
+    patience = 500
+    min_delta = 1e-3
+Early stopping at epoch 30177
+Epoch 30177 | Train Loss: 0.001618 | Val Loss: 0.001699 | Train R²: 0.9434 | Val R²: 0.9429    
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.58
+NT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.77
+DT_RECO vs Tramontana_RECO R²=0.71 RMSE=1.24
+NT_RECO vs Tramontana_RECO R²=0.73 RMSE=1.05
 
-gpp_inputs = torch.randn(32, input_dim_gpp)
-reco_inputs = torch.randn(32, input_dim_reco)
-true_nee = torch.randn(32, 1)  # Measured NEE
+
+    patience = 500
+    min_delta = 1e-4
+Early stopping at epoch 37211
+Epoch 37211 | Train Loss: 0.001496 | Val Loss: 0.001563 | Train R²: 0.9476 | Val R²: 0.9475
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.54
+NT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.67
+DT_RECO vs Tramontana_RECO R²=0.75 RMSE=1.17
+NT_RECO vs Tramontana_RECO R²=0.78 RMSE=0.95
+
+
+
+
+
+
+CUSTOM MODELS
+with
+    patience = 500
+    min_delta = 1e-4
+    Early stopping at epoch 8003    
+DT_GPP vs Custom_GPP R²=0.95 RMSE=1.62
+NT_GPP vs Custom_GPP R²=0.93 RMSE=1.87
+DT_RECO vs Custom_RECO R²=0.69 RMSE=1.29
+NT_RECO vs Custom_RECO R²=0.65 RMSE=1.19
+
+
+with
+    patience = 500
+    min_delta = 1e-3
+    Early stopping at epoch 4866    
+DT_GPP vs Custom_GPP R²=0.95 RMSE=1.60
+NT_GPP vs Custom_GPP R²=0.93 RMSE=1.83
+DT_RECO vs Custom_RECO R²=0.72 RMSE=1.23
+NT_RECO vs Custom_RECO R²=0.72 RMSE=1.07    
+
+with 
+    patience = 500
+    min_delta = 1e-2
+    Early stopping at epoch 1523
+Epoch  1523 | Train Loss: 0.002157 | Val Loss: 0.002255 | Train R²: 0.9245 | Val R²: 0.9243    
+DT_GPP vs Custom_GPP R²=0.95 RMSE=1.67
+NT_GPP vs Custom_GPP R²=0.93 RMSE=1.87
+DT_RECO vs Custom_RECO R²=0.78 RMSE=1.10
+NT_RECO vs Custom_RECO R²=0.84 RMSE=0.80        
+
+
+with 
+    patience = 500
+    min_delta = 1e-1
+    Early stopping at epoch 851
+DT_GPP vs Custom_GPP R²=0.93 RMSE=1.89
+NT_GPP vs Custom_GPP R²=0.92 RMSE=2.05
+DT_RECO vs Custom_RECO R²=0.69 RMSE=1.30
+NT_RECO vs Custom_RECO R²=0.78 RMSE=0.94
+    
+
 
     torch.set_printoptions(profile="full")
     torch.set_printoptions(linewidth=200)
