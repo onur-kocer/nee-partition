@@ -7,6 +7,7 @@ import pandas as pd
 from typing import List, Tuple, Union
 from datetime import datetime
 import math
+import re
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -104,7 +105,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
 
     # Early stopping conditions
     patience = 500
-    min_delta = 1e-4
+    min_delta = 1e-2
 
     # __device = torch.device("cuda" if torch.cuda.is_available() else "cpu")__
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -692,6 +693,184 @@ def split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0
         }
     }
 
+def get_first_5_letters(filename):
+    """
+    Given a file name, returns the site acronym.
+    Example
+        Input: CADSM_nee_partition_202101010000_202512312359.csv
+        Output: CADSM
+    """
+    match = re.search(r'[a-zA-Z]{5}', filename)
+    return match.group(0) if match else None
+
+def load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str):
+    """
+    Loads the already trained model.
+    Example:
+    Inputs:
+        site_name = "CADSM"
+        run_type_str = "Tramontana" (or "Custom")
+    Outputs:
+        The trained GPP and RECO models are returned.
+    """
+    if torch.cuda.is_available():
+        trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True))
+        trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True))
+    else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
+        trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+        trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+    return trained_gpp_model, trained_reco_model
+
+def initialize_model(tramontana_run):
+    """
+    Just initialize GPP and RECO models. (with no-trained weights)
+    These initialized models will be used for loading in the trained model.
+    """
+    if tramontana_run:
+        trained_gpp_model = SNN_GPP_Tram(splits['train']['gpp'].shape[1], hidden_size)
+        trained_reco_model = SNN_GPP_Tram(splits['train']['reco'].shape[1], hidden_size)
+    else:
+        trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_size)
+        trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_size)
+    return trained_gpp_model, trained_reco_model
+
+def get_run_type_str(tramontana_run):
+    """
+    This str is useful for saving, loading, and graphing purposes.
+    """
+    return "Tramontana" if tramontana_run else "Custom"
+
+def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str):
+    """
+    Evaluate a single model against the DAYTIME AND NIGHTTIME MODELS
+    """
+    # Init model variables to prep for loading.
+    trained_gpp_model, trained_reco_model = initialize_model(tramontana_run=tramontana_run)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    print("Unpickling models")
+    # Load model.
+    trained_gpp_model, trained_reco_model = load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str)
+    print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
+
+
+
+    # Time for eval.
+    trained_gpp_model.eval()
+    trained_reco_model.eval()
+
+    # test_or_train = "train"
+    # test_or_train = "test"
+    # test_or_train = "val"
+    test_or_train = "full"
+    assert test_or_train == "full" or test_or_train == "test" or test_or_train == "train" or test_or_train == "val", "Pick a split, or full dataset."
+
+    if test_or_train == "full":
+        # do nothing
+        print("using full data set for visualization")
+    else: # grab the corresponding splits. Whether it is train/test.
+        time = splits[test_or_train]['time']
+        gpp_inputs = splits[test_or_train]['gpp']
+        reco_inputs = splits[test_or_train]['reco']
+        sw_in_raw = splits[test_or_train]['sw_in_raw']
+
+
+    with torch.no_grad():
+        # with full time is just the time var.
+        # import pdb; pdb.set_trace()
+        gpp_pred = trained_gpp_model(gpp_inputs.to(device))
+        reco_pred = trained_reco_model(reco_inputs.to(device))
+        if tramontana_run:
+            SW_IN_RAW_values = sw_in_raw.to(device)
+            gpp_pred = gpp_pred * SW_IN_RAW_values
+            gpp_pred = torch.relu(gpp_pred)
+
+
+
+    # The network is trained on the normalized NEE values. That means that the subnetwork predictions are also normalized.
+    # So before plotting them, the values need to be un-normalized. For this we need the Raw NEE values from the clean file(clean_file_name)
+    raw_nee_name =  ['NEE']
+    # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
+    raw_nee, _, _, _ = load_data("{}".format(clean_file_name), raw_nee_name, [], prep_doy_sin_cos = False);
+
+    # Normalize Raw Features just to get the nee_min and nee_max vals.
+    _, nee_min, nee_max = normalize_features(raw_nee)
+    print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NEE max: {nee_max}')
+
+    reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
+    gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
+    # gpp_pred_raw = -gpp_pred_raw # just to flip the view #ignore for now
+
+
+    df = pd.DataFrame({
+        'hour': time.squeeze().cpu().numpy(),
+        'gpp': gpp_pred_raw.squeeze().cpu().numpy(),
+        'reco': reco_pred_raw.squeeze().cpu().numpy(),
+    })
+
+
+    mean_or_median = 'mean'
+    # Group and compute mean ± std
+    gpp_stats = df.groupby('hour')['gpp'].agg([mean_or_median, 'std'])
+    reco_stats = df.groupby('hour')['reco'].agg([mean_or_median, 'std'])
+
+    # fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+    fig, ax = plt.subplots(2, 1, figsize=(7, 10), sharex=True)
+    fig.suptitle(f'{run_type_str} - GPP and RECO predictions with the {test_or_train} split', fontsize=16, fontweight='bold')
+
+
+    # GPP plot
+    ax[0].plot(gpp_stats.index, gpp_stats[mean_or_median], label=f'GPP {mean_or_median}')
+    ax[0].fill_between(gpp_stats.index,
+                    gpp_stats[mean_or_median] - gpp_stats['std'],
+                    gpp_stats[mean_or_median] + gpp_stats['std'],
+                    alpha=0.3, label='±1 Std Dev')
+    ax[0].set_ylabel("GPP")
+    ax[0].legend()
+    ax[0].grid(True)
+
+    # RECO plot
+    ax[1].plot(reco_stats.index, reco_stats[mean_or_median], label=f'RECO {mean_or_median}', color='green')
+    ax[1].fill_between(reco_stats.index,
+                    reco_stats[mean_or_median] - reco_stats['std'],
+                    reco_stats[mean_or_median] + reco_stats['std'],
+                    alpha=0.3, label='±1 Std Dev', color='green')
+    ax[1].set_xlabel("Hour of Day")
+    ax[1].set_ylabel("RECO")
+    ax[1].legend()
+    ax[1].grid(True)
+
+    plt.tight_layout()
+    if save_plot:
+        plt.savefig(plot_saving_str, dpi=300)  # Save the figure with high resolution
+        plt.close()
+    else:
+        plt.show()
+
+    run_metrics = True
+    if run_metrics:
+
+        # reco_pred_raw and gpp_pred_raw has the NN predicted raw values
+        DT_GPP = ['DT_GPP']
+        dt_gpp, _, DT_GPP_name, _ = load_data("{}".format(normalized_file_name), DT_GPP, [], prep_doy_sin_cos = False)
+        NT_GPP = ['NT_GPP']
+        nt_gpp, _, NT_GPP_name, _ = load_data("{}".format(normalized_file_name), NT_GPP, [], prep_doy_sin_cos = False)
+        DT_RECO = ['DT_RECO']
+        dt_reco, _, DT_RECO_name, _ = load_data("{}".format(normalized_file_name), DT_RECO, [], prep_doy_sin_cos = False)
+        NT_RECO = ['NT_RECO']
+        nt_reco, _, NT_RECO_name, _ = load_data("{}".format(normalized_file_name), NT_RECO, [], prep_doy_sin_cos = False)
+
+        print(model_inputs_information)
+        print(f"DT_GPP vs {run_type_str}_GPP R²={r2_score(dt_gpp, gpp_pred_raw):.2f} RMSE={rmse(dt_gpp, gpp_pred_raw):.2f}\n"
+            f"NT_GPP vs {run_type_str}_GPP R²={r2_score(nt_gpp, gpp_pred_raw):.2f} RMSE={rmse(nt_gpp, gpp_pred_raw):.2f}\n"
+            f"DT_RECO vs {run_type_str}_RECO R²={r2_score(dt_reco, reco_pred_raw):.2f} RMSE={rmse(dt_reco, reco_pred_raw):.2f}\n"
+            f"NT_RECO vs {run_type_str}_RECO R²={r2_score(nt_reco, reco_pred_raw):.2f} RMSE={rmse(nt_reco, reco_pred_raw):.2f}\n"
+            f"DT_GPP vs NT_GPP R²={r2_score(dt_gpp, nt_gpp):.2f} RMSE={rmse(dt_gpp, nt_gpp):.2f}\n"
+            f"DT_RECO vs NT_RECO R²={r2_score(dt_reco, nt_reco):.2f} RMSE={rmse(dt_reco, nt_reco):.2f}\n"
+            )
+
+
+
 
 pre_processing = False
 drop_na = False
@@ -704,6 +883,7 @@ hidden_size = 12
 #### Use Tramontana model or Custom Model ####
 ##############################################
 tramontana_run = False
+run_type_str = get_run_type_str(tramontana_run=tramontana_run)
 
 print(f"pre_processing: {pre_processing}\
       drop_na: {drop_na} \
@@ -715,6 +895,13 @@ print(f"pre_processing: {pre_processing}\
       ")
 
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
+site_name = get_first_5_letters(filename=file_name)
+# site_name = "temp"
+if site_name is None:
+    raise Exception(f"\n\n\nTried getting the site name using the file_name variable but failed.\n"
+                    "Make sure you specified a file name using the variable file_name.")
+
+
 processed_file_name = "data/Processed_{}".format(file_name)
 clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
 
@@ -764,7 +951,6 @@ if drop_na:
     df_clean.to_csv(clean_file_name, index=False)
 
 
-
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
@@ -795,191 +981,87 @@ if normalize_raw_features:
 
 # Read normalized values file then do backprop magic time.
 # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
-GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
-RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+# OG structure:
+# GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+# RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
 NEE = ['NEE']
 TIME = ['TIME']
 
+GPP_INPUT_FEATURES_SETS = [
+    # ['SW_IN', 'TA'],
+    # ['SW_IN', 'TA', 'VPD'],
+    # ['SW_IN', 'TA', 'VPD', 'WS'],
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+]
+RECO_INPUT_FEATURES_SETS = [
+    # ['DOY_sin', 'DOY_cos', 'TA'],
+    # ['DOY_sin', 'DOY_cos', 'TA'],
+    # ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+]
+
+assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
+for i in range(len(GPP_INPUT_FEATURES_SETS)):
+    GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[i]
+    RECO_INPUT_FEATURES = RECO_INPUT_FEATURES_SETS[i]
+
 # Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
-gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
-reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
-true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
-time, _, time_name, _ = load_data("{}".format(normalized_file_name), TIME, [], prep_doy_sin_cos = False)
+    gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
+    reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
+    true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)
+    time, _, time_name, _ = load_data("{}".format(normalized_file_name), TIME, [], prep_doy_sin_cos = False)
 
-print(f"gpp_input_names,  {gpp_input_names} \n"
-      f"reco_input_names,  {reco_input_names} \n"
-      f"true_nee_name,  {true_nee_name} \n")
-
-
-# READ THE SW_IN EVEN IF IT IS NOT A TRAMONTANA RUN.
-# READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
-# CLEAN FILE AND THE NORMALIZED FILE SHOULD HAVE THE EXACT SAME ROWS FOR THIS TO WORK PROPERLY
-sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
-# sw_in_raw_name = ['SW_IN_RAW']
+    print(f"gpp_input_names,  {gpp_input_names} \n"
+        f"reco_input_names,  {reco_input_names} \n"
+        f"true_nee_name,  {true_nee_name} \n")
 
 
-# Not sure if this is the cleanest way. But keep for now as we need to validate.
-splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+    # READ THE SW_IN EVEN IF IT IS NOT A TRAMONTANA RUN.
+    # READING FROM THE CLEAN FILE as the raw (not-normalized) sw_in is needed for the Tramontana model.
+    # CLEAN FILE AND THE NORMALIZED FILE SHOULD HAVE THE EXACT SAME ROWS FOR THIS TO WORK PROPERLY
+    sw_in_raw, _, _, _ = load_data("{}".format(clean_file_name), ['SW_IN'], [], prep_doy_sin_cos = False)
 
 
-if train_models:
-    gpp_model, reco_model = better_fit_gpu(
-        tram=tramontana_run,
-        hidden_layer_size=hidden_size,
-        X_gpp_train=splits['train']['gpp'],
-        X_reco_train=splits['train']['reco'],
-        y_train=splits['train']['nee'],
-        X_gpp_val=splits['val']['gpp'],
-        X_reco_val=splits['val']['reco'],
-        y_val=splits['val']['nee'],
-        SW_IN_RAW_train=splits['train']['sw_in_raw'],
-        SW_IN_RAW_val=splits['val']['sw_in_raw'],
-    )
-
-run_type_str = "Tramontana" if tramontana_run else "Custom"
-if save_models:
-    torch.save(gpp_model.state_dict(), f"trained_models/CADSM_gpp_model_{run_type_str}.pth")
-    torch.save(reco_model.state_dict(), f"trained_models/CADSM_reco_model_{run_type_str}.pth")
+    # Not sure if this is the cleanest way. But keep for now as we need to validate.
+    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
 
 
-print("Unpickling models")
-if tramontana_run:
-    trained_gpp_model = SNN_GPP_Tram(splits['train']['gpp'].shape[1], hidden_size)
-    trained_reco_model = SNN_GPP_Tram(splits['train']['reco'].shape[1], hidden_size)
-else:
-    trained_gpp_model = SNN_GPP(splits['train']['gpp'].shape[1], hidden_size)
-    trained_reco_model = SNN_RECO(splits['train']['reco'].shape[1], hidden_size)
+    if train_models:
+        gpp_model, reco_model = better_fit_gpu(
+            tram=tramontana_run,
+            hidden_layer_size=hidden_size,
+            X_gpp_train=splits['train']['gpp'],
+            X_reco_train=splits['train']['reco'],
+            y_train=splits['train']['nee'],
+            X_gpp_val=splits['val']['gpp'],
+            X_reco_val=splits['val']['reco'],
+            y_val=splits['val']['nee'],
+            SW_IN_RAW_train=splits['train']['sw_in_raw'],
+            SW_IN_RAW_val=splits['val']['sw_in_raw'],
+        )
+
+    if save_models:
+        torch.save(gpp_model.state_dict(), f"trained_models/{site_name}_gpp_model_{run_type_str}.pth")
+        torch.save(reco_model.state_dict(), f"trained_models/{site_name}_reco_model_{run_type_str}.pth")
+
+    model_inputs_information = (f"\n\n\nMetrics for the {run_type_str}, with\n"
+                f"GPP inputs: {GPP_INPUT_FEATURES}\n"
+                f"RECO inputs: {RECO_INPUT_FEATURES}:")
+    save_plot = True
+    # prep the plot saving str
+
+    plot_saving_str = (f"./experiment_figures/{run_type_str}"
+                       f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
+                       f"reco_{'_'.join(RECO_INPUT_FEATURES)}_{i}"
+                       )
+    evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str)
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-if torch.cuda.is_available():
-    trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True))
-    trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True))
-else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
-    trained_gpp_model.load_state_dict(torch.load(f"trained_models/CADSM_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
-    trained_reco_model.load_state_dict(torch.load(f"trained_models/CADSM_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+"""
+TODO:
+- more elaborate early stopping condition
 
-
-
-print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
-
-# print(f"Parameters")
-# for param in trained_gpp_model.parameters():
-#     print(param)
-# for param in trained_reco_model.parameters():
-#     print(param)
-
-
-# Time for eval.
-trained_gpp_model.eval()
-trained_reco_model.eval()
-
-# test_or_train = "train"
-# test_or_train = "test"
-# test_or_train = "val"
-test_or_train = "full"
-assert test_or_train == "full" or test_or_train == "test" or test_or_train == "train" or test_or_train == "val", "Pick a split, or full dataset."
-
-if test_or_train == "full":
-    # do nothing
-    print("using full data set for visualization")
-else: # grab the corresponding splits. Whether it is train/test.
-    time = splits[test_or_train]['time']
-    gpp_inputs = splits[test_or_train]['gpp']
-    reco_inputs = splits[test_or_train]['reco']
-    sw_in_raw = splits[test_or_train]['sw_in_raw']
-
-
-with torch.no_grad():
-    # with full time is just the time var.
-    gpp_pred = trained_gpp_model(gpp_inputs.to(device))
-    reco_pred = trained_reco_model(reco_inputs.to(device))
-    if tramontana_run:
-        SW_IN_RAW_values = sw_in_raw.to(device)
-        gpp_pred = gpp_pred * SW_IN_RAW_values
-        gpp_pred = torch.relu(gpp_pred)
-
-
-
-# The network is trained on the normalized NEE values. That means that the subnetwork predictions are also normalized.
-# So before plotting them, the values need to be un-normalized. For this we need the Raw NEE values from the clean file(clean_file_name)
-raw_nee_name =  ['NEE']
-# WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
-raw_nee, _, _, _ = load_data("{}".format(clean_file_name), raw_nee_name, [], prep_doy_sin_cos = False);
-
-# Normalize Raw Features just to get the nee_min and nee_max vals.
-_, nee_min, nee_max = normalize_features(raw_nee)
-print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NEE max: {nee_max}')
-
-reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
-gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
-# gpp_pred_raw = -gpp_pred_raw # just to flip the view #ignore for now
-
-
-df = pd.DataFrame({
-    'hour': time.squeeze().cpu().numpy(),
-    'gpp': gpp_pred_raw.squeeze().cpu().numpy(),
-    'reco': reco_pred_raw.squeeze().cpu().numpy(),
-})
-
-
-mean_or_median = 'mean'
-# Group and compute mean ± std
-gpp_stats = df.groupby('hour')['gpp'].agg([mean_or_median, 'std'])
-reco_stats = df.groupby('hour')['reco'].agg([mean_or_median, 'std'])
-
-fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-fig.suptitle(f'{run_type_str} - GPP and RECO predictions with the {test_or_train} split', fontsize=16, fontweight='bold')
-
-
-# GPP plot
-ax[0].plot(gpp_stats.index, gpp_stats[mean_or_median], label=f'GPP {mean_or_median}')
-ax[0].fill_between(gpp_stats.index,
-                   gpp_stats[mean_or_median] - gpp_stats['std'],
-                   gpp_stats[mean_or_median] + gpp_stats['std'],
-                   alpha=0.3, label='±1 Std Dev')
-ax[0].set_ylabel("GPP")
-ax[0].legend()
-ax[0].grid(True)
-
-# RECO plot
-ax[1].plot(reco_stats.index, reco_stats[mean_or_median], label=f'RECO {mean_or_median}', color='green')
-ax[1].fill_between(reco_stats.index,
-                   reco_stats[mean_or_median] - reco_stats['std'],
-                   reco_stats[mean_or_median] + reco_stats['std'],
-                   alpha=0.3, label='±1 Std Dev', color='green')
-ax[1].set_xlabel("Hour of Day")
-ax[1].set_ylabel("RECO")
-ax[1].legend()
-ax[1].grid(True)
-
-plt.tight_layout()
-plt.show()
-
-run_metrics = True
-if run_metrics:
-
-    # reco_pred_raw and gpp_pred_raw has the NN predicted raw values
-    DT_GPP = ['DT_GPP']
-    dt_gpp, _, DT_GPP_name, _ = load_data("{}".format(normalized_file_name), DT_GPP, [], prep_doy_sin_cos = False)
-    NT_GPP = ['NT_GPP']
-    nt_gpp, _, NT_GPP_name, _ = load_data("{}".format(normalized_file_name), NT_GPP, [], prep_doy_sin_cos = False)
-    DT_RECO = ['DT_RECO']
-    dt_reco, _, DT_RECO_name, _ = load_data("{}".format(normalized_file_name), DT_RECO, [], prep_doy_sin_cos = False)
-    NT_RECO = ['NT_RECO']
-    nt_reco, _, NT_RECO_name, _ = load_data("{}".format(normalized_file_name), NT_RECO, [], prep_doy_sin_cos = False)
-
-
-    print(f"DT_GPP vs {run_type_str}_GPP R²={r2_score(dt_gpp, gpp_pred_raw):.2f} RMSE={rmse(dt_gpp, gpp_pred_raw):.2f}\n"
-          f"NT_GPP vs {run_type_str}_GPP R²={r2_score(nt_gpp, gpp_pred_raw):.2f} RMSE={rmse(nt_gpp, gpp_pred_raw):.2f}\n"
-          f"DT_RECO vs {run_type_str}_RECO R²={r2_score(dt_reco, reco_pred_raw):.2f} RMSE={rmse(dt_reco, reco_pred_raw):.2f}\n"
-          f"NT_RECO vs {run_type_str}_RECO R²={r2_score(nt_reco, reco_pred_raw):.2f} RMSE={rmse(nt_reco, reco_pred_raw):.2f}\n"
-          f"DT_GPP vs NT_GPP R²={r2_score(dt_gpp, nt_gpp):.2f} RMSE={rmse(dt_gpp, nt_gpp):.2f}\n"
-          f"DT_RECO vs NT_RECO R²={r2_score(dt_reco, nt_reco):.2f} RMSE={rmse(dt_reco, nt_reco):.2f}\n"
-          )
-
-
-
+"""
 
 """
 Tramontana - A LOT SLOWER OF IMPROVEMENT OVER TIME:
@@ -1080,4 +1162,11 @@ NT_RECO vs Custom_RECO R²=0.78 RMSE=0.94
 
     torch.set_printoptions(profile="full")
     torch.set_printoptions(linewidth=200)
+
+# print(f"Parameters")
+# for param in trained_gpp_model.parameters():
+#     print(param)
+# for param in trained_reco_model.parameters():
+#     print(param)
+    
 """
