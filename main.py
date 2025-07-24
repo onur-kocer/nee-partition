@@ -1105,7 +1105,7 @@ for i in range(len(GPP_INPUT_FEATURES_SETS)):
     save_plot = True
     # prep the plot saving str
 
-    plot_saving_str = (f"./experiment_figures/{run_type_str}"
+    plot_saving_str = (f"./experiment_figures/{run_type_str}_"
                        f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                        f"reco_{'_'.join(RECO_INPUT_FEATURES)}_{i}"
                        )
