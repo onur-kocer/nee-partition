@@ -8,6 +8,7 @@ from typing import List, Tuple, Union
 from datetime import datetime
 import math
 import re
+from scipy.stats import linregress
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -151,6 +152,19 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     # Early stopping variables:
     best_val_r2 = -float('inf')
     epochs_since_improvement = 0
+
+    # Early stopping variables:
+    # --- Parameters ---
+    trend_window = 10  # Number of past epochs to use for trend analysis
+    # min_slope = 0.001  # Minimum acceptable upward slope in validation R² # crazy
+    # min_slope = 0.00001  # Minimum acceptable upward slope in validation R²
+    min_slope = 0.000005  # Minimum acceptable upward slope in validation R² -best
+    # min_slope = 0.000001  # Minimum acceptable upward slope in validation R² goes worse
+
+    # --- History buffer ---
+    val_r2_history = []    
+
+
     best_gpp_model_state = None
     best_reco_model_state = None
 
@@ -199,21 +213,53 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         ####################################
         ##### EARLY STOPPING CONDITION #####
         ####################################
-        if val_r2 > best_val_r2 + min_delta :
-            best_val_r2 = val_r2
-            epochs_since_improvement = 0
+        # if val_r2 > best_val_r2 + min_delta :
+        #     best_val_r2 = val_r2
+        #     epochs_since_improvement = 0
 
-            # Preserve the best model in case training goes bad.
+        #     # Preserve the best model in case training goes bad.
+        #     best_gpp_model_state = gpp_model.state_dict()
+        #     best_reco_model_state = reco_model.state_dict()
+        # else:
+        #     epochs_since_improvement += 1
+
+        # if epochs_since_improvement >= patience:
+        #     print(f"Early stopping at epoch {epoch}")
+        #     print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
+        #           f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+        #     break        
+        ####################################
+        ### EARLY STOPPING CONDITION END ###
+        ####################################
+
+
+
+        ####################################
+        ##### EARLY STOPPING CONDITION #####
+        ####################################
+        val_r2_history.append(val_r2)
+
+        # Keep only the last `trend_window` values
+        if len(val_r2_history) > trend_window:
+            val_r2_history.pop(0)
+
+        # Always track best model
+        if val_r2 > best_val_r2:
+            best_val_r2 = val_r2
             best_gpp_model_state = gpp_model.state_dict()
             best_reco_model_state = reco_model.state_dict()
-        else:
-            epochs_since_improvement += 1
 
-        if epochs_since_improvement >= patience:
-            print(f"Early stopping at epoch {epoch}")
-            print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
-                  f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
-            break
+        # Apply early stopping logic only when we have enough data
+        if len(val_r2_history) == trend_window:
+            x = list(range(trend_window))
+            y = val_r2_history
+            slope, _, _, _, _ = linregress(x, y)
+
+            if slope < min_slope:
+                print(f"Early stopping at epoch {epoch} due to flat/negative trend (slope={slope:.6f})")
+                print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
+                    f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+                break        
         ####################################
         ### EARLY STOPPING CONDITION END ###
         ####################################
@@ -221,6 +267,9 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         if epoch % 500 == 0 or epoch == epochs - 1:
             print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
                   f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+        # # if epoch % 500 == 0 and len(val_r2_history) == trend_window:
+        # if epoch % 500 == 0 :
+        #     print(f"[epoch {epoch}] trend slope: {slope:.6f}")
 
     if best_gpp_model_state is not None and \
         best_reco_model_state is not None: # Second condition is not needed. Just here for clarity.
@@ -875,8 +924,8 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-train_models = False
-save_models = False
+train_models = True
+save_models = True
 hidden_size = 12
 
 ##############################################
@@ -895,8 +944,8 @@ print(f"pre_processing: {pre_processing}\
       ")
 
 file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-site_name = get_first_5_letters(filename=file_name)
-# site_name = "temp"
+# site_name = get_first_5_letters(filename=file_name)
+site_name = "temp"
 if site_name is None:
     raise Exception(f"\n\n\nTried getting the site name using the file_name variable but failed.\n"
                     "Make sure you specified a file name using the variable file_name.")
@@ -988,15 +1037,21 @@ NEE = ['NEE']
 TIME = ['TIME']
 
 GPP_INPUT_FEATURES_SETS = [
-    # ['SW_IN', 'TA'],
-    # ['SW_IN', 'TA', 'VPD'],
-    # ['SW_IN', 'TA', 'VPD', 'WS'],
+    ['SW_IN', 'TA'],
+    ['SW_IN', 'TA', 'VPD'],
+    ['SW_IN', 'TA', 'VPD', 'WS'],
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN'], # 4
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+
     ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
 ]
 RECO_INPUT_FEATURES_SETS = [
-    # ['DOY_sin', 'DOY_cos', 'TA'],
-    # ['DOY_sin', 'DOY_cos', 'TA'],
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
+    ['DOY_sin', 'DOY_cos', 'TA'],
+    ['DOY_sin', 'DOY_cos', 'TA'],
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN'], # 4
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
 ]
 
