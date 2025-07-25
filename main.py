@@ -762,12 +762,18 @@ def load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_typ
     Outputs:
         The trained GPP and RECO models are returned.
     """
-    if torch.cuda.is_available():
-        trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True))
-        trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True))
-    else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
-        trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
-        trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+    # "TODO the following logic to be discontinued if it works on both cpu and cuda"
+    # if torch.cuda.is_available():
+    #     trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True))
+    #     trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True))
+    # else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
+    #     trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+    #     trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
+
+    trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth",
+                                                 weights_only=True, map_location=device))
+    trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth",
+                                                  weights_only=True, map_location=device))
 
     # Then make sure to move the loaded models to device.
     # Both models, and the data has to be on the same device. Avoid any splits at all times.
