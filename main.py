@@ -752,7 +752,7 @@ def get_first_5_letters(filename):
     match = re.search(r'[a-zA-Z]{5}', filename)
     return match.group(0) if match else None
 
-def load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str):
+def load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str, device):
     """
     Loads the already trained model.
     Example:
@@ -768,7 +768,12 @@ def load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_typ
     else: # map_location=torch.device('cpu') is needed for graphing on the CPU.
         trained_gpp_model.load_state_dict(torch.load(f"trained_models/{site_name}_gpp_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
         trained_reco_model.load_state_dict(torch.load(f"trained_models/{site_name}_reco_model_{run_type_str}.pth", weights_only=True, map_location=torch.device('cpu')))
-    return trained_gpp_model, trained_reco_model
+
+    # Then make sure to move the loaded models to device.
+    # Both models, and the data has to be on the same device. Avoid any splits at all times.
+    trained_gpp_model = trained_gpp_model.to(device)
+    trained_reco_model = trained_reco_model.to(device)
+
 
 def initialize_model(tramontana_run):
     """
@@ -798,10 +803,10 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("Unpickling models")
-    # Load model.
-    trained_gpp_model, trained_reco_model = load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str)
-    print(f"trained gpp model: {trained_gpp_model}, trained_reco_model: {trained_reco_model}")
-
+    # Load models.
+    load_trained_model(trained_gpp_model, trained_reco_model, site_name, run_type_str, device)
+    print(f"Following models have been loaded and moved to {device}:\n"
+          f"trained gpp model:\n {trained_gpp_model}, trained_reco_model:\n {trained_reco_model}")
 
 
     # Time for eval.
