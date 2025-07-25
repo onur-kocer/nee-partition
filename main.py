@@ -86,11 +86,17 @@ class SNN_RECO(nn.Module):
 
 
 def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
+    # Ensure both tensors are on the same device
+    y_true = y_true.to(y_pred.device)
+
     ss_res = ((y_true - y_pred) ** 2).sum()
     ss_tot = ((y_true - y_true.mean()) ** 2).sum()
     return 1 - ss_res / ss_tot
 
 def rmse(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
+    # Ensure both tensors are on the same device
+    y_true = y_true.to(y_pred.device)
+
     mse = torch.mean((y_true - y_pred) ** 2)
     return torch.sqrt(mse).item()
 
@@ -619,6 +625,11 @@ def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch
     Returns:
         X (torch.Tensor): Un-normalized tensor of shape [N, D]
     """
+    # Make sure all data is on the same device before any computation:
+    device = X_norm.device
+    X_min = X_min.to(device)
+    X_max = X_max.to(device)
+
     range_ = (X_max - X_min).clamp(min=1e-8)
     return ((X_norm / 2) + 0.5) * range_ + X_min
 
