@@ -160,12 +160,23 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     epochs_since_improvement = 0
 
     # Early stopping variables:
+    # min_slope is the minimum acceptable upward slope in validation
+    #   and it measured every {trend_window} many epochs
     # --- Parameters ---
-    trend_window = 10  # Number of past epochs to use for trend analysis
-    # min_slope = 0.001  # Minimum acceptable upward slope in validation R² # crazy
-    # min_slope = 0.00001  # Minimum acceptable upward slope in validation R²
-    min_slope = 0.000005  # Minimum acceptable upward slope in validation R² -best
-    # min_slope = 0.000001  # Minimum acceptable upward slope in validation R² goes worse
+    if not tram: # ie custom run. We know the following numbers work really well with full feature set. AND also reduced sets too!
+        # min_slope = 0.001
+        # min_slope = 0.00001
+        # min_slope = 1e-6 #  # Minimum acceptable upward slope in validation
+        trend_window = 10  # Number of past epochs to use for trend analysis
+        min_slope = 5e-6 # best
+    else: # the Tramontana model takes much longer to train.
+        # trend_window = 500 #95 94 71 73 pretty close
+        # trend_window = 50 # 95 93 71 70
+        # min_slope = 5e-7 # r2 .9306 seems to be overfitting. Low looking RECO results
+        trend_window = 100 #95 94 72 73
+        min_slope = 2e-6
+
+
 
     # --- History buffer ---
     val_r2_history = []    
@@ -1065,7 +1076,10 @@ GPP_INPUT_FEATURES_SETS = [
     ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN'], # 4
     ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
 
-    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'],
+    # DAILY VARS
+    ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX']
+
 ]
 RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'TA'],
@@ -1074,7 +1088,9 @@ RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN'], # 4
     ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
 
-    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'],
+    # DAILY VARS
+    ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG']
 ]
 
 assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
@@ -1136,7 +1152,8 @@ for i in range(len(GPP_INPUT_FEATURES_SETS)):
 
 """
 TODO:
-- more elaborate early stopping condition
+- DONE - more elaborate early stopping condition
+- Init the device ONLY ONCE.
 
 """
 
