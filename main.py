@@ -1145,7 +1145,7 @@ for i in range(len(GPP_INPUT_FEATURES_SETS)):
 
     plot_saving_str = (f"./experiment_figures/{run_type_str}_"
                        f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
-                       f"reco_{'_'.join(RECO_INPUT_FEATURES)}_{i}"
+                       f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
     evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str)
 
