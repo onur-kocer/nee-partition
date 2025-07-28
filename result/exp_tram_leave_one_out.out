@@ -1,0 +1,1437 @@
+created virtual environment CPython3.10.13.final.0-64 in 15216ms
+  creator CPython3Posix(dest=/localscratch/onurk.64775886.0/env, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/onurk/.local/share/virtualenv)
+    added seed packages: pip==25.1.1, setuptools==80.9.0, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.6.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.18.0+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: typing-extensions>=4.10.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.10/site-packages (from torch) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.5+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.7.0+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sympy-1.13.1+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages (from sympy==1.13.1->torch) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/MarkupSafe-2.1.5+computecanada-cp310-cp310-linux_x86_64.whl (from jinja2->torch)
+INFO: pip is looking at multiple versions of networkx to determine which version is compatible with other requirements. This could take a while.
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.4.2+computecanada-py3-none-any.whl (from torch)
+Installing collected packages: sympy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
+  Attempting uninstall: sympy
+    Found existing installation: sympy 1.13.3+computecanada
+    Not uninstalling sympy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages, outside environment /localscratch/onurk.64775886.0/env
+    Can't uninstall 'sympy'. No files were found to uninstall.
+
+Successfully installed MarkupSafe-2.1.5+computecanada filelock-3.18.0+computecanada fsspec-2025.7.0+computecanada jinja2-3.1.6+computecanada networkx-3.4.2+computecanada sympy-1.13.1+computecanada torch-2.6.0+computecanada
+pre_processing: False      drop_na: False       normalize_raw_features: False       train_models: True       save_models: True       hidden_size: 12       tramontana_run: True       
+gpp_input_names,  ['VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 15064.468750 | Val Loss: 15412.562500 | Train R²: -527502.6875 | Val R²: -517760.2500
+Epoch   500 | Train Loss: 213.742889 | Val Loss: 217.783386 | Train R²: -7483.5093 | Val R²: -7315.0981
+Epoch  1000 | Train Loss: 51.405933 | Val Loss: 52.597702 | Train R²: -1799.0514 | Val R²: -1765.9387
+Epoch  1500 | Train Loss: 21.369366 | Val Loss: 21.932215 | Train R²: -747.2786 | Val R²: -735.7790
+Epoch  2000 | Train Loss: 11.194585 | Val Loss: 11.513644 | Train R²: -390.9942 | Val R²: -385.7831
+Epoch  2500 | Train Loss: 6.655437 | Val Loss: 6.854402 | Train R²: -232.0495 | Val R²: -229.2630
+Epoch  3000 | Train Loss: 4.292058 | Val Loss: 4.423416 | Train R²: -149.2925 | Val R²: -147.5978
+Epoch  3500 | Train Loss: 2.937732 | Val Loss: 3.027720 | Train R²: -101.8689 | Val R²: -100.7116
+Epoch  4000 | Train Loss: 2.109854 | Val Loss: 2.173108 | Train R²: -72.8795 | Val R²: -72.0022
+Epoch  4500 | Train Loss: 1.563361 | Val Loss: 1.608752 | Train R²: -53.7433 | Val R²: -53.0435
+Epoch  5000 | Train Loss: 1.108779 | Val Loss: 1.142845 | Train R²: -37.8255 | Val R²: -37.3921
+Epoch  5500 | Train Loss: 0.805658 | Val Loss: 0.834716 | Train R²: -27.2112 | Val R²: -27.0410
+Epoch  6000 | Train Loss: 0.607629 | Val Loss: 0.629418 | Train R²: -20.2770 | Val R²: -20.1443
+Epoch  6500 | Train Loss: 0.444715 | Val Loss: 0.459649 | Train R²: -14.5723 | Val R²: -14.4412
+Epoch  7000 | Train Loss: 0.314268 | Val Loss: 0.324508 | Train R²: -10.0046 | Val R²: -9.9014
+Epoch  7500 | Train Loss: 0.227127 | Val Loss: 0.234291 | Train R²: -6.9532 | Val R²: -6.8706
+Epoch  8000 | Train Loss: 0.167030 | Val Loss: 0.172169 | Train R²: -4.8488 | Val R²: -4.7837
+Epoch  8500 | Train Loss: 0.124467 | Val Loss: 0.128197 | Train R²: -3.3584 | Val R²: -3.3066
+Epoch  9000 | Train Loss: 0.093807 | Val Loss: 0.096460 | Train R²: -2.2848 | Val R²: -2.2404
+Epoch  9500 | Train Loss: 0.071710 | Val Loss: 0.073524 | Train R²: -1.5110 | Val R²: -1.4699
+Epoch 10000 | Train Loss: 0.055683 | Val Loss: 0.056876 | Train R²: -0.9498 | Val R²: -0.9107
+Epoch 10500 | Train Loss: 0.043857 | Val Loss: 0.044612 | Train R²: -0.5357 | Val R²: -0.4987
+Epoch 11000 | Train Loss: 0.034980 | Val Loss: 0.035466 | Train R²: -0.2249 | Val R²: -0.1914
+Epoch 11500 | Train Loss: 0.028142 | Val Loss: 0.028458 | Train R²: 0.0146 | Val R²: 0.0440
+Epoch 12000 | Train Loss: 0.022869 | Val Loss: 0.023068 | Train R²: 0.1992 | Val R²: 0.2251
+Epoch 12500 | Train Loss: 0.018857 | Val Loss: 0.018973 | Train R²: 0.3397 | Val R²: 0.3626
+Epoch 13000 | Train Loss: 0.015840 | Val Loss: 0.015906 | Train R²: 0.4454 | Val R²: 0.4656
+Epoch 13500 | Train Loss: 0.013586 | Val Loss: 0.013634 | Train R²: 0.5243 | Val R²: 0.5420
+Epoch 14000 | Train Loss: 0.011891 | Val Loss: 0.011937 | Train R²: 0.5836 | Val R²: 0.5990
+Epoch 14500 | Train Loss: 0.010599 | Val Loss: 0.010662 | Train R²: 0.6289 | Val R²: 0.6418
+Epoch 15000 | Train Loss: 0.009627 | Val Loss: 0.009719 | Train R²: 0.6629 | Val R²: 0.6735
+Epoch 15500 | Train Loss: 0.008922 | Val Loss: 0.009038 | Train R²: 0.6876 | Val R²: 0.6964
+Epoch 16000 | Train Loss: 0.008396 | Val Loss: 0.008537 | Train R²: 0.7060 | Val R²: 0.7132
+Epoch 16500 | Train Loss: 0.007985 | Val Loss: 0.008154 | Train R²: 0.7204 | Val R²: 0.7261
+Epoch 17000 | Train Loss: 0.007642 | Val Loss: 0.007841 | Train R²: 0.7324 | Val R²: 0.7366
+Epoch 17500 | Train Loss: 0.007335 | Val Loss: 0.007566 | Train R²: 0.7432 | Val R²: 0.7458
+Epoch 18000 | Train Loss: 0.007054 | Val Loss: 0.007309 | Train R²: 0.7530 | Val R²: 0.7545
+Epoch 18500 | Train Loss: 0.006784 | Val Loss: 0.007055 | Train R²: 0.7624 | Val R²: 0.7630
+Epoch 19000 | Train Loss: 0.006508 | Val Loss: 0.006792 | Train R²: 0.7721 | Val R²: 0.7718
+Epoch 19500 | Train Loss: 0.006223 | Val Loss: 0.006520 | Train R²: 0.7821 | Val R²: 0.7810
+Epoch 20000 | Train Loss: 0.005916 | Val Loss: 0.006221 | Train R²: 0.7928 | Val R²: 0.7910
+Epoch 20500 | Train Loss: 0.005536 | Val Loss: 0.005842 | Train R²: 0.8061 | Val R²: 0.8037
+Epoch 21000 | Train Loss: 0.005003 | Val Loss: 0.005305 | Train R²: 0.8248 | Val R²: 0.8218
+Epoch 21500 | Train Loss: 0.004364 | Val Loss: 0.004629 | Train R²: 0.8472 | Val R²: 0.8445
+Epoch 22000 | Train Loss: 0.003798 | Val Loss: 0.003982 | Train R²: 0.8670 | Val R²: 0.8662
+Epoch 22500 | Train Loss: 0.003449 | Val Loss: 0.003577 | Train R²: 0.8792 | Val R²: 0.8798
+Epoch 23000 | Train Loss: 0.003245 | Val Loss: 0.003353 | Train R²: 0.8864 | Val R²: 0.8874
+Epoch 23500 | Train Loss: 0.003127 | Val Loss: 0.003232 | Train R²: 0.8905 | Val R²: 0.8914
+Epoch 24000 | Train Loss: 0.003051 | Val Loss: 0.003157 | Train R²: 0.8932 | Val R²: 0.8940
+Epoch 24500 | Train Loss: 0.002989 | Val Loss: 0.003094 | Train R²: 0.8953 | Val R²: 0.8961
+Epoch 25000 | Train Loss: 0.002926 | Val Loss: 0.003027 | Train R²: 0.8975 | Val R²: 0.8983
+Epoch 25500 | Train Loss: 0.002842 | Val Loss: 0.002942 | Train R²: 0.9005 | Val R²: 0.9012
+Epoch 26000 | Train Loss: 0.002746 | Val Loss: 0.002849 | Train R²: 0.9038 | Val R²: 0.9043
+Epoch 26500 | Train Loss: 0.002665 | Val Loss: 0.002767 | Train R²: 0.9067 | Val R²: 0.9071
+Epoch 27000 | Train Loss: 0.002596 | Val Loss: 0.002690 | Train R²: 0.9091 | Val R²: 0.9096
+Epoch 27500 | Train Loss: 0.002539 | Val Loss: 0.002623 | Train R²: 0.9111 | Val R²: 0.9119
+Epoch 28000 | Train Loss: 0.002487 | Val Loss: 0.002560 | Train R²: 0.9129 | Val R²: 0.9140
+Epoch 28500 | Train Loss: 0.002431 | Val Loss: 0.002493 | Train R²: 0.9149 | Val R²: 0.9163
+Epoch 29000 | Train Loss: 0.002380 | Val Loss: 0.002434 | Train R²: 0.9167 | Val R²: 0.9182
+Epoch 29500 | Train Loss: 0.002338 | Val Loss: 0.002386 | Train R²: 0.9181 | Val R²: 0.9198
+Epoch 30000 | Train Loss: 0.002305 | Val Loss: 0.002346 | Train R²: 0.9193 | Val R²: 0.9212
+Early stopping at epoch 30323 due to flat/negative trend (slope=0.000002)
+Epoch 30323 | Train Loss: 0.002286 | Val Loss: 0.002327 | Train R²: 0.9199 | Val R²: 0.9218
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.89 RMSE=2.38
+NT_GPP vs Tramontana_GPP R²=0.88 RMSE=2.45
+DT_RECO vs Tramontana_RECO R²=0.26 RMSE=2.00
+NT_RECO vs Tramontana_RECO R²=0.33 RMSE=1.64
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 15351.786133 | Val Loss: 15721.624023 | Train R²: -537563.5000 | Val R²: -528142.7500
+Epoch   500 | Train Loss: 229.952850 | Val Loss: 230.506821 | Train R²: -8051.1240 | Val R²: -7742.5205
+Epoch  1000 | Train Loss: 57.333057 | Val Loss: 57.777950 | Train R²: -2006.5981 | Val R²: -1939.9611
+Epoch  1500 | Train Loss: 24.866684 | Val Loss: 25.143063 | Train R²: -869.7421 | Val R²: -843.6423
+Epoch  2000 | Train Loss: 13.385081 | Val Loss: 13.562623 | Train R²: -467.6976 | Val R²: -454.6154
+Epoch  2500 | Train Loss: 8.080448 | Val Loss: 8.199117 | Train R²: -281.9483 | Val R²: -274.4367
+Epoch  3000 | Train Loss: 5.245476 | Val Loss: 5.327099 | Train R²: -182.6778 | Val R²: -177.9557
+Epoch  3500 | Train Loss: 3.588788 | Val Loss: 3.646007 | Train R²: -124.6665 | Val R²: -121.4820
+Epoch  4000 | Train Loss: 2.562313 | Val Loss: 2.602922 | Train R²: -88.7230 | Val R²: -86.4411
+Epoch  4500 | Train Loss: 1.899213 | Val Loss: 1.928297 | Train R²: -65.5036 | Val R²: -63.7782
+Epoch  5000 | Train Loss: 1.432136 | Val Loss: 1.453235 | Train R²: -49.1483 | Val R²: -47.8192
+Epoch  5500 | Train Loss: 1.004463 | Val Loss: 1.024564 | Train R²: -34.1727 | Val R²: -33.4187
+Epoch  6000 | Train Loss: 0.754214 | Val Loss: 0.770574 | Train R²: -25.4099 | Val R²: -24.8863
+Epoch  6500 | Train Loss: 0.571533 | Val Loss: 0.583242 | Train R²: -19.0131 | Val R²: -18.5931
+Epoch  7000 | Train Loss: 0.411390 | Val Loss: 0.418158 | Train R²: -13.4054 | Val R²: -13.0474
+Epoch  7500 | Train Loss: 0.293797 | Val Loss: 0.297962 | Train R²: -9.2877 | Val R²: -9.0096
+Epoch  8000 | Train Loss: 0.214475 | Val Loss: 0.217193 | Train R²: -6.5101 | Val R²: -6.2963
+Epoch  8500 | Train Loss: 0.159281 | Val Loss: 0.161192 | Train R²: -4.5774 | Val R²: -4.4150
+Epoch  9000 | Train Loss: 0.119769 | Val Loss: 0.121124 | Train R²: -3.1939 | Val R²: -3.0690
+Epoch  9500 | Train Loss: 0.091102 | Val Loss: 0.091986 | Train R²: -2.1901 | Val R²: -2.0901
+Epoch 10000 | Train Loss: 0.070389 | Val Loss: 0.070914 | Train R²: -1.4648 | Val R²: -1.3822
+Epoch 10500 | Train Loss: 0.055246 | Val Loss: 0.055534 | Train R²: -0.9345 | Val R²: -0.8656
+Epoch 11000 | Train Loss: 0.043850 | Val Loss: 0.043974 | Train R²: -0.5355 | Val R²: -0.4772
+Epoch 11500 | Train Loss: 0.034991 | Val Loss: 0.034990 | Train R²: -0.2253 | Val R²: -0.1754
+Epoch 12000 | Train Loss: 0.028072 | Val Loss: 0.027933 | Train R²: 0.0170 | Val R²: 0.0616
+Epoch 12500 | Train Loss: 0.022795 | Val Loss: 0.022560 | Train R²: 0.2018 | Val R²: 0.2421
+Epoch 13000 | Train Loss: 0.018812 | Val Loss: 0.018554 | Train R²: 0.3413 | Val R²: 0.3767
+Epoch 13500 | Train Loss: 0.015830 | Val Loss: 0.015595 | Train R²: 0.4457 | Val R²: 0.4761
+Epoch 14000 | Train Loss: 0.013592 | Val Loss: 0.013401 | Train R²: 0.5241 | Val R²: 0.5498
+Epoch 14500 | Train Loss: 0.011881 | Val Loss: 0.011750 | Train R²: 0.5840 | Val R²: 0.6053
+Epoch 15000 | Train Loss: 0.010546 | Val Loss: 0.010497 | Train R²: 0.6307 | Val R²: 0.6474
+Epoch 15500 | Train Loss: 0.009537 | Val Loss: 0.009565 | Train R²: 0.6660 | Val R²: 0.6787
+Epoch 16000 | Train Loss: 0.008787 | Val Loss: 0.008875 | Train R²: 0.6923 | Val R²: 0.7018
+Epoch 16500 | Train Loss: 0.008224 | Val Loss: 0.008363 | Train R²: 0.7120 | Val R²: 0.7191
+Epoch 17000 | Train Loss: 0.007789 | Val Loss: 0.007964 | Train R²: 0.7272 | Val R²: 0.7324
+Epoch 17500 | Train Loss: 0.007436 | Val Loss: 0.007634 | Train R²: 0.7396 | Val R²: 0.7435
+Epoch 18000 | Train Loss: 0.007130 | Val Loss: 0.007338 | Train R²: 0.7503 | Val R²: 0.7535
+Epoch 18500 | Train Loss: 0.006843 | Val Loss: 0.007054 | Train R²: 0.7604 | Val R²: 0.7630
+Epoch 19000 | Train Loss: 0.006560 | Val Loss: 0.006767 | Train R²: 0.7703 | Val R²: 0.7727
+Epoch 19500 | Train Loss: 0.006277 | Val Loss: 0.006473 | Train R²: 0.7802 | Val R²: 0.7825
+Epoch 20000 | Train Loss: 0.005979 | Val Loss: 0.006159 | Train R²: 0.7906 | Val R²: 0.7931
+Epoch 20500 | Train Loss: 0.005643 | Val Loss: 0.005806 | Train R²: 0.8024 | Val R²: 0.8050
+Epoch 21000 | Train Loss: 0.005258 | Val Loss: 0.005415 | Train R²: 0.8159 | Val R²: 0.8181
+Epoch 21500 | Train Loss: 0.004741 | Val Loss: 0.004892 | Train R²: 0.8340 | Val R²: 0.8357
+Epoch 22000 | Train Loss: 0.003576 | Val Loss: 0.003681 | Train R²: 0.8748 | Val R²: 0.8764
+Epoch 22500 | Train Loss: 0.002848 | Val Loss: 0.003016 | Train R²: 0.9003 | Val R²: 0.8987
+Epoch 23000 | Train Loss: 0.002579 | Val Loss: 0.002757 | Train R²: 0.9097 | Val R²: 0.9074
+Epoch 23500 | Train Loss: 0.002399 | Val Loss: 0.002572 | Train R²: 0.9160 | Val R²: 0.9136
+Epoch 24000 | Train Loss: 0.002269 | Val Loss: 0.002436 | Train R²: 0.9205 | Val R²: 0.9182
+Epoch 24500 | Train Loss: 0.002168 | Val Loss: 0.002330 | Train R²: 0.9241 | Val R²: 0.9217
+Epoch 25000 | Train Loss: 0.002086 | Val Loss: 0.002247 | Train R²: 0.9270 | Val R²: 0.9245
+Epoch 25500 | Train Loss: 0.002024 | Val Loss: 0.002183 | Train R²: 0.9291 | Val R²: 0.9267
+Epoch 26000 | Train Loss: 0.001975 | Val Loss: 0.002130 | Train R²: 0.9308 | Val R²: 0.9284
+Epoch 26500 | Train Loss: 0.001933 | Val Loss: 0.002083 | Train R²: 0.9323 | Val R²: 0.9300
+Epoch 27000 | Train Loss: 0.001890 | Val Loss: 0.002035 | Train R²: 0.9338 | Val R²: 0.9316
+Epoch 27500 | Train Loss: 0.001838 | Val Loss: 0.001976 | Train R²: 0.9356 | Val R²: 0.9336
+Epoch 28000 | Train Loss: 0.001786 | Val Loss: 0.001910 | Train R²: 0.9375 | Val R²: 0.9358
+Epoch 28500 | Train Loss: 0.001742 | Val Loss: 0.001852 | Train R²: 0.9390 | Val R²: 0.9378
+Epoch 29000 | Train Loss: 0.001702 | Val Loss: 0.001797 | Train R²: 0.9404 | Val R²: 0.9396
+Epoch 29500 | Train Loss: 0.001668 | Val Loss: 0.001748 | Train R²: 0.9416 | Val R²: 0.9413
+Epoch 30000 | Train Loss: 0.001640 | Val Loss: 0.001707 | Train R²: 0.9426 | Val R²: 0.9427
+Epoch 30500 | Train Loss: 0.001615 | Val Loss: 0.001672 | Train R²: 0.9435 | Val R²: 0.9438
+Early stopping at epoch 30627 due to flat/negative trend (slope=0.000002)
+Epoch 30627 | Train Loss: 0.001609 | Val Loss: 0.001664 | Train R²: 0.9437 | Val R²: 0.9441
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.61
+NT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.75
+DT_RECO vs Tramontana_RECO R²=0.71 RMSE=1.25
+NT_RECO vs Tramontana_RECO R²=0.74 RMSE=1.02
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 16389.982422 | Val Loss: 16776.121094 | Train R²: -573917.4375 | Val R²: -563566.8750
+Epoch   500 | Train Loss: 226.982208 | Val Loss: 230.736923 | Train R²: -7947.1030 | Val R²: -7750.2515
+Epoch  1000 | Train Loss: 57.311939 | Val Loss: 58.533901 | Train R²: -2005.8586 | Val R²: -1965.3560
+Epoch  1500 | Train Loss: 24.732122 | Val Loss: 25.345572 | Train R²: -865.0302 | Val R²: -850.4453
+Epoch  2000 | Train Loss: 13.216672 | Val Loss: 13.579257 | Train R²: -461.8004 | Val R²: -455.1742
+Epoch  2500 | Train Loss: 7.927378 | Val Loss: 8.160783 | Train R²: -276.5883 | Val R²: -273.1489
+Epoch  3000 | Train Loss: 5.120668 | Val Loss: 5.278762 | Train R²: -178.3074 | Val R²: -176.3319
+Epoch  3500 | Train Loss: 3.492208 | Val Loss: 3.602848 | Train R²: -121.2846 | Val R²: -120.0321
+Epoch  4000 | Train Loss: 2.489635 | Val Loss: 2.568806 | Train R²: -86.1781 | Val R²: -85.2951
+Epoch  4500 | Train Loss: 1.842093 | Val Loss: 1.899794 | Train R²: -63.5035 | Val R²: -62.8207
+Epoch  5000 | Train Loss: 1.343243 | Val Loss: 1.385889 | Train R²: -46.0355 | Val R²: -45.5568
+Epoch  5500 | Train Loss: 0.968837 | Val Loss: 1.004919 | Train R²: -32.9252 | Val R²: -32.7587
+Epoch  6000 | Train Loss: 0.724889 | Val Loss: 0.753720 | Train R²: -24.3830 | Val R²: -24.3201
+Epoch  6500 | Train Loss: 0.539515 | Val Loss: 0.560215 | Train R²: -17.8919 | Val R²: -17.8196
+Epoch  7000 | Train Loss: 0.378295 | Val Loss: 0.392323 | Train R²: -12.2466 | Val R²: -12.1795
+Epoch  7500 | Train Loss: 0.270284 | Val Loss: 0.280242 | Train R²: -8.4644 | Val R²: -8.4143
+Epoch  8000 | Train Loss: 0.197263 | Val Loss: 0.204584 | Train R²: -5.9074 | Val R²: -5.8727
+Epoch  8500 | Train Loss: 0.146158 | Val Loss: 0.151579 | Train R²: -4.1179 | Val R²: -4.0920
+Epoch  9000 | Train Loss: 0.109606 | Val Loss: 0.113539 | Train R²: -2.8380 | Val R²: -2.8142
+Epoch  9500 | Train Loss: 0.083355 | Val Loss: 0.086115 | Train R²: -1.9188 | Val R²: -1.8929
+Epoch 10000 | Train Loss: 0.064336 | Val Loss: 0.066230 | Train R²: -1.2528 | Val R²: -1.2249
+Epoch 10500 | Train Loss: 0.050314 | Val Loss: 0.051579 | Train R²: -0.7618 | Val R²: -0.7327
+Epoch 11000 | Train Loss: 0.039838 | Val Loss: 0.040661 | Train R²: -0.3950 | Val R²: -0.3659
+Epoch 11500 | Train Loss: 0.031836 | Val Loss: 0.032364 | Train R²: -0.1148 | Val R²: -0.0872
+Epoch 12000 | Train Loss: 0.025664 | Val Loss: 0.025982 | Train R²: 0.1013 | Val R²: 0.1272
+Epoch 12500 | Train Loss: 0.020975 | Val Loss: 0.021157 | Train R²: 0.2655 | Val R²: 0.2893
+Epoch 13000 | Train Loss: 0.017445 | Val Loss: 0.017548 | Train R²: 0.3891 | Val R²: 0.4105
+Epoch 13500 | Train Loss: 0.014836 | Val Loss: 0.014897 | Train R²: 0.4805 | Val R²: 0.4995
+Epoch 14000 | Train Loss: 0.012909 | Val Loss: 0.012951 | Train R²: 0.5480 | Val R²: 0.5649
+Epoch 14500 | Train Loss: 0.011468 | Val Loss: 0.011503 | Train R²: 0.5984 | Val R²: 0.6136
+Epoch 15000 | Train Loss: 0.010366 | Val Loss: 0.010404 | Train R²: 0.6370 | Val R²: 0.6505
+Epoch 15500 | Train Loss: 0.009521 | Val Loss: 0.009562 | Train R²: 0.6666 | Val R²: 0.6788
+Epoch 16000 | Train Loss: 0.008905 | Val Loss: 0.008954 | Train R²: 0.6882 | Val R²: 0.6992
+Epoch 16500 | Train Loss: 0.008435 | Val Loss: 0.008503 | Train R²: 0.7046 | Val R²: 0.7144
+Epoch 17000 | Train Loss: 0.008050 | Val Loss: 0.008142 | Train R²: 0.7181 | Val R²: 0.7265
+Epoch 17500 | Train Loss: 0.007713 | Val Loss: 0.007829 | Train R²: 0.7299 | Val R²: 0.7370
+Epoch 18000 | Train Loss: 0.007396 | Val Loss: 0.007531 | Train R²: 0.7410 | Val R²: 0.7470
+Epoch 18500 | Train Loss: 0.007091 | Val Loss: 0.007245 | Train R²: 0.7517 | Val R²: 0.7566
+Epoch 19000 | Train Loss: 0.006803 | Val Loss: 0.006978 | Train R²: 0.7618 | Val R²: 0.7656
+Epoch 19500 | Train Loss: 0.006527 | Val Loss: 0.006725 | Train R²: 0.7714 | Val R²: 0.7741
+Epoch 20000 | Train Loss: 0.006249 | Val Loss: 0.006470 | Train R²: 0.7812 | Val R²: 0.7827
+Epoch 20500 | Train Loss: 0.005970 | Val Loss: 0.006211 | Train R²: 0.7910 | Val R²: 0.7914
+Epoch 21000 | Train Loss: 0.005699 | Val Loss: 0.005948 | Train R²: 0.8004 | Val R²: 0.8002
+Epoch 21500 | Train Loss: 0.005437 | Val Loss: 0.005679 | Train R²: 0.8096 | Val R²: 0.8092
+Epoch 22000 | Train Loss: 0.005181 | Val Loss: 0.005415 | Train R²: 0.8186 | Val R²: 0.8181
+Epoch 22500 | Train Loss: 0.004899 | Val Loss: 0.005128 | Train R²: 0.8284 | Val R²: 0.8277
+Epoch 23000 | Train Loss: 0.004485 | Val Loss: 0.004703 | Train R²: 0.8430 | Val R²: 0.8420
+Epoch 23500 | Train Loss: 0.003483 | Val Loss: 0.003666 | Train R²: 0.8780 | Val R²: 0.8768
+Epoch 24000 | Train Loss: 0.002720 | Val Loss: 0.002893 | Train R²: 0.9048 | Val R²: 0.9028
+Epoch 24500 | Train Loss: 0.002442 | Val Loss: 0.002611 | Train R²: 0.9145 | Val R²: 0.9123
+Epoch 25000 | Train Loss: 0.002315 | Val Loss: 0.002478 | Train R²: 0.9189 | Val R²: 0.9168
+Epoch 25500 | Train Loss: 0.002221 | Val Loss: 0.002379 | Train R²: 0.9222 | Val R²: 0.9201
+Epoch 26000 | Train Loss: 0.002116 | Val Loss: 0.002265 | Train R²: 0.9259 | Val R²: 0.9239
+Epoch 26500 | Train Loss: 0.002003 | Val Loss: 0.002135 | Train R²: 0.9299 | Val R²: 0.9283
+Epoch 27000 | Train Loss: 0.001913 | Val Loss: 0.002027 | Train R²: 0.9330 | Val R²: 0.9319
+Epoch 27500 | Train Loss: 0.001855 | Val Loss: 0.001955 | Train R²: 0.9350 | Val R²: 0.9343
+Epoch 28000 | Train Loss: 0.001815 | Val Loss: 0.001909 | Train R²: 0.9364 | Val R²: 0.9359
+Epoch 28500 | Train Loss: 0.001784 | Val Loss: 0.001874 | Train R²: 0.9375 | Val R²: 0.9371
+Epoch 29000 | Train Loss: 0.001754 | Val Loss: 0.001840 | Train R²: 0.9386 | Val R²: 0.9382
+Epoch 29500 | Train Loss: 0.001721 | Val Loss: 0.001804 | Train R²: 0.9397 | Val R²: 0.9394
+Early stopping at epoch 29662 due to flat/negative trend (slope=0.000002)
+Epoch 29662 | Train Loss: 0.001711 | Val Loss: 0.001795 | Train R²: 0.9401 | Val R²: 0.9397
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.55
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.83
+DT_RECO vs Tramontana_RECO R²=0.72 RMSE=1.23
+NT_RECO vs Tramontana_RECO R²=0.69 RMSE=1.12
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 16124.725586 | Val Loss: 16492.951172 | Train R²: -564629.0625 | Val R²: -554054.2500
+Epoch   500 | Train Loss: 220.225021 | Val Loss: 222.882553 | Train R²: -7710.4912 | Val R²: -7486.3955
+Epoch  1000 | Train Loss: 55.077545 | Val Loss: 56.038017 | Train R²: -1927.6179 | Val R²: -1881.5105
+Epoch  1500 | Train Loss: 23.637384 | Val Loss: 24.147612 | Train R²: -826.6964 | Val R²: -810.2018
+Epoch  2000 | Train Loss: 12.592688 | Val Loss: 12.903970 | Train R²: -439.9508 | Val R²: -432.4890
+Epoch  2500 | Train Loss: 7.540315 | Val Loss: 7.744748 | Train R²: -263.0348 | Val R²: -259.1729
+Epoch  3000 | Train Loss: 4.867397 | Val Loss: 5.007802 | Train R²: -169.4388 | Val R²: -167.2294
+Epoch  3500 | Train Loss: 3.320405 | Val Loss: 3.419686 | Train R²: -115.2687 | Val R²: -113.8791
+Epoch  4000 | Train Loss: 2.370167 | Val Loss: 2.441774 | Train R²: -81.9948 | Val R²: -81.0276
+Epoch  4500 | Train Loss: 1.758677 | Val Loss: 1.811057 | Train R²: -60.5826 | Val R²: -59.8397
+Epoch  5000 | Train Loss: 1.278951 | Val Loss: 1.316124 | Train R²: -43.7843 | Val R²: -43.2132
+Epoch  5500 | Train Loss: 0.910550 | Val Loss: 0.944665 | Train R²: -30.8842 | Val R²: -30.7346
+Epoch  6000 | Train Loss: 0.685740 | Val Loss: 0.712087 | Train R²: -23.0122 | Val R²: -22.9215
+Epoch  6500 | Train Loss: 0.514626 | Val Loss: 0.533821 | Train R²: -17.0204 | Val R²: -16.9329
+Epoch  7000 | Train Loss: 0.363590 | Val Loss: 0.376807 | Train R²: -11.7316 | Val R²: -11.6582
+Epoch  7500 | Train Loss: 0.260308 | Val Loss: 0.269643 | Train R²: -8.1150 | Val R²: -8.0582
+Epoch  8000 | Train Loss: 0.190118 | Val Loss: 0.196938 | Train R²: -5.6573 | Val R²: -5.6158
+Epoch  8500 | Train Loss: 0.141051 | Val Loss: 0.146177 | Train R²: -3.9391 | Val R²: -3.9106
+Epoch  9000 | Train Loss: 0.105744 | Val Loss: 0.109601 | Train R²: -2.7028 | Val R²: -2.6819
+Epoch  9500 | Train Loss: 0.080110 | Val Loss: 0.082939 | Train R²: -1.8052 | Val R²: -1.7862
+Epoch 10000 | Train Loss: 0.061535 | Val Loss: 0.063541 | Train R²: -1.1547 | Val R²: -1.1346
+Epoch 10500 | Train Loss: 0.047949 | Val Loss: 0.049338 | Train R²: -0.6790 | Val R²: -0.6574
+Epoch 11000 | Train Loss: 0.037867 | Val Loss: 0.038851 | Train R²: -0.3260 | Val R²: -0.3051
+Epoch 11500 | Train Loss: 0.030186 | Val Loss: 0.030903 | Train R²: -0.0570 | Val R²: -0.0381
+Epoch 12000 | Train Loss: 0.024278 | Val Loss: 0.024803 | Train R²: 0.1499 | Val R²: 0.1668
+Epoch 12500 | Train Loss: 0.019815 | Val Loss: 0.020205 | Train R²: 0.3062 | Val R²: 0.3213
+Epoch 13000 | Train Loss: 0.016497 | Val Loss: 0.016806 | Train R²: 0.4223 | Val R²: 0.4354
+Epoch 13500 | Train Loss: 0.014050 | Val Loss: 0.014321 | Train R²: 0.5080 | Val R²: 0.5189
+Epoch 14000 | Train Loss: 0.012237 | Val Loss: 0.012497 | Train R²: 0.5715 | Val R²: 0.5802
+Epoch 14500 | Train Loss: 0.010874 | Val Loss: 0.011141 | Train R²: 0.6192 | Val R²: 0.6258
+Epoch 15000 | Train Loss: 0.009848 | Val Loss: 0.010126 | Train R²: 0.6552 | Val R²: 0.6598
+Epoch 15500 | Train Loss: 0.009085 | Val Loss: 0.009367 | Train R²: 0.6819 | Val R²: 0.6853
+Epoch 16000 | Train Loss: 0.008512 | Val Loss: 0.008795 | Train R²: 0.7020 | Val R²: 0.7046
+Epoch 16500 | Train Loss: 0.008066 | Val Loss: 0.008357 | Train R²: 0.7176 | Val R²: 0.7192
+Epoch 17000 | Train Loss: 0.007699 | Val Loss: 0.008006 | Train R²: 0.7304 | Val R²: 0.7310
+Epoch 17500 | Train Loss: 0.007381 | Val Loss: 0.007711 | Train R²: 0.7416 | Val R²: 0.7410
+Epoch 18000 | Train Loss: 0.007100 | Val Loss: 0.007449 | Train R²: 0.7514 | Val R²: 0.7498
+Epoch 18500 | Train Loss: 0.006836 | Val Loss: 0.007191 | Train R²: 0.7606 | Val R²: 0.7584
+Epoch 19000 | Train Loss: 0.006570 | Val Loss: 0.006925 | Train R²: 0.7699 | Val R²: 0.7674
+Epoch 19500 | Train Loss: 0.006297 | Val Loss: 0.006648 | Train R²: 0.7795 | Val R²: 0.7767
+Epoch 20000 | Train Loss: 0.006015 | Val Loss: 0.006354 | Train R²: 0.7894 | Val R²: 0.7866
+Epoch 20500 | Train Loss: 0.005731 | Val Loss: 0.006064 | Train R²: 0.7993 | Val R²: 0.7963
+Epoch 21000 | Train Loss: 0.005434 | Val Loss: 0.005766 | Train R²: 0.8097 | Val R²: 0.8063
+Epoch 21500 | Train Loss: 0.005084 | Val Loss: 0.005420 | Train R²: 0.8220 | Val R²: 0.8179
+Epoch 22000 | Train Loss: 0.004593 | Val Loss: 0.004939 | Train R²: 0.8392 | Val R²: 0.8341
+Epoch 22500 | Train Loss: 0.003691 | Val Loss: 0.004011 | Train R²: 0.8708 | Val R²: 0.8652
+Epoch 23000 | Train Loss: 0.002934 | Val Loss: 0.003192 | Train R²: 0.8973 | Val R²: 0.8928
+Epoch 23500 | Train Loss: 0.002603 | Val Loss: 0.002814 | Train R²: 0.9089 | Val R²: 0.9055
+Epoch 24000 | Train Loss: 0.002437 | Val Loss: 0.002618 | Train R²: 0.9147 | Val R²: 0.9121
+Epoch 24500 | Train Loss: 0.002322 | Val Loss: 0.002494 | Train R²: 0.9187 | Val R²: 0.9162
+Epoch 25000 | Train Loss: 0.002247 | Val Loss: 0.002412 | Train R²: 0.9213 | Val R²: 0.9190
+Epoch 25500 | Train Loss: 0.002186 | Val Loss: 0.002342 | Train R²: 0.9235 | Val R²: 0.9213
+Epoch 26000 | Train Loss: 0.002120 | Val Loss: 0.002269 | Train R²: 0.9258 | Val R²: 0.9238
+Epoch 26500 | Train Loss: 0.002033 | Val Loss: 0.002167 | Train R²: 0.9288 | Val R²: 0.9272
+Epoch 27000 | Train Loss: 0.001957 | Val Loss: 0.002079 | Train R²: 0.9315 | Val R²: 0.9302
+Epoch 27500 | Train Loss: 0.001898 | Val Loss: 0.002012 | Train R²: 0.9335 | Val R²: 0.9324
+Epoch 28000 | Train Loss: 0.001851 | Val Loss: 0.001956 | Train R²: 0.9352 | Val R²: 0.9343
+Epoch 28500 | Train Loss: 0.001809 | Val Loss: 0.001907 | Train R²: 0.9366 | Val R²: 0.9359
+Epoch 29000 | Train Loss: 0.001763 | Val Loss: 0.001859 | Train R²: 0.9383 | Val R²: 0.9376
+Epoch 29500 | Train Loss: 0.001725 | Val Loss: 0.001815 | Train R²: 0.9396 | Val R²: 0.9390
+Epoch 30000 | Train Loss: 0.001694 | Val Loss: 0.001778 | Train R²: 0.9407 | Val R²: 0.9403
+Early stopping at epoch 30240 due to flat/negative trend (slope=0.000002)
+Epoch 30240 | Train Loss: 0.001683 | Val Loss: 0.001767 | Train R²: 0.9411 | Val R²: 0.9406
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.68
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.89
+DT_RECO vs Tramontana_RECO R²=0.67 RMSE=1.34
+NT_RECO vs Tramontana_RECO R²=0.63 RMSE=1.23
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 16205.932617 | Val Loss: 16584.201172 | Train R²: -567472.6250 | Val R²: -557119.6250
+Epoch   500 | Train Loss: 232.625778 | Val Loss: 232.930634 | Train R²: -8144.7207 | Val R²: -7823.9453
+Epoch  1000 | Train Loss: 57.451466 | Val Loss: 57.665257 | Train R²: -2010.7444 | Val R²: -1936.1754
+Epoch  1500 | Train Loss: 24.686705 | Val Loss: 24.814548 | Train R²: -863.4399 | Val R²: -832.6064
+Epoch  2000 | Train Loss: 13.182347 | Val Loss: 13.260491 | Train R²: -460.5985 | Val R²: -444.4657
+Epoch  2500 | Train Loss: 7.904620 | Val Loss: 7.953861 | Train R²: -275.7914 | Val R²: -266.1977
+Epoch  3000 | Train Loss: 5.102870 | Val Loss: 5.134418 | Train R²: -177.6842 | Val R²: -171.4828
+Epoch  3500 | Train Loss: 3.475885 | Val Loss: 3.496147 | Train R²: -120.7130 | Val R²: -116.4477
+Epoch  4000 | Train Loss: 2.473511 | Val Loss: 2.486380 | Train R²: -85.6135 | Val R²: -82.5261
+Epoch  4500 | Train Loss: 1.827248 | Val Loss: 1.835314 | Train R²: -62.9837 | Val R²: -60.6545
+Epoch  5000 | Train Loss: 1.337436 | Val Loss: 1.341787 | Train R²: -45.8322 | Val R²: -44.0753
+Epoch  5500 | Train Loss: 0.960040 | Val Loss: 0.966584 | Train R²: -32.6172 | Val R²: -31.4709
+Epoch  6000 | Train Loss: 0.726745 | Val Loss: 0.732572 | Train R²: -24.4480 | Val R²: -23.6096
+Epoch  6500 | Train Loss: 0.553588 | Val Loss: 0.557421 | Train R²: -18.3847 | Val R²: -17.7257
+Epoch  7000 | Train Loss: 0.396374 | Val Loss: 0.397237 | Train R²: -12.8796 | Val R²: -12.3446
+Epoch  7500 | Train Loss: 0.281826 | Val Loss: 0.281808 | Train R²: -8.8685 | Val R²: -8.4669
+Epoch  8000 | Train Loss: 0.204130 | Val Loss: 0.203740 | Train R²: -6.1479 | Val R²: -5.8443
+Epoch  8500 | Train Loss: 0.149419 | Val Loss: 0.148900 | Train R²: -4.2321 | Val R²: -4.0021
+Epoch  9000 | Train Loss: 0.110641 | Val Loss: 0.110012 | Train R²: -2.8742 | Val R²: -2.6957
+Epoch  9500 | Train Loss: 0.083399 | Val Loss: 0.082654 | Train R²: -1.9203 | Val R²: -1.7766
+Epoch 10000 | Train Loss: 0.064286 | Val Loss: 0.063486 | Train R²: -1.2511 | Val R²: -1.1327
+Epoch 10500 | Train Loss: 0.050454 | Val Loss: 0.049694 | Train R²: -0.7667 | Val R²: -0.6694
+Epoch 11000 | Train Loss: 0.040052 | Val Loss: 0.039386 | Train R²: -0.4025 | Val R²: -0.3231
+Epoch 11500 | Train Loss: 0.032059 | Val Loss: 0.031515 | Train R²: -0.1226 | Val R²: -0.0587
+Epoch 12000 | Train Loss: 0.025910 | Val Loss: 0.025491 | Train R²: 0.0927 | Val R²: 0.1437
+Epoch 12500 | Train Loss: 0.021244 | Val Loss: 0.020929 | Train R²: 0.2561 | Val R²: 0.2969
+Epoch 13000 | Train Loss: 0.017725 | Val Loss: 0.017498 | Train R²: 0.3793 | Val R²: 0.4122
+Epoch 13500 | Train Loss: 0.015089 | Val Loss: 0.014942 | Train R²: 0.4716 | Val R²: 0.4980
+Epoch 14000 | Train Loss: 0.013100 | Val Loss: 0.013017 | Train R²: 0.5413 | Val R²: 0.5627
+Epoch 14500 | Train Loss: 0.011605 | Val Loss: 0.011580 | Train R²: 0.5936 | Val R²: 0.6110
+Epoch 15000 | Train Loss: 0.010496 | Val Loss: 0.010519 | Train R²: 0.6325 | Val R²: 0.6466
+Epoch 15500 | Train Loss: 0.009677 | Val Loss: 0.009734 | Train R²: 0.6611 | Val R²: 0.6730
+Epoch 16000 | Train Loss: 0.009062 | Val Loss: 0.009144 | Train R²: 0.6827 | Val R²: 0.6928
+Epoch 16500 | Train Loss: 0.008586 | Val Loss: 0.008689 | Train R²: 0.6993 | Val R²: 0.7081
+Epoch 17000 | Train Loss: 0.008203 | Val Loss: 0.008329 | Train R²: 0.7128 | Val R²: 0.7202
+Epoch 17500 | Train Loss: 0.007876 | Val Loss: 0.008026 | Train R²: 0.7242 | Val R²: 0.7304
+Epoch 18000 | Train Loss: 0.007575 | Val Loss: 0.007753 | Train R²: 0.7347 | Val R²: 0.7396
+Epoch 18500 | Train Loss: 0.007284 | Val Loss: 0.007493 | Train R²: 0.7449 | Val R²: 0.7483
+Epoch 19000 | Train Loss: 0.006997 | Val Loss: 0.007234 | Train R²: 0.7550 | Val R²: 0.7570
+Epoch 19500 | Train Loss: 0.006700 | Val Loss: 0.006961 | Train R²: 0.7654 | Val R²: 0.7662
+Epoch 20000 | Train Loss: 0.006397 | Val Loss: 0.006685 | Train R²: 0.7760 | Val R²: 0.7754
+Epoch 20500 | Train Loss: 0.006103 | Val Loss: 0.006405 | Train R²: 0.7863 | Val R²: 0.7848
+Epoch 21000 | Train Loss: 0.005817 | Val Loss: 0.006127 | Train R²: 0.7963 | Val R²: 0.7942
+Epoch 21500 | Train Loss: 0.005509 | Val Loss: 0.005816 | Train R²: 0.8071 | Val R²: 0.8046
+Epoch 22000 | Train Loss: 0.005109 | Val Loss: 0.005389 | Train R²: 0.8211 | Val R²: 0.8190
+Epoch 22500 | Train Loss: 0.004384 | Val Loss: 0.004597 | Train R²: 0.8465 | Val R²: 0.8456
+Epoch 23000 | Train Loss: 0.003112 | Val Loss: 0.003305 | Train R²: 0.8910 | Val R²: 0.8890
+Epoch 23500 | Train Loss: 0.002666 | Val Loss: 0.002891 | Train R²: 0.9067 | Val R²: 0.9029
+Epoch 24000 | Train Loss: 0.002415 | Val Loss: 0.002623 | Train R²: 0.9154 | Val R²: 0.9119
+Epoch 24500 | Train Loss: 0.002245 | Val Loss: 0.002442 | Train R²: 0.9214 | Val R²: 0.9180
+Epoch 25000 | Train Loss: 0.002111 | Val Loss: 0.002297 | Train R²: 0.9261 | Val R²: 0.9228
+Epoch 25500 | Train Loss: 0.001994 | Val Loss: 0.002159 | Train R²: 0.9302 | Val R²: 0.9275
+Epoch 26000 | Train Loss: 0.001917 | Val Loss: 0.002068 | Train R²: 0.9329 | Val R²: 0.9305
+Epoch 26500 | Train Loss: 0.001861 | Val Loss: 0.002003 | Train R²: 0.9348 | Val R²: 0.9327
+Epoch 27000 | Train Loss: 0.001822 | Val Loss: 0.001957 | Train R²: 0.9362 | Val R²: 0.9342
+Epoch 27500 | Train Loss: 0.001792 | Val Loss: 0.001925 | Train R²: 0.9373 | Val R²: 0.9353
+Early stopping at epoch 27660 due to flat/negative trend (slope=0.000002)
+Epoch 27660 | Train Loss: 0.001783 | Val Loss: 0.001918 | Train R²: 0.9376 | Val R²: 0.9356
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.72
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.92
+DT_RECO vs Tramontana_RECO R²=0.63 RMSE=1.40
+NT_RECO vs Tramontana_RECO R²=0.65 RMSE=1.20
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 18763.583984 | Val Loss: 19227.748047 | Train R²: -657032.3750 | Val R²: -645925.5625
+Epoch   500 | Train Loss: 241.991592 | Val Loss: 247.465363 | Train R²: -8472.6777 | Val R²: -8312.2178
+Epoch  1000 | Train Loss: 59.573639 | Val Loss: 61.212593 | Train R²: -2085.0552 | Val R²: -2055.3425
+Epoch  1500 | Train Loss: 25.637169 | Val Loss: 26.438198 | Train R²: -896.7217 | Val R²: -887.1504
+Epoch  2000 | Train Loss: 13.722457 | Val Loss: 14.189226 | Train R²: -479.5113 | Val R²: -475.6652
+Epoch  2500 | Train Loss: 8.250565 | Val Loss: 8.548228 | Train R²: -287.9052 | Val R²: -286.1646
+Epoch  3000 | Train Loss: 5.339860 | Val Loss: 5.540180 | Train R²: -185.9828 | Val R²: -185.1138
+Epoch  3500 | Train Loss: 3.644994 | Val Loss: 3.784591 | Train R²: -126.6346 | Val R²: -126.1375
+Epoch  4000 | Train Loss: 2.597386 | Val Loss: 2.697036 | Train R²: -89.9511 | Val R²: -89.6028
+Epoch  4500 | Train Loss: 1.920180 | Val Loss: 1.992660 | Train R²: -66.2378 | Val R²: -65.9403
+Epoch  5000 | Train Loss: 1.419117 | Val Loss: 1.472615 | Train R²: -48.6924 | Val R²: -48.4702
+Epoch  5500 | Train Loss: 1.020290 | Val Loss: 1.062953 | Train R²: -34.7269 | Val R²: -34.7083
+Epoch  6000 | Train Loss: 0.757666 | Val Loss: 0.792264 | Train R²: -25.5308 | Val R²: -25.6149
+Epoch  6500 | Train Loss: 0.567974 | Val Loss: 0.593150 | Train R²: -18.8884 | Val R²: -18.9260
+Epoch  7000 | Train Loss: 0.405901 | Val Loss: 0.423520 | Train R²: -13.2132 | Val R²: -13.2275
+Epoch  7500 | Train Loss: 0.291138 | Val Loss: 0.303711 | Train R²: -9.1946 | Val R²: -9.2027
+Epoch  8000 | Train Loss: 0.212662 | Val Loss: 0.221834 | Train R²: -6.4467 | Val R²: -6.4522
+Epoch  8500 | Train Loss: 0.157361 | Val Loss: 0.164174 | Train R²: -4.5102 | Val R²: -4.5152
+Epoch  9000 | Train Loss: 0.117590 | Val Loss: 0.122649 | Train R²: -3.1176 | Val R²: -3.1202
+Epoch  9500 | Train Loss: 0.088918 | Val Loss: 0.092615 | Train R²: -2.1136 | Val R²: -2.1112
+Epoch 10000 | Train Loss: 0.068309 | Val Loss: 0.070975 | Train R²: -1.3919 | Val R²: -1.3843
+Epoch 10500 | Train Loss: 0.053250 | Val Loss: 0.055175 | Train R²: -0.8646 | Val R²: -0.8535
+Epoch 11000 | Train Loss: 0.041998 | Val Loss: 0.043391 | Train R²: -0.4706 | Val R²: -0.4577
+Epoch 11500 | Train Loss: 0.033434 | Val Loss: 0.034447 | Train R²: -0.1707 | Val R²: -0.1572
+Epoch 12000 | Train Loss: 0.026844 | Val Loss: 0.027580 | Train R²: 0.0600 | Val R²: 0.0735
+Epoch 12500 | Train Loss: 0.021827 | Val Loss: 0.022360 | Train R²: 0.2357 | Val R²: 0.2488
+Epoch 13000 | Train Loss: 0.018054 | Val Loss: 0.018447 | Train R²: 0.3678 | Val R²: 0.3803
+Epoch 13500 | Train Loss: 0.015240 | Val Loss: 0.015548 | Train R²: 0.4663 | Val R²: 0.4777
+Epoch 14000 | Train Loss: 0.013154 | Val Loss: 0.013417 | Train R²: 0.5394 | Val R²: 0.5493
+Epoch 14500 | Train Loss: 0.011612 | Val Loss: 0.011848 | Train R²: 0.5934 | Val R²: 0.6020
+Epoch 15000 | Train Loss: 0.010444 | Val Loss: 0.010665 | Train R²: 0.6343 | Val R²: 0.6417
+Epoch 15500 | Train Loss: 0.009523 | Val Loss: 0.009737 | Train R²: 0.6665 | Val R²: 0.6729
+Epoch 16000 | Train Loss: 0.008813 | Val Loss: 0.009023 | Train R²: 0.6914 | Val R²: 0.6969
+Epoch 16500 | Train Loss: 0.008270 | Val Loss: 0.008487 | Train R²: 0.7104 | Val R²: 0.7149
+Epoch 17000 | Train Loss: 0.007839 | Val Loss: 0.008068 | Train R²: 0.7255 | Val R²: 0.7290
+Epoch 17500 | Train Loss: 0.007470 | Val Loss: 0.007709 | Train R²: 0.7384 | Val R²: 0.7410
+Epoch 18000 | Train Loss: 0.007121 | Val Loss: 0.007371 | Train R²: 0.7506 | Val R²: 0.7524
+Epoch 18500 | Train Loss: 0.006777 | Val Loss: 0.007037 | Train R²: 0.7627 | Val R²: 0.7636
+Epoch 19000 | Train Loss: 0.006439 | Val Loss: 0.006703 | Train R²: 0.7745 | Val R²: 0.7748
+Epoch 19500 | Train Loss: 0.006106 | Val Loss: 0.006368 | Train R²: 0.7862 | Val R²: 0.7861
+Epoch 20000 | Train Loss: 0.005768 | Val Loss: 0.006024 | Train R²: 0.7980 | Val R²: 0.7976
+Epoch 20500 | Train Loss: 0.005416 | Val Loss: 0.005673 | Train R²: 0.8103 | Val R²: 0.8094
+Epoch 21000 | Train Loss: 0.005058 | Val Loss: 0.005327 | Train R²: 0.8229 | Val R²: 0.8211
+Epoch 21500 | Train Loss: 0.004668 | Val Loss: 0.004945 | Train R²: 0.8366 | Val R²: 0.8339
+Epoch 22000 | Train Loss: 0.004182 | Val Loss: 0.004461 | Train R²: 0.8536 | Val R²: 0.8501
+Epoch 22500 | Train Loss: 0.003631 | Val Loss: 0.003882 | Train R²: 0.8729 | Val R²: 0.8696
+Epoch 23000 | Train Loss: 0.003190 | Val Loss: 0.003407 | Train R²: 0.8883 | Val R²: 0.8856
+Epoch 23500 | Train Loss: 0.002895 | Val Loss: 0.003088 | Train R²: 0.8986 | Val R²: 0.8963
+Epoch 24000 | Train Loss: 0.002697 | Val Loss: 0.002890 | Train R²: 0.9056 | Val R²: 0.9029
+Epoch 24500 | Train Loss: 0.002552 | Val Loss: 0.002746 | Train R²: 0.9107 | Val R²: 0.9078
+Epoch 25000 | Train Loss: 0.002436 | Val Loss: 0.002626 | Train R²: 0.9147 | Val R²: 0.9118
+Epoch 25500 | Train Loss: 0.002330 | Val Loss: 0.002509 | Train R²: 0.9184 | Val R²: 0.9157
+Epoch 26000 | Train Loss: 0.002216 | Val Loss: 0.002377 | Train R²: 0.9224 | Val R²: 0.9201
+Epoch 26500 | Train Loss: 0.002119 | Val Loss: 0.002266 | Train R²: 0.9258 | Val R²: 0.9239
+Epoch 27000 | Train Loss: 0.002027 | Val Loss: 0.002168 | Train R²: 0.9290 | Val R²: 0.9272
+Epoch 27500 | Train Loss: 0.001944 | Val Loss: 0.002083 | Train R²: 0.9319 | Val R²: 0.9300
+Epoch 28000 | Train Loss: 0.001884 | Val Loss: 0.002021 | Train R²: 0.9340 | Val R²: 0.9321
+Epoch 28500 | Train Loss: 0.001844 | Val Loss: 0.001971 | Train R²: 0.9354 | Val R²: 0.9338
+Epoch 29000 | Train Loss: 0.001813 | Val Loss: 0.001929 | Train R²: 0.9365 | Val R²: 0.9352
+Early stopping at epoch 29395 due to flat/negative trend (slope=0.000002)
+Epoch 29395 | Train Loss: 0.001795 | Val Loss: 0.001903 | Train R²: 0.9372 | Val R²: 0.9361
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.53
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.85
+DT_RECO vs Tramontana_RECO R²=0.72 RMSE=1.23
+NT_RECO vs Tramontana_RECO R²=0.70 RMSE=1.10
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 18742.224609 | Val Loss: 19194.156250 | Train R²: -656284.5000 | Val R²: -644797.1250
+Epoch   500 | Train Loss: 248.590652 | Val Loss: 253.062317 | Train R²: -8703.7529 | Val R²: -8500.2393
+Epoch  1000 | Train Loss: 62.253834 | Val Loss: 63.619316 | Train R²: -2178.9062 | Val R²: -2136.1929
+Epoch  1500 | Train Loss: 27.058451 | Val Loss: 27.716908 | Train R²: -946.4899 | Val R²: -930.1069
+Epoch  2000 | Train Loss: 14.575298 | Val Loss: 14.952335 | Train R²: -509.3747 | Val R²: -501.3007
+Epoch  2500 | Train Loss: 8.795455 | Val Loss: 9.031645 | Train R²: -306.9853 | Val R²: -302.4042
+Epoch  3000 | Train Loss: 5.700377 | Val Loss: 5.856485 | Train R²: -198.6068 | Val R²: -195.7396
+Epoch  3500 | Train Loss: 3.888025 | Val Loss: 3.994816 | Train R²: -135.1447 | Val R²: -133.1997
+Epoch  4000 | Train Loss: 2.762662 | Val Loss: 2.837423 | Train R²: -95.7385 | Val R²: -94.3188
+Epoch  4500 | Train Loss: 2.033926 | Val Loss: 2.087177 | Train R²: -70.2208 | Val R²: -69.1155
+Epoch  5000 | Train Loss: 1.519820 | Val Loss: 1.558531 | Train R²: -52.2187 | Val R²: -51.3564
+Epoch  5500 | Train Loss: 1.092783 | Val Loss: 1.122285 | Train R²: -37.2654 | Val R²: -36.7014
+Epoch  6000 | Train Loss: 0.804863 | Val Loss: 0.830179 | Train R²: -27.1834 | Val R²: -26.8886
+Epoch  6500 | Train Loss: 0.608206 | Val Loss: 0.626539 | Train R²: -20.2972 | Val R²: -20.0476
+Epoch  7000 | Train Loss: 0.442505 | Val Loss: 0.454648 | Train R²: -14.4949 | Val R²: -14.2732
+Epoch  7500 | Train Loss: 0.316817 | Val Loss: 0.325381 | Train R²: -10.0938 | Val R²: -9.9307
+Epoch  8000 | Train Loss: 0.230865 | Val Loss: 0.236958 | Train R²: -7.0841 | Val R²: -6.9602
+Epoch  8500 | Train Loss: 0.170148 | Val Loss: 0.174575 | Train R²: -4.9580 | Val R²: -4.8646
+Epoch  9000 | Train Loss: 0.126425 | Val Loss: 0.129629 | Train R²: -3.4269 | Val R²: -3.3547
+Epoch  9500 | Train Loss: 0.095035 | Val Loss: 0.097254 | Train R²: -2.3278 | Val R²: -2.2671
+Epoch 10000 | Train Loss: 0.072804 | Val Loss: 0.074255 | Train R²: -1.5493 | Val R²: -1.4945
+Epoch 10500 | Train Loss: 0.056849 | Val Loss: 0.057780 | Train R²: -0.9906 | Val R²: -0.9410
+Epoch 11000 | Train Loss: 0.044975 | Val Loss: 0.045602 | Train R²: -0.5748 | Val R²: -0.5319
+Epoch 11500 | Train Loss: 0.035876 | Val Loss: 0.036322 | Train R²: -0.2563 | Val R²: -0.2202
+Epoch 12000 | Train Loss: 0.028795 | Val Loss: 0.029124 | Train R²: -0.0083 | Val R²: 0.0216
+Epoch 12500 | Train Loss: 0.023306 | Val Loss: 0.023568 | Train R²: 0.1839 | Val R²: 0.2083
+Epoch 13000 | Train Loss: 0.019133 | Val Loss: 0.019360 | Train R²: 0.3300 | Val R²: 0.3496
+Epoch 13500 | Train Loss: 0.015998 | Val Loss: 0.016208 | Train R²: 0.4398 | Val R²: 0.4555
+Epoch 14000 | Train Loss: 0.013647 | Val Loss: 0.013851 | Train R²: 0.5221 | Val R²: 0.5347
+Epoch 14500 | Train Loss: 0.011891 | Val Loss: 0.012092 | Train R²: 0.5836 | Val R²: 0.5938
+Epoch 15000 | Train Loss: 0.010592 | Val Loss: 0.010790 | Train R²: 0.6291 | Val R²: 0.6375
+Epoch 15500 | Train Loss: 0.009640 | Val Loss: 0.009837 | Train R²: 0.6624 | Val R²: 0.6695
+Epoch 16000 | Train Loss: 0.008929 | Val Loss: 0.009126 | Train R²: 0.6873 | Val R²: 0.6934
+Epoch 16500 | Train Loss: 0.008380 | Val Loss: 0.008583 | Train R²: 0.7066 | Val R²: 0.7117
+Epoch 17000 | Train Loss: 0.007948 | Val Loss: 0.008162 | Train R²: 0.7217 | Val R²: 0.7258
+Epoch 17500 | Train Loss: 0.007593 | Val Loss: 0.007815 | Train R²: 0.7341 | Val R²: 0.7375
+Epoch 18000 | Train Loss: 0.007279 | Val Loss: 0.007509 | Train R²: 0.7451 | Val R²: 0.7478
+Epoch 18500 | Train Loss: 0.006981 | Val Loss: 0.007221 | Train R²: 0.7556 | Val R²: 0.7574
+Epoch 19000 | Train Loss: 0.006680 | Val Loss: 0.006934 | Train R²: 0.7661 | Val R²: 0.7670
+Epoch 19500 | Train Loss: 0.006373 | Val Loss: 0.006646 | Train R²: 0.7769 | Val R²: 0.7767
+Epoch 20000 | Train Loss: 0.006069 | Val Loss: 0.006361 | Train R²: 0.7875 | Val R²: 0.7863
+Epoch 20500 | Train Loss: 0.005765 | Val Loss: 0.006070 | Train R²: 0.7981 | Val R²: 0.7961
+Epoch 21000 | Train Loss: 0.005423 | Val Loss: 0.005740 | Train R²: 0.8101 | Val R²: 0.8072
+Epoch 21500 | Train Loss: 0.004979 | Val Loss: 0.005309 | Train R²: 0.8256 | Val R²: 0.8217
+Epoch 22000 | Train Loss: 0.004348 | Val Loss: 0.004670 | Train R²: 0.8477 | Val R²: 0.8431
+Epoch 22500 | Train Loss: 0.003580 | Val Loss: 0.003870 | Train R²: 0.8746 | Val R²: 0.8700
+Epoch 23000 | Train Loss: 0.003019 | Val Loss: 0.003262 | Train R²: 0.8943 | Val R²: 0.8904
+Epoch 23500 | Train Loss: 0.002678 | Val Loss: 0.002894 | Train R²: 0.9062 | Val R²: 0.9028
+Epoch 24000 | Train Loss: 0.002464 | Val Loss: 0.002668 | Train R²: 0.9137 | Val R²: 0.9104
+Epoch 24500 | Train Loss: 0.002329 | Val Loss: 0.002521 | Train R²: 0.9185 | Val R²: 0.9153
+Epoch 25000 | Train Loss: 0.002224 | Val Loss: 0.002406 | Train R²: 0.9221 | Val R²: 0.9192
+Epoch 25500 | Train Loss: 0.002125 | Val Loss: 0.002296 | Train R²: 0.9256 | Val R²: 0.9229
+Epoch 26000 | Train Loss: 0.002046 | Val Loss: 0.002204 | Train R²: 0.9284 | Val R²: 0.9260
+Epoch 26500 | Train Loss: 0.001992 | Val Loss: 0.002140 | Train R²: 0.9303 | Val R²: 0.9281
+Epoch 27000 | Train Loss: 0.001944 | Val Loss: 0.002082 | Train R²: 0.9319 | Val R²: 0.9301
+Epoch 27500 | Train Loss: 0.001901 | Val Loss: 0.002032 | Train R²: 0.9334 | Val R²: 0.9317
+Epoch 28000 | Train Loss: 0.001861 | Val Loss: 0.001987 | Train R²: 0.9348 | Val R²: 0.9333
+Epoch 28500 | Train Loss: 0.001821 | Val Loss: 0.001943 | Train R²: 0.9362 | Val R²: 0.9347
+Epoch 29000 | Train Loss: 0.001777 | Val Loss: 0.001898 | Train R²: 0.9378 | Val R²: 0.9362
+Epoch 29500 | Train Loss: 0.001737 | Val Loss: 0.001856 | Train R²: 0.9392 | Val R²: 0.9377
+Epoch 30000 | Train Loss: 0.001707 | Val Loss: 0.001821 | Train R²: 0.9402 | Val R²: 0.9388
+Early stopping at epoch 30037 due to flat/negative trend (slope=0.000002)
+Epoch 30037 | Train Loss: 0.001707 | Val Loss: 0.001822 | Train R²: 0.9402 | Val R²: 0.9388
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.55
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.82
+DT_RECO vs Tramontana_RECO R²=0.72 RMSE=1.23
+NT_RECO vs Tramontana_RECO R²=0.70 RMSE=1.11
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 19445.433594 | Val Loss: 19938.363281 | Train R²: -680908.3125 | Val R²: -669797.5625
+Epoch   500 | Train Loss: 250.825562 | Val Loss: 257.517426 | Train R²: -8782.0117 | Val R²: -8649.9004
+Epoch  1000 | Train Loss: 63.693741 | Val Loss: 65.560532 | Train R²: -2229.3264 | Val R²: -2201.4050
+Epoch  1500 | Train Loss: 27.853214 | Val Loss: 28.716208 | Train R²: -974.3197 | Val R²: -963.6767
+Epoch  2000 | Train Loss: 15.039663 | Val Loss: 15.522254 | Train R²: -525.6351 | Val R²: -520.4462
+Epoch  2500 | Train Loss: 9.080661 | Val Loss: 9.378127 | Train R²: -316.9722 | Val R²: -314.0437
+Epoch  3000 | Train Loss: 5.880391 | Val Loss: 6.074515 | Train R²: -204.9102 | Val R²: -203.0640
+Epoch  3500 | Train Loss: 4.002266 | Val Loss: 4.133573 | Train R²: -139.1450 | Val R²: -137.8610
+Epoch  4000 | Train Loss: 2.833470 | Val Loss: 2.924398 | Train R²: -98.2180 | Val R²: -97.2406
+Epoch  4500 | Train Loss: 2.072235 | Val Loss: 2.136292 | Train R²: -71.5622 | Val R²: -70.7654
+Epoch  5000 | Train Loss: 1.509005 | Val Loss: 1.553606 | Train R²: -51.8399 | Val R²: -51.1910
+Epoch  5500 | Train Loss: 1.115235 | Val Loss: 1.147987 | Train R²: -38.0515 | Val R²: -37.5649
+Epoch  6000 | Train Loss: 0.808852 | Val Loss: 0.834841 | Train R²: -27.3231 | Val R²: -27.0452
+Epoch  6500 | Train Loss: 0.591673 | Val Loss: 0.610493 | Train R²: -19.7183 | Val R²: -19.5086
+Epoch  7000 | Train Loss: 0.429415 | Val Loss: 0.442914 | Train R²: -14.0366 | Val R²: -13.8790
+Epoch  7500 | Train Loss: 0.311175 | Val Loss: 0.320806 | Train R²: -9.8962 | Val R²: -9.7770
+Epoch  8000 | Train Loss: 0.226938 | Val Loss: 0.233589 | Train R²: -6.9465 | Val R²: -6.8471
+Epoch  8500 | Train Loss: 0.166720 | Val Loss: 0.171402 | Train R²: -4.8379 | Val R²: -4.7580
+Epoch  9000 | Train Loss: 0.123544 | Val Loss: 0.126850 | Train R²: -3.3261 | Val R²: -3.2613
+Epoch  9500 | Train Loss: 0.092725 | Val Loss: 0.094976 | Train R²: -2.2469 | Val R²: -2.1906
+Epoch 10000 | Train Loss: 0.071063 | Val Loss: 0.072522 | Train R²: -1.4884 | Val R²: -1.4363
+Epoch 10500 | Train Loss: 0.055711 | Val Loss: 0.056634 | Train R²: -0.9508 | Val R²: -0.9025
+Epoch 11000 | Train Loss: 0.044386 | Val Loss: 0.045004 | Train R²: -0.5542 | Val R²: -0.5118
+Epoch 11500 | Train Loss: 0.035566 | Val Loss: 0.036023 | Train R²: -0.2454 | Val R²: -0.2101
+Epoch 12000 | Train Loss: 0.028597 | Val Loss: 0.028933 | Train R²: -0.0014 | Val R²: 0.0281
+Epoch 12500 | Train Loss: 0.023214 | Val Loss: 0.023465 | Train R²: 0.1871 | Val R²: 0.2117
+Epoch 13000 | Train Loss: 0.019105 | Val Loss: 0.019317 | Train R²: 0.3310 | Val R²: 0.3511
+Epoch 13500 | Train Loss: 0.015970 | Val Loss: 0.016173 | Train R²: 0.4408 | Val R²: 0.4567
+Epoch 14000 | Train Loss: 0.013576 | Val Loss: 0.013777 | Train R²: 0.5246 | Val R²: 0.5372
+Epoch 14500 | Train Loss: 0.011747 | Val Loss: 0.011944 | Train R²: 0.5886 | Val R²: 0.5987
+Epoch 15000 | Train Loss: 0.010358 | Val Loss: 0.010548 | Train R²: 0.6373 | Val R²: 0.6457
+Epoch 15500 | Train Loss: 0.009330 | Val Loss: 0.009513 | Train R²: 0.6733 | Val R²: 0.6804
+Epoch 16000 | Train Loss: 0.008566 | Val Loss: 0.008754 | Train R²: 0.7001 | Val R²: 0.7059
+Epoch 16500 | Train Loss: 0.008016 | Val Loss: 0.008219 | Train R²: 0.7193 | Val R²: 0.7239
+Epoch 17000 | Train Loss: 0.007623 | Val Loss: 0.007840 | Train R²: 0.7331 | Val R²: 0.7366
+Epoch 17500 | Train Loss: 0.007322 | Val Loss: 0.007550 | Train R²: 0.7436 | Val R²: 0.7464
+Epoch 18000 | Train Loss: 0.007069 | Val Loss: 0.007304 | Train R²: 0.7525 | Val R²: 0.7546
+Epoch 18500 | Train Loss: 0.006843 | Val Loss: 0.007082 | Train R²: 0.7604 | Val R²: 0.7621
+Epoch 19000 | Train Loss: 0.006637 | Val Loss: 0.006882 | Train R²: 0.7676 | Val R²: 0.7688
+Epoch 19500 | Train Loss: 0.006445 | Val Loss: 0.006694 | Train R²: 0.7743 | Val R²: 0.7751
+Epoch 20000 | Train Loss: 0.006257 | Val Loss: 0.006507 | Train R²: 0.7809 | Val R²: 0.7814
+Epoch 20500 | Train Loss: 0.006065 | Val Loss: 0.006315 | Train R²: 0.7876 | Val R²: 0.7879
+Epoch 21000 | Train Loss: 0.005865 | Val Loss: 0.006114 | Train R²: 0.7946 | Val R²: 0.7946
+Epoch 21500 | Train Loss: 0.005616 | Val Loss: 0.005872 | Train R²: 0.8033 | Val R²: 0.8028
+Epoch 22000 | Train Loss: 0.005363 | Val Loss: 0.005642 | Train R²: 0.8122 | Val R²: 0.8105
+Epoch 22500 | Train Loss: 0.005082 | Val Loss: 0.005373 | Train R²: 0.8221 | Val R²: 0.8195
+Epoch 23000 | Train Loss: 0.004696 | Val Loss: 0.004998 | Train R²: 0.8356 | Val R²: 0.8321
+Epoch 23500 | Train Loss: 0.004180 | Val Loss: 0.004493 | Train R²: 0.8536 | Val R²: 0.8491
+Epoch 24000 | Train Loss: 0.003760 | Val Loss: 0.004090 | Train R²: 0.8683 | Val R²: 0.8626
+Epoch 24500 | Train Loss: 0.003481 | Val Loss: 0.003814 | Train R²: 0.8781 | Val R²: 0.8719
+Epoch 25000 | Train Loss: 0.003239 | Val Loss: 0.003559 | Train R²: 0.8866 | Val R²: 0.8804
+Epoch 25500 | Train Loss: 0.003012 | Val Loss: 0.003304 | Train R²: 0.8945 | Val R²: 0.8890
+Epoch 26000 | Train Loss: 0.002788 | Val Loss: 0.003044 | Train R²: 0.9024 | Val R²: 0.8978
+Epoch 26500 | Train Loss: 0.002655 | Val Loss: 0.002894 | Train R²: 0.9070 | Val R²: 0.9028
+Epoch 27000 | Train Loss: 0.002586 | Val Loss: 0.002816 | Train R²: 0.9095 | Val R²: 0.9054
+Epoch 27500 | Train Loss: 0.002535 | Val Loss: 0.002759 | Train R²: 0.9112 | Val R²: 0.9073
+Epoch 28000 | Train Loss: 0.002488 | Val Loss: 0.002707 | Train R²: 0.9129 | Val R²: 0.9091
+Epoch 28500 | Train Loss: 0.002437 | Val Loss: 0.002647 | Train R²: 0.9147 | Val R²: 0.9111
+Epoch 29000 | Train Loss: 0.002383 | Val Loss: 0.002582 | Train R²: 0.9166 | Val R²: 0.9133
+Epoch 29500 | Train Loss: 0.002328 | Val Loss: 0.002522 | Train R²: 0.9185 | Val R²: 0.9153
+Epoch 30000 | Train Loss: 0.002238 | Val Loss: 0.002412 | Train R²: 0.9216 | Val R²: 0.9190
+Epoch 30500 | Train Loss: 0.002148 | Val Loss: 0.002308 | Train R²: 0.9248 | Val R²: 0.9225
+Epoch 31000 | Train Loss: 0.002087 | Val Loss: 0.002243 | Train R²: 0.9269 | Val R²: 0.9246
+Epoch 31500 | Train Loss: 0.002034 | Val Loss: 0.002182 | Train R²: 0.9288 | Val R²: 0.9267
+Epoch 32000 | Train Loss: 0.001992 | Val Loss: 0.002132 | Train R²: 0.9303 | Val R²: 0.9284
+Epoch 32500 | Train Loss: 0.001951 | Val Loss: 0.002086 | Train R²: 0.9317 | Val R²: 0.9299
+Epoch 33000 | Train Loss: 0.001919 | Val Loss: 0.002048 | Train R²: 0.9328 | Val R²: 0.9312
+Early stopping at epoch 33179 due to flat/negative trend (slope=0.000002)
+Epoch 33179 | Train Loss: 0.001913 | Val Loss: 0.002040 | Train R²: 0.9330 | Val R²: 0.9315
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.94
+NT_GPP vs Tramontana_GPP R²=0.91 RMSE=2.10
+DT_RECO vs Tramontana_RECO R²=0.52 RMSE=1.61
+NT_RECO vs Tramontana_RECO R²=0.50 RMSE=1.42
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 20284.304688 | Val Loss: 20791.845703 | Train R²: -710282.6250 | Val R²: -698468.9375
+Epoch   500 | Train Loss: 263.298279 | Val Loss: 269.640228 | Train R²: -9218.7617 | Val R²: -9057.1465
+Epoch  1000 | Train Loss: 65.842636 | Val Loss: 67.596786 | Train R²: -2304.5730 | Val R²: -2269.8096
+Epoch  1500 | Train Loss: 28.658684 | Val Loss: 29.473999 | Train R²: -1002.5244 | Val R²: -989.1336
+Epoch  2000 | Train Loss: 15.440365 | Val Loss: 15.899200 | Train R²: -539.6662 | Val R²: -533.1091
+Epoch  2500 | Train Loss: 9.310971 | Val Loss: 9.595545 | Train R²: -325.0368 | Val R²: -321.3475
+Epoch  3000 | Train Loss: 6.024887 | Val Loss: 6.211732 | Train R²: -209.9699 | Val R²: -207.6736
+Epoch  3500 | Train Loss: 4.098585 | Val Loss: 4.225762 | Train R²: -142.5177 | Val R²: -140.9580
+Epoch  4000 | Train Loss: 2.901088 | Val Loss: 2.989739 | Train R²: -100.5857 | Val R²: -99.4357
+Epoch  4500 | Train Loss: 2.124534 | Val Loss: 2.187364 | Train R²: -73.3936 | Val R²: -72.4811
+Epoch  5000 | Train Loss: 1.576032 | Val Loss: 1.620710 | Train R²: -54.1870 | Val R²: -53.4452
+Epoch  5500 | Train Loss: 1.163473 | Val Loss: 1.195212 | Train R²: -39.7407 | Val R²: -39.1513
+Epoch  6000 | Train Loss: 0.848761 | Val Loss: 0.874946 | Train R²: -28.7206 | Val R²: -28.3925
+Epoch  6500 | Train Loss: 0.630701 | Val Loss: 0.650919 | Train R²: -21.0849 | Val R²: -20.8666
+Epoch  7000 | Train Loss: 0.461441 | Val Loss: 0.475241 | Train R²: -15.1580 | Val R²: -14.9650
+Epoch  7500 | Train Loss: 0.332450 | Val Loss: 0.342554 | Train R²: -10.6412 | Val R²: -10.5076
+Epoch  8000 | Train Loss: 0.242430 | Val Loss: 0.249753 | Train R²: -7.4890 | Val R²: -7.3901
+Epoch  8500 | Train Loss: 0.178817 | Val Loss: 0.184185 | Train R²: -5.2615 | Val R²: -5.1874
+Epoch  9000 | Train Loss: 0.133009 | Val Loss: 0.136957 | Train R²: -3.6575 | Val R²: -3.6009
+Epoch  9500 | Train Loss: 0.100011 | Val Loss: 0.102845 | Train R²: -2.5020 | Val R²: -2.4549
+Epoch 10000 | Train Loss: 0.076556 | Val Loss: 0.078527 | Train R²: -1.6807 | Val R²: -1.6380
+Epoch 10500 | Train Loss: 0.059795 | Val Loss: 0.061166 | Train R²: -1.0938 | Val R²: -1.0548
+Epoch 11000 | Train Loss: 0.047355 | Val Loss: 0.048375 | Train R²: -0.6582 | Val R²: -0.6251
+Epoch 11500 | Train Loss: 0.037768 | Val Loss: 0.038576 | Train R²: -0.3225 | Val R²: -0.2959
+Epoch 12000 | Train Loss: 0.030291 | Val Loss: 0.030947 | Train R²: -0.0607 | Val R²: -0.0396
+Epoch 12500 | Train Loss: 0.024525 | Val Loss: 0.025057 | Train R²: 0.1412 | Val R²: 0.1582
+Epoch 13000 | Train Loss: 0.020116 | Val Loss: 0.020554 | Train R²: 0.2956 | Val R²: 0.3095
+Epoch 13500 | Train Loss: 0.016783 | Val Loss: 0.017153 | Train R²: 0.4123 | Val R²: 0.4238
+Epoch 14000 | Train Loss: 0.014278 | Val Loss: 0.014594 | Train R²: 0.5000 | Val R²: 0.5097
+Epoch 14500 | Train Loss: 0.012390 | Val Loss: 0.012663 | Train R²: 0.5661 | Val R²: 0.5746
+Epoch 15000 | Train Loss: 0.010969 | Val Loss: 0.011210 | Train R²: 0.6159 | Val R²: 0.6234
+Epoch 15500 | Train Loss: 0.009901 | Val Loss: 0.010120 | Train R²: 0.6533 | Val R²: 0.6600
+Epoch 16000 | Train Loss: 0.009098 | Val Loss: 0.009312 | Train R²: 0.6814 | Val R²: 0.6872
+Epoch 16500 | Train Loss: 0.008508 | Val Loss: 0.008730 | Train R²: 0.7021 | Val R²: 0.7067
+Epoch 17000 | Train Loss: 0.008066 | Val Loss: 0.008296 | Train R²: 0.7176 | Val R²: 0.7213
+Epoch 17500 | Train Loss: 0.007711 | Val Loss: 0.007947 | Train R²: 0.7300 | Val R²: 0.7330
+Epoch 18000 | Train Loss: 0.007402 | Val Loss: 0.007643 | Train R²: 0.7408 | Val R²: 0.7433
+Epoch 18500 | Train Loss: 0.007118 | Val Loss: 0.007363 | Train R²: 0.7508 | Val R²: 0.7527
+Epoch 19000 | Train Loss: 0.006844 | Val Loss: 0.007095 | Train R²: 0.7603 | Val R²: 0.7616
+Epoch 19500 | Train Loss: 0.006565 | Val Loss: 0.006831 | Train R²: 0.7701 | Val R²: 0.7705
+Epoch 20000 | Train Loss: 0.006284 | Val Loss: 0.006564 | Train R²: 0.7800 | Val R²: 0.7795
+Epoch 20500 | Train Loss: 0.006003 | Val Loss: 0.006280 | Train R²: 0.7898 | Val R²: 0.7890
+Epoch 21000 | Train Loss: 0.005710 | Val Loss: 0.005977 | Train R²: 0.8000 | Val R²: 0.7992
+Epoch 21500 | Train Loss: 0.005388 | Val Loss: 0.005643 | Train R²: 0.8113 | Val R²: 0.8104
+Epoch 22000 | Train Loss: 0.004992 | Val Loss: 0.005229 | Train R²: 0.8252 | Val R²: 0.8243
+Epoch 22500 | Train Loss: 0.004404 | Val Loss: 0.004614 | Train R²: 0.8458 | Val R²: 0.8450
+Epoch 23000 | Train Loss: 0.003675 | Val Loss: 0.003874 | Train R²: 0.8713 | Val R²: 0.8699
+Epoch 23500 | Train Loss: 0.003167 | Val Loss: 0.003366 | Train R²: 0.8891 | Val R²: 0.8869
+Epoch 24000 | Train Loss: 0.002873 | Val Loss: 0.003079 | Train R²: 0.8994 | Val R²: 0.8966
+Epoch 24500 | Train Loss: 0.002687 | Val Loss: 0.002887 | Train R²: 0.9059 | Val R²: 0.9030
+Epoch 25000 | Train Loss: 0.002561 | Val Loss: 0.002750 | Train R²: 0.9103 | Val R²: 0.9076
+Epoch 25500 | Train Loss: 0.002464 | Val Loss: 0.002641 | Train R²: 0.9137 | Val R²: 0.9113
+Epoch 26000 | Train Loss: 0.002385 | Val Loss: 0.002556 | Train R²: 0.9165 | Val R²: 0.9141
+Epoch 26500 | Train Loss: 0.002320 | Val Loss: 0.002481 | Train R²: 0.9188 | Val R²: 0.9167
+Epoch 27000 | Train Loss: 0.002269 | Val Loss: 0.002422 | Train R²: 0.9206 | Val R²: 0.9186
+Epoch 27500 | Train Loss: 0.002225 | Val Loss: 0.002370 | Train R²: 0.9221 | Val R²: 0.9204
+Epoch 28000 | Train Loss: 0.002186 | Val Loss: 0.002323 | Train R²: 0.9235 | Val R²: 0.9220
+Epoch 28500 | Train Loss: 0.002145 | Val Loss: 0.002279 | Train R²: 0.9249 | Val R²: 0.9234
+Epoch 29000 | Train Loss: 0.002100 | Val Loss: 0.002241 | Train R²: 0.9265 | Val R²: 0.9247
+Early stopping at epoch 29174 due to flat/negative trend (slope=0.000002)
+Epoch 29174 | Train Loss: 0.002085 | Val Loss: 0.002227 | Train R²: 0.9270 | Val R²: 0.9252
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.91 RMSE=2.15
+NT_GPP vs Tramontana_GPP R²=0.87 RMSE=2.53
+DT_RECO vs Tramontana_RECO R²=0.30 RMSE=1.94
+NT_RECO vs Tramontana_RECO R²=0.06 RMSE=1.96
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 19943.201172 | Val Loss: 20465.835938 | Train R²: -698338.3750 | Val R²: -687517.1875
+Epoch   500 | Train Loss: 264.372253 | Val Loss: 270.897705 | Train R²: -9256.3682 | Val R²: -9099.3906
+Epoch  1000 | Train Loss: 66.061218 | Val Loss: 67.857063 | Train R²: -2312.2271 | Val R²: -2278.5540
+Epoch  1500 | Train Loss: 28.625029 | Val Loss: 29.455269 | Train R²: -1001.3459 | Val R²: -988.5042
+Epoch  2000 | Train Loss: 15.366842 | Val Loss: 15.832736 | Train R²: -537.0917 | Val R²: -530.8763
+Epoch  2500 | Train Loss: 9.238753 | Val Loss: 9.527297 | Train R²: -322.5080 | Val R²: -319.0548
+Epoch  3000 | Train Loss: 5.961629 | Val Loss: 6.150957 | Train R²: -207.7549 | Val R²: -205.6319
+Epoch  3500 | Train Loss: 4.044308 | Val Loss: 4.173142 | Train R²: -140.6172 | Val R²: -139.1903
+Epoch  4000 | Train Loss: 2.853763 | Val Loss: 2.943576 | Train R²: -98.9285 | Val R²: -97.8849
+Epoch  4500 | Train Loss: 2.078567 | Val Loss: 2.142316 | Train R²: -71.7839 | Val R²: -70.9678
+Epoch  5000 | Train Loss: 1.504051 | Val Loss: 1.549321 | Train R²: -51.6665 | Val R²: -51.0470
+Epoch  5500 | Train Loss: 1.100700 | Val Loss: 1.134315 | Train R²: -37.5426 | Val R²: -37.1056
+Epoch  6000 | Train Loss: 0.786517 | Val Loss: 0.813569 | Train R²: -26.5410 | Val R²: -26.3306
+Epoch  6500 | Train Loss: 0.579294 | Val Loss: 0.598021 | Train R²: -19.2848 | Val R²: -19.0896
+Epoch  7000 | Train Loss: 0.427119 | Val Loss: 0.441024 | Train R²: -13.9562 | Val R²: -13.8155
+Epoch  7500 | Train Loss: 0.311214 | Val Loss: 0.321712 | Train R²: -9.8976 | Val R²: -9.8074
+Epoch  8000 | Train Loss: 0.228559 | Val Loss: 0.236245 | Train R²: -7.0033 | Val R²: -6.9363
+Epoch  8500 | Train Loss: 0.169037 | Val Loss: 0.174647 | Train R²: -4.9191 | Val R²: -4.8670
+Epoch  9000 | Train Loss: 0.125503 | Val Loss: 0.129553 | Train R²: -3.3947 | Val R²: -3.3521
+Epoch  9500 | Train Loss: 0.093983 | Val Loss: 0.096785 | Train R²: -2.2909 | Val R²: -2.2513
+Epoch 10000 | Train Loss: 0.071839 | Val Loss: 0.073662 | Train R²: -1.5155 | Val R²: -1.4746
+Epoch 10500 | Train Loss: 0.056266 | Val Loss: 0.057411 | Train R²: -0.9702 | Val R²: -0.9286
+Epoch 11000 | Train Loss: 0.044994 | Val Loss: 0.045723 | Train R²: -0.5755 | Val R²: -0.5360
+Epoch 11500 | Train Loss: 0.036407 | Val Loss: 0.036932 | Train R²: -0.2748 | Val R²: -0.2407
+Epoch 12000 | Train Loss: 0.029495 | Val Loss: 0.029954 | Train R²: -0.0328 | Val R²: -0.0063
+Epoch 12500 | Train Loss: 0.024056 | Val Loss: 0.024443 | Train R²: 0.1576 | Val R²: 0.1789
+Epoch 13000 | Train Loss: 0.019846 | Val Loss: 0.020178 | Train R²: 0.3051 | Val R²: 0.3222
+Epoch 13500 | Train Loss: 0.016593 | Val Loss: 0.016891 | Train R²: 0.4190 | Val R²: 0.4326
+Epoch 14000 | Train Loss: 0.014069 | Val Loss: 0.014348 | Train R²: 0.5073 | Val R²: 0.5180
+Epoch 14500 | Train Loss: 0.012140 | Val Loss: 0.012405 | Train R²: 0.5749 | Val R²: 0.5833
+Epoch 15000 | Train Loss: 0.010678 | Val Loss: 0.010930 | Train R²: 0.6261 | Val R²: 0.6328
+Epoch 15500 | Train Loss: 0.009570 | Val Loss: 0.009813 | Train R²: 0.6649 | Val R²: 0.6704
+Epoch 16000 | Train Loss: 0.008740 | Val Loss: 0.008974 | Train R²: 0.6939 | Val R²: 0.6985
+Epoch 16500 | Train Loss: 0.008126 | Val Loss: 0.008352 | Train R²: 0.7154 | Val R²: 0.7194
+Epoch 17000 | Train Loss: 0.007663 | Val Loss: 0.007885 | Train R²: 0.7317 | Val R²: 0.7351
+Epoch 17500 | Train Loss: 0.007289 | Val Loss: 0.007514 | Train R²: 0.7448 | Val R²: 0.7476
+Epoch 18000 | Train Loss: 0.006966 | Val Loss: 0.007200 | Train R²: 0.7561 | Val R²: 0.7581
+Epoch 18500 | Train Loss: 0.006674 | Val Loss: 0.006922 | Train R²: 0.7663 | Val R²: 0.7675
+Epoch 19000 | Train Loss: 0.006395 | Val Loss: 0.006661 | Train R²: 0.7761 | Val R²: 0.7762
+Epoch 19500 | Train Loss: 0.006124 | Val Loss: 0.006408 | Train R²: 0.7856 | Val R²: 0.7847
+Epoch 20000 | Train Loss: 0.005862 | Val Loss: 0.006164 | Train R²: 0.7947 | Val R²: 0.7929
+Epoch 20500 | Train Loss: 0.005604 | Val Loss: 0.005918 | Train R²: 0.8038 | Val R²: 0.8012
+Epoch 21000 | Train Loss: 0.005336 | Val Loss: 0.005654 | Train R²: 0.8131 | Val R²: 0.8100
+Epoch 21500 | Train Loss: 0.005025 | Val Loss: 0.005338 | Train R²: 0.8241 | Val R²: 0.8207
+Epoch 22000 | Train Loss: 0.004578 | Val Loss: 0.004862 | Train R²: 0.8397 | Val R²: 0.8367
+Epoch 22500 | Train Loss: 0.003827 | Val Loss: 0.004059 | Train R²: 0.8660 | Val R²: 0.8636
+Epoch 23000 | Train Loss: 0.003008 | Val Loss: 0.003199 | Train R²: 0.8947 | Val R²: 0.8925
+Epoch 23500 | Train Loss: 0.002590 | Val Loss: 0.002764 | Train R²: 0.9093 | Val R²: 0.9071
+Epoch 24000 | Train Loss: 0.002402 | Val Loss: 0.002571 | Train R²: 0.9159 | Val R²: 0.9136
+Epoch 24500 | Train Loss: 0.002297 | Val Loss: 0.002462 | Train R²: 0.9196 | Val R²: 0.9173
+Epoch 25000 | Train Loss: 0.002231 | Val Loss: 0.002389 | Train R²: 0.9219 | Val R²: 0.9197
+Epoch 25500 | Train Loss: 0.002187 | Val Loss: 0.002336 | Train R²: 0.9234 | Val R²: 0.9215
+Epoch 26000 | Train Loss: 0.002144 | Val Loss: 0.002283 | Train R²: 0.9249 | Val R²: 0.9233
+Epoch 26500 | Train Loss: 0.002080 | Val Loss: 0.002208 | Train R²: 0.9272 | Val R²: 0.9258
+Epoch 27000 | Train Loss: 0.001998 | Val Loss: 0.002119 | Train R²: 0.9300 | Val R²: 0.9288
+Epoch 27500 | Train Loss: 0.001926 | Val Loss: 0.002043 | Train R²: 0.9325 | Val R²: 0.9314
+Epoch 28000 | Train Loss: 0.001870 | Val Loss: 0.001985 | Train R²: 0.9345 | Val R²: 0.9333
+Epoch 28500 | Train Loss: 0.001829 | Val Loss: 0.001940 | Train R²: 0.9360 | Val R²: 0.9348
+Epoch 29000 | Train Loss: 0.001799 | Val Loss: 0.001903 | Train R²: 0.9370 | Val R²: 0.9361
+Epoch 29500 | Train Loss: 0.001769 | Val Loss: 0.001864 | Train R²: 0.9381 | Val R²: 0.9374
+Epoch 30000 | Train Loss: 0.001738 | Val Loss: 0.001819 | Train R²: 0.9391 | Val R²: 0.9389
+Early stopping at epoch 30215 due to flat/negative trend (slope=0.000002)
+Epoch 30215 | Train Loss: 0.001728 | Val Loss: 0.001806 | Train R²: 0.9395 | Val R²: 0.9393
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.56
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.80
+DT_RECO vs Tramontana_RECO R²=0.69 RMSE=1.28
+NT_RECO vs Tramontana_RECO R²=0.73 RMSE=1.05
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 19753.001953 | Val Loss: 20262.726562 | Train R²: -691678.2500 | Val R²: -680694.0625
+Epoch   500 | Train Loss: 246.735886 | Val Loss: 251.412018 | Train R²: -8638.8066 | Val R²: -8444.7988
+Epoch  1000 | Train Loss: 63.559551 | Val Loss: 64.775047 | Train R²: -2224.6277 | Val R²: -2175.0176
+Epoch  1500 | Train Loss: 27.891628 | Val Loss: 28.434166 | Train R²: -975.6647 | Val R²: -954.2019
+Epoch  2000 | Train Loss: 15.079030 | Val Loss: 15.375420 | Train R²: -527.0135 | Val R²: -515.5135
+Epoch  2500 | Train Loss: 9.110743 | Val Loss: 9.289961 | Train R²: -318.0255 | Val R²: -311.0820
+Epoch  3000 | Train Loss: 5.903378 | Val Loss: 6.018219 | Train R²: -205.7151 | Val R²: -201.1728
+Epoch  3500 | Train Loss: 4.020028 | Val Loss: 4.096244 | Train R²: -139.7670 | Val R²: -136.6070
+Epoch  4000 | Train Loss: 2.845636 | Val Loss: 2.897330 | Train R²: -98.6440 | Val R²: -96.3313
+Epoch  4500 | Train Loss: 2.058055 | Val Loss: 2.093163 | Train R²: -71.0657 | Val R²: -69.3166
+Epoch  5000 | Train Loss: 1.489191 | Val Loss: 1.513181 | Train R²: -51.1461 | Val R²: -49.8330
+Epoch  5500 | Train Loss: 1.075429 | Val Loss: 1.096499 | Train R²: -36.6577 | Val R²: -35.8352
+Epoch  6000 | Train Loss: 0.801838 | Val Loss: 0.819126 | Train R²: -27.0775 | Val R²: -26.5173
+Epoch  6500 | Train Loss: 0.605230 | Val Loss: 0.617932 | Train R²: -20.1930 | Val R²: -19.7585
+Epoch  7000 | Train Loss: 0.442778 | Val Loss: 0.450698 | Train R²: -14.5045 | Val R²: -14.1405
+Epoch  7500 | Train Loss: 0.319782 | Val Loss: 0.325185 | Train R²: -10.1976 | Val R²: -9.9241
+Epoch  8000 | Train Loss: 0.233705 | Val Loss: 0.237449 | Train R²: -7.1835 | Val R²: -6.9767
+Epoch  8500 | Train Loss: 0.172243 | Val Loss: 0.174881 | Train R²: -5.0313 | Val R²: -4.8748
+Epoch  9000 | Train Loss: 0.127743 | Val Loss: 0.129578 | Train R²: -3.4731 | Val R²: -3.3530
+Epoch  9500 | Train Loss: 0.095728 | Val Loss: 0.096912 | Train R²: -2.3520 | Val R²: -2.2556
+Epoch 10000 | Train Loss: 0.073123 | Val Loss: 0.073814 | Train R²: -1.5605 | Val R²: -1.4797
+Epoch 10500 | Train Loss: 0.057010 | Val Loss: 0.057406 | Train R²: -0.9963 | Val R²: -0.9285
+Epoch 11000 | Train Loss: 0.045029 | Val Loss: 0.045300 | Train R²: -0.5768 | Val R²: -0.5218
+Epoch 11500 | Train Loss: 0.035860 | Val Loss: 0.036086 | Train R²: -0.2557 | Val R²: -0.2123
+Epoch 12000 | Train Loss: 0.028830 | Val Loss: 0.029037 | Train R²: -0.0095 | Val R²: 0.0245
+Epoch 12500 | Train Loss: 0.023469 | Val Loss: 0.023656 | Train R²: 0.1782 | Val R²: 0.2053
+Epoch 13000 | Train Loss: 0.019370 | Val Loss: 0.019538 | Train R²: 0.3217 | Val R²: 0.3437
+Epoch 13500 | Train Loss: 0.016264 | Val Loss: 0.016415 | Train R²: 0.4305 | Val R²: 0.4486
+Epoch 14000 | Train Loss: 0.013931 | Val Loss: 0.014073 | Train R²: 0.5122 | Val R²: 0.5272
+Epoch 14500 | Train Loss: 0.012182 | Val Loss: 0.012318 | Train R²: 0.5734 | Val R²: 0.5862
+Epoch 15000 | Train Loss: 0.010872 | Val Loss: 0.011010 | Train R²: 0.6193 | Val R²: 0.6301
+Epoch 15500 | Train Loss: 0.009878 | Val Loss: 0.010027 | Train R²: 0.6541 | Val R²: 0.6632
+Epoch 16000 | Train Loss: 0.009082 | Val Loss: 0.009240 | Train R²: 0.6820 | Val R²: 0.6896
+Epoch 16500 | Train Loss: 0.008446 | Val Loss: 0.008605 | Train R²: 0.7043 | Val R²: 0.7109
+Epoch 17000 | Train Loss: 0.007959 | Val Loss: 0.008128 | Train R²: 0.7213 | Val R²: 0.7270
+Epoch 17500 | Train Loss: 0.007592 | Val Loss: 0.007776 | Train R²: 0.7342 | Val R²: 0.7388
+Epoch 18000 | Train Loss: 0.007289 | Val Loss: 0.007494 | Train R²: 0.7448 | Val R²: 0.7483
+Epoch 18500 | Train Loss: 0.007003 | Val Loss: 0.007232 | Train R²: 0.7548 | Val R²: 0.7570
+Epoch 19000 | Train Loss: 0.006723 | Val Loss: 0.006973 | Train R²: 0.7646 | Val R²: 0.7658
+Epoch 19500 | Train Loss: 0.006431 | Val Loss: 0.006705 | Train R²: 0.7748 | Val R²: 0.7747
+Epoch 20000 | Train Loss: 0.006128 | Val Loss: 0.006428 | Train R²: 0.7854 | Val R²: 0.7841
+Epoch 20500 | Train Loss: 0.005817 | Val Loss: 0.006137 | Train R²: 0.7963 | Val R²: 0.7938
+Epoch 21000 | Train Loss: 0.005486 | Val Loss: 0.005805 | Train R²: 0.8079 | Val R²: 0.8050
+Epoch 21500 | Train Loss: 0.005124 | Val Loss: 0.005424 | Train R²: 0.8206 | Val R²: 0.8178
+Epoch 22000 | Train Loss: 0.004687 | Val Loss: 0.004959 | Train R²: 0.8359 | Val R²: 0.8334
+Epoch 22500 | Train Loss: 0.004010 | Val Loss: 0.004224 | Train R²: 0.8596 | Val R²: 0.8581
+Epoch 23000 | Train Loss: 0.003104 | Val Loss: 0.003247 | Train R²: 0.8913 | Val R²: 0.8909
+Epoch 23500 | Train Loss: 0.002634 | Val Loss: 0.002766 | Train R²: 0.9078 | Val R²: 0.9071
+Epoch 24000 | Train Loss: 0.002429 | Val Loss: 0.002554 | Train R²: 0.9150 | Val R²: 0.9142
+Epoch 24500 | Train Loss: 0.002315 | Val Loss: 0.002433 | Train R²: 0.9189 | Val R²: 0.9183
+Epoch 25000 | Train Loss: 0.002236 | Val Loss: 0.002357 | Train R²: 0.9217 | Val R²: 0.9208
+Epoch 25500 | Train Loss: 0.002171 | Val Loss: 0.002296 | Train R²: 0.9240 | Val R²: 0.9229
+Epoch 26000 | Train Loss: 0.002093 | Val Loss: 0.002225 | Train R²: 0.9267 | Val R²: 0.9253
+Epoch 26500 | Train Loss: 0.002011 | Val Loss: 0.002141 | Train R²: 0.9296 | Val R²: 0.9281
+Epoch 27000 | Train Loss: 0.001939 | Val Loss: 0.002065 | Train R²: 0.9321 | Val R²: 0.9306
+Epoch 27500 | Train Loss: 0.001883 | Val Loss: 0.002003 | Train R²: 0.9341 | Val R²: 0.9327
+Epoch 28000 | Train Loss: 0.001843 | Val Loss: 0.001958 | Train R²: 0.9355 | Val R²: 0.9342
+Epoch 28500 | Train Loss: 0.001809 | Val Loss: 0.001920 | Train R²: 0.9367 | Val R²: 0.9355
+Epoch 29000 | Train Loss: 0.001770 | Val Loss: 0.001879 | Train R²: 0.9380 | Val R²: 0.9369
+Epoch 29500 | Train Loss: 0.001727 | Val Loss: 0.001833 | Train R²: 0.9395 | Val R²: 0.9384
+Epoch 30000 | Train Loss: 0.001690 | Val Loss: 0.001792 | Train R²: 0.9408 | Val R²: 0.9398
+Early stopping at epoch 30418 due to flat/negative trend (slope=0.000002)
+Epoch 30418 | Train Loss: 0.001666 | Val Loss: 0.001767 | Train R²: 0.9417 | Val R²: 0.9406
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.56
+NT_GPP vs Tramontana_GPP R²=0.94 RMSE=1.79
+DT_RECO vs Tramontana_RECO R²=0.71 RMSE=1.25
+NT_RECO vs Tramontana_RECO R²=0.72 RMSE=1.06
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Tramontana Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+SNN_RECO_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+Epoch     0 | Train Loss: 18108.720703 | Val Loss: 18591.138672 | Train R²: -634101.5000 | Val R²: -624539.5625
+Epoch   500 | Train Loss: 276.350037 | Val Loss: 280.332489 | Train R²: -9675.7871 | Val R²: -9416.3369
+Epoch  1000 | Train Loss: 65.617874 | Val Loss: 67.278831 | Train R²: -2296.7026 | Val R²: -2259.1284
+Epoch  1500 | Train Loss: 27.992920 | Val Loss: 28.854040 | Train R²: -979.2116 | Val R²: -968.3070
+Epoch  2000 | Train Loss: 14.961086 | Val Loss: 15.468325 | Train R²: -522.8836 | Val R²: -518.6345
+Epoch  2500 | Train Loss: 9.005013 | Val Loss: 9.327772 | Train R²: -314.3233 | Val R²: -312.3521
+Epoch  3000 | Train Loss: 5.842105 | Val Loss: 6.057807 | Train R²: -203.5696 | Val R²: -202.5027
+Epoch  3500 | Train Loss: 4.000472 | Val Loss: 4.149432 | Train R²: -139.0822 | Val R²: -138.3938
+Epoch  4000 | Train Loss: 2.861411 | Val Loss: 2.966654 | Train R²: -99.1964 | Val R²: -98.6602
+Epoch  4500 | Train Loss: 2.127054 | Val Loss: 2.202652 | Train R²: -73.4818 | Val R²: -72.9947
+Epoch  5000 | Train Loss: 1.637543 | Val Loss: 1.692594 | Train R²: -56.3409 | Val R²: -55.8601
+Epoch  5500 | Train Loss: 1.253512 | Val Loss: 1.293856 | Train R²: -42.8935 | Val R²: -42.4651
+Epoch  6000 | Train Loss: 0.923281 | Val Loss: 0.956187 | Train R²: -31.3300 | Val R²: -31.1216
+Epoch  6500 | Train Loss: 0.681488 | Val Loss: 0.709469 | Train R²: -22.8633 | Val R²: -22.8335
+Epoch  7000 | Train Loss: 0.486304 | Val Loss: 0.505839 | Train R²: -16.0286 | Val R²: -15.9929
+Epoch  7500 | Train Loss: 0.345557 | Val Loss: 0.358266 | Train R²: -11.1002 | Val R²: -11.0354
+Epoch  8000 | Train Loss: 0.252071 | Val Loss: 0.260930 | Train R²: -7.8266 | Val R²: -7.7655
+Epoch  8500 | Train Loss: 0.187689 | Val Loss: 0.194157 | Train R²: -5.5722 | Val R²: -5.5224
+Epoch  9000 | Train Loss: 0.141546 | Val Loss: 0.146349 | Train R²: -3.9564 | Val R²: -3.9164
+Epoch  9500 | Train Loss: 0.107710 | Val Loss: 0.111246 | Train R²: -2.7716 | Val R²: -2.7371
+Epoch 10000 | Train Loss: 0.082697 | Val Loss: 0.085243 | Train R²: -1.8958 | Val R²: -1.8636
+Epoch 10500 | Train Loss: 0.064087 | Val Loss: 0.065859 | Train R²: -1.2441 | Val R²: -1.2124
+Epoch 11000 | Train Loss: 0.050083 | Val Loss: 0.051251 | Train R²: -0.7537 | Val R²: -0.7217
+Epoch 11500 | Train Loss: 0.039519 | Val Loss: 0.040239 | Train R²: -0.3838 | Val R²: -0.3518
+Epoch 12000 | Train Loss: 0.031638 | Val Loss: 0.032064 | Train R²: -0.1079 | Val R²: -0.0771
+Epoch 12500 | Train Loss: 0.025755 | Val Loss: 0.025994 | Train R²: 0.0982 | Val R²: 0.1268
+Epoch 13000 | Train Loss: 0.021346 | Val Loss: 0.021469 | Train R²: 0.2525 | Val R²: 0.2788
+Epoch 13500 | Train Loss: 0.018068 | Val Loss: 0.018120 | Train R²: 0.3673 | Val R²: 0.3913
+Epoch 14000 | Train Loss: 0.015651 | Val Loss: 0.015659 | Train R²: 0.4520 | Val R²: 0.4740
+Epoch 14500 | Train Loss: 0.013863 | Val Loss: 0.013849 | Train R²: 0.5146 | Val R²: 0.5348
+Epoch 15000 | Train Loss: 0.012538 | Val Loss: 0.012524 | Train R²: 0.5610 | Val R²: 0.5793
+Epoch 15500 | Train Loss: 0.011542 | Val Loss: 0.011546 | Train R²: 0.5958 | Val R²: 0.6121
+Epoch 16000 | Train Loss: 0.010761 | Val Loss: 0.010791 | Train R²: 0.6232 | Val R²: 0.6375
+Epoch 16500 | Train Loss: 0.010107 | Val Loss: 0.010167 | Train R²: 0.6461 | Val R²: 0.6585
+Epoch 17000 | Train Loss: 0.009522 | Val Loss: 0.009614 | Train R²: 0.6666 | Val R²: 0.6770
+Epoch 17500 | Train Loss: 0.008971 | Val Loss: 0.009096 | Train R²: 0.6859 | Val R²: 0.6944
+Epoch 18000 | Train Loss: 0.008428 | Val Loss: 0.008591 | Train R²: 0.7049 | Val R²: 0.7114
+Epoch 18500 | Train Loss: 0.007877 | Val Loss: 0.008091 | Train R²: 0.7242 | Val R²: 0.7282
+Epoch 19000 | Train Loss: 0.007332 | Val Loss: 0.007605 | Train R²: 0.7433 | Val R²: 0.7445
+Epoch 19500 | Train Loss: 0.006805 | Val Loss: 0.007141 | Train R²: 0.7617 | Val R²: 0.7601
+Epoch 20000 | Train Loss: 0.006312 | Val Loss: 0.006684 | Train R²: 0.7790 | Val R²: 0.7755
+Epoch 20500 | Train Loss: 0.005828 | Val Loss: 0.006213 | Train R²: 0.7959 | Val R²: 0.7913
+Epoch 21000 | Train Loss: 0.005310 | Val Loss: 0.005685 | Train R²: 0.8141 | Val R²: 0.8090
+Epoch 21500 | Train Loss: 0.004670 | Val Loss: 0.005011 | Train R²: 0.8365 | Val R²: 0.8317
+Epoch 22000 | Train Loss: 0.003822 | Val Loss: 0.004092 | Train R²: 0.8662 | Val R²: 0.8625
+Epoch 22500 | Train Loss: 0.003072 | Val Loss: 0.003282 | Train R²: 0.8924 | Val R²: 0.8897
+Epoch 23000 | Train Loss: 0.002673 | Val Loss: 0.002855 | Train R²: 0.9064 | Val R²: 0.9041
+Epoch 23500 | Train Loss: 0.002454 | Val Loss: 0.002618 | Train R²: 0.9141 | Val R²: 0.9121
+Epoch 24000 | Train Loss: 0.002312 | Val Loss: 0.002458 | Train R²: 0.9190 | Val R²: 0.9174
+Epoch 24500 | Train Loss: 0.002213 | Val Loss: 0.002345 | Train R²: 0.9225 | Val R²: 0.9212
+Epoch 25000 | Train Loss: 0.002140 | Val Loss: 0.002261 | Train R²: 0.9251 | Val R²: 0.9240
+Epoch 25500 | Train Loss: 0.002073 | Val Loss: 0.002186 | Train R²: 0.9274 | Val R²: 0.9266
+Epoch 26000 | Train Loss: 0.002000 | Val Loss: 0.002105 | Train R²: 0.9300 | Val R²: 0.9293
+Epoch 26500 | Train Loss: 0.001926 | Val Loss: 0.002022 | Train R²: 0.9326 | Val R²: 0.9321
+Epoch 27000 | Train Loss: 0.001866 | Val Loss: 0.001953 | Train R²: 0.9347 | Val R²: 0.9344
+Epoch 27500 | Train Loss: 0.001820 | Val Loss: 0.001899 | Train R²: 0.9363 | Val R²: 0.9362
+Epoch 28000 | Train Loss: 0.001781 | Val Loss: 0.001859 | Train R²: 0.9376 | Val R²: 0.9376
+Epoch 28500 | Train Loss: 0.001746 | Val Loss: 0.001821 | Train R²: 0.9389 | Val R²: 0.9388
+Epoch 29000 | Train Loss: 0.001712 | Val Loss: 0.001783 | Train R²: 0.9400 | Val R²: 0.9401
+Epoch 29500 | Train Loss: 0.001682 | Val Loss: 0.001749 | Train R²: 0.9411 | Val R²: 0.9412
+Early stopping at epoch 29523 due to flat/negative trend (slope=0.000002)
+Epoch 29523 | Train Loss: 0.001681 | Val Loss: 0.001751 | Train R²: 0.9411 | Val R²: 0.9412
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+), trained_reco_model:
+ SNN_GPP_Tram(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): Sigmoid()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Tramontana, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Tramontana_GPP R²=0.95 RMSE=1.63
+NT_GPP vs Tramontana_GPP R²=0.93 RMSE=1.83
+DT_RECO vs Tramontana_RECO R²=0.69 RMSE=1.29
+NT_RECO vs Tramontana_RECO R²=0.71 RMSE=1.09
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=0.91
+
