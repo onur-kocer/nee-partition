@@ -9,6 +9,7 @@ from datetime import datetime
 import math
 import re
 from scipy.stats import linregress
+import json
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -91,7 +92,8 @@ def r2_score(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
 
     ss_res = ((y_true - y_pred) ** 2).sum()
     ss_tot = ((y_true - y_true.mean()) ** 2).sum()
-    return 1 - ss_res / ss_tot
+    return (1 - ss_res / ss_tot).item()
+
 
 def rmse(y_true: torch.Tensor, y_pred: torch.Tensor) -> float:
     # Ensure both tensors are on the same device
@@ -168,7 +170,10 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         # min_slope = 0.00001
         # min_slope = 1e-6 #  # Minimum acceptable upward slope in validation
         trend_window = 10  # Number of past epochs to use for trend analysis
-        min_slope = 5e-6 # best
+        min_slope = 5e-6 # best 95 93 79 85
+        trend_window = 100
+        min_slope = 2e-6 # #95 93 74 76 Tram - changing this to higher number just leads to overfitting.
+        print("Custom will use the Tram vars")
     else: # the Tramontana model takes much longer to train.
         # trend_window = 500 #95 94 71 73 pretty close
         # trend_window = 50 # 95 93 71 70
@@ -275,7 +280,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
             if slope < min_slope:
                 print(f"Early stopping at epoch {epoch} due to flat/negative trend (slope={slope:.6f})")
                 print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
-                    f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+                    f"Train R²: {train_r2:.4f} | Val R²: {val_r2:.4f}")
                 break        
         ####################################
         ### EARLY STOPPING CONDITION END ###
@@ -283,7 +288,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
 
         if epoch % 500 == 0 or epoch == epochs - 1:
             print(f"Epoch {epoch:5d} | Train Loss: {loss.item():.6f} | Val Loss: {val_loss.item():.6f} | "
-                  f"Train R²: {train_r2.item():.4f} | Val R²: {val_r2.item():.4f}")
+                  f"Train R²: {train_r2:.4f} | Val R²: {val_r2:.4f}")
         # # if epoch % 500 == 0 and len(val_r2_history) == trend_window:
         # if epoch % 500 == 0 :
         #     print(f"[epoch {epoch}] trend slope: {slope:.6f}")
@@ -822,7 +827,7 @@ def get_run_type_str(tramontana_run):
     """
     return "Tramontana" if tramontana_run else "Custom"
 
-def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str):
+def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES):
     """
     Evaluate a single model against the DAYTIME AND NIGHTTIME MODELS
     """
@@ -859,7 +864,6 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
 
     with torch.no_grad():
         # with full time is just the time var.
-        # import pdb; pdb.set_trace()
         gpp_pred = trained_gpp_model(gpp_inputs.to(device))
         reco_pred = trained_reco_model(reco_inputs.to(device))
         if tramontana_run:
@@ -943,14 +947,52 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
         nt_reco, _, NT_RECO_name, _ = load_data("{}".format(normalized_file_name), NT_RECO, [], prep_doy_sin_cos = False)
 
         print(model_inputs_information)
-        print(f"DT_GPP vs {run_type_str}_GPP R²={r2_score(dt_gpp, gpp_pred_raw):.2f} RMSE={rmse(dt_gpp, gpp_pred_raw):.2f}\n"
-            f"NT_GPP vs {run_type_str}_GPP R²={r2_score(nt_gpp, gpp_pred_raw):.2f} RMSE={rmse(nt_gpp, gpp_pred_raw):.2f}\n"
-            f"DT_RECO vs {run_type_str}_RECO R²={r2_score(dt_reco, reco_pred_raw):.2f} RMSE={rmse(dt_reco, reco_pred_raw):.2f}\n"
-            f"NT_RECO vs {run_type_str}_RECO R²={r2_score(nt_reco, reco_pred_raw):.2f} RMSE={rmse(nt_reco, reco_pred_raw):.2f}\n"
-            f"DT_GPP vs NT_GPP R²={r2_score(dt_gpp, nt_gpp):.2f} RMSE={rmse(dt_gpp, nt_gpp):.2f}\n"
-            f"DT_RECO vs NT_RECO R²={r2_score(dt_reco, nt_reco):.2f} RMSE={rmse(dt_reco, nt_reco):.2f}\n"
-            )
 
+        # Step 1: Compute metrics
+        metrics = {
+            'DT_GPP_vs_model': {
+                'r2': round(r2_score(dt_gpp, gpp_pred_raw), 2),
+                'rmse': round(rmse(dt_gpp, gpp_pred_raw), 2)
+            },
+            'NT_GPP_vs_model': {
+                'r2': round(r2_score(nt_gpp, gpp_pred_raw), 2),
+                'rmse': round(rmse(nt_gpp, gpp_pred_raw), 2)
+            },
+            'DT_RECO_vs_model': {
+                'r2': round(r2_score(dt_reco, reco_pred_raw), 2),
+                'rmse': round(rmse(dt_reco, reco_pred_raw), 2)
+            },
+            'NT_RECO_vs_model': {
+                'r2': round(r2_score(nt_reco, reco_pred_raw), 2),
+                'rmse': round(rmse(nt_reco, reco_pred_raw), 2)
+            },
+            'DT_GPP_vs_NT_GPP': {
+                'r2': round(r2_score(dt_gpp, nt_gpp), 2),
+                'rmse': round(rmse(dt_gpp, nt_gpp), 2)
+            },
+            'DT_RECO_vs_NT_RECO': {
+                'r2': round(r2_score(dt_reco, nt_reco), 2),
+                'rmse': round(rmse(dt_reco, nt_reco))
+            }
+        }
+
+        # Step 2: Save metrics into master dictionary
+        results_dict[f"experiment_{experiment_id}"] = {
+            'run_type': run_type_str,
+            'gpp_inputs': GPP_INPUT_FEATURES,
+            'reco_inputs': RECO_INPUT_FEATURES,
+            'metrics': metrics
+        }
+
+        # Step 3: Print metrics for logging.
+        print(
+            f"DT_GPP vs {run_type_str}_GPP R²={metrics['DT_GPP_vs_model']['r2']:.2f} RMSE={metrics['DT_GPP_vs_model']['rmse']:.2f}\n"
+            f"NT_GPP vs {run_type_str}_GPP R²={metrics['NT_GPP_vs_model']['r2']:.2f} RMSE={metrics['NT_GPP_vs_model']['rmse']:.2f}\n"
+            f"DT_RECO vs {run_type_str}_RECO R²={metrics['DT_RECO_vs_model']['r2']:.2f} RMSE={metrics['DT_RECO_vs_model']['rmse']:.2f}\n"
+            f"NT_RECO vs {run_type_str}_RECO R²={metrics['NT_RECO_vs_model']['r2']:.2f} RMSE={metrics['NT_RECO_vs_model']['rmse']:.2f}\n"
+            f"DT_GPP vs NT_GPP R²={metrics['DT_GPP_vs_NT_GPP']['r2']:.2f} RMSE={metrics['DT_GPP_vs_NT_GPP']['rmse']:.2f}\n"
+            f"DT_RECO vs NT_RECO R²={metrics['DT_RECO_vs_NT_RECO']['r2']:.2f} RMSE={metrics['DT_RECO_vs_NT_RECO']['rmse']:.2f}\n"
+        )
 
 
 
@@ -1094,9 +1136,11 @@ RECO_INPUT_FEATURES_SETS = [
 ]
 
 assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
-for i in range(len(GPP_INPUT_FEATURES_SETS)):
-    GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[i]
-    RECO_INPUT_FEATURES = RECO_INPUT_FEATURES_SETS[i]
+
+results_dict = {} # this will store all experiment outputs.
+for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
+    GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[experiment_id]
+    RECO_INPUT_FEATURES = RECO_INPUT_FEATURES_SETS[experiment_id]
 
 # Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
     gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
@@ -1142,13 +1186,15 @@ for i in range(len(GPP_INPUT_FEATURES_SETS)):
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
     save_plot = True
     # prep the plot saving str
-
     plot_saving_str = (f"./experiment_figures/{run_type_str}_"
                        f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                        f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
-    evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str)
+    evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES)
 
+
+
+print(json.dumps(results_dict, indent = 4))
 
 """
 TODO:
