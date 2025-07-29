@@ -1,0 +1,1621 @@
+created virtual environment CPython3.10.13.final.0-64 in 25764ms
+  creator CPython3Posix(dest=/localscratch/onurk.64940059.0/env, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/onurk/.local/share/virtualenv)
+    added seed packages: pip==25.1.1, setuptools==80.9.0, wheel==0.45.1+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2023/x86-64-v3/torch-2.6.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.18.0+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: typing-extensions>=4.10.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/ipykernel/2025a/lib/python3.10/site-packages (from torch) (4.12.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.5+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/jinja2-3.1.6+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2025.7.0+computecanada-py3-none-any.whl (from torch)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/sympy-1.13.1+computecanada-py3-none-any.whl (from torch)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages (from sympy==1.13.1->torch) (1.3.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/MarkupSafe-2.1.5+computecanada-cp310-cp310-linux_x86_64.whl (from jinja2->torch)
+INFO: pip is looking at multiple versions of networkx to determine which version is compatible with other requirements. This could take a while.
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.4.2+computecanada-py3-none-any.whl (from torch)
+Installing collected packages: sympy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
+  Attempting uninstall: sympy
+    Found existing installation: sympy 1.13.3+computecanada
+    Not uninstalling sympy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages, outside environment /localscratch/onurk.64940059.0/env
+    Can't uninstall 'sympy'. No files were found to uninstall.
+
+Successfully installed MarkupSafe-2.1.5+computecanada filelock-3.18.0+computecanada fsspec-2025.7.0+computecanada jinja2-3.1.6+computecanada networkx-3.4.2+computecanada sympy-1.13.1+computecanada torch-2.6.0+computecanada
+pre_processing: False      drop_na: False       normalize_raw_features: False       train_models: True       save_models: True       hidden_size: 12       tramontana_run: False       
+gpp_input_names,  ['VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.724121 | Val Loss: 0.687182 | Train R²: -24.3561 | Val R²: -22.0848
+Epoch   500 | Train Loss: 0.008814 | Val Loss: 0.009711 | Train R²: 0.6914 | Val R²: 0.6738
+Epoch  1000 | Train Loss: 0.006552 | Val Loss: 0.007429 | Train R²: 0.7706 | Val R²: 0.7504
+Epoch  1500 | Train Loss: 0.005536 | Val Loss: 0.006369 | Train R²: 0.8061 | Val R²: 0.7861
+Epoch  2000 | Train Loss: 0.004922 | Val Loss: 0.005719 | Train R²: 0.8276 | Val R²: 0.8079
+Epoch  2500 | Train Loss: 0.004563 | Val Loss: 0.005309 | Train R²: 0.8402 | Val R²: 0.8216
+Epoch  3000 | Train Loss: 0.004279 | Val Loss: 0.004977 | Train R²: 0.8502 | Val R²: 0.8328
+Epoch  3500 | Train Loss: 0.004045 | Val Loss: 0.004703 | Train R²: 0.8584 | Val R²: 0.8420
+Epoch  4000 | Train Loss: 0.003864 | Val Loss: 0.004498 | Train R²: 0.8647 | Val R²: 0.8489
+Epoch  4500 | Train Loss: 0.003715 | Val Loss: 0.004352 | Train R²: 0.8699 | Val R²: 0.8538
+Epoch  5000 | Train Loss: 0.003593 | Val Loss: 0.004228 | Train R²: 0.8742 | Val R²: 0.8580
+Epoch  5500 | Train Loss: 0.003442 | Val Loss: 0.004066 | Train R²: 0.8795 | Val R²: 0.8634
+Epoch  6000 | Train Loss: 0.003321 | Val Loss: 0.003911 | Train R²: 0.8837 | Val R²: 0.8686
+Epoch  6500 | Train Loss: 0.003224 | Val Loss: 0.003792 | Train R²: 0.8871 | Val R²: 0.8726
+Epoch  7000 | Train Loss: 0.003153 | Val Loss: 0.003707 | Train R²: 0.8896 | Val R²: 0.8755
+Epoch  7500 | Train Loss: 0.003072 | Val Loss: 0.003612 | Train R²: 0.8924 | Val R²: 0.8786
+Epoch  8000 | Train Loss: 0.003016 | Val Loss: 0.003557 | Train R²: 0.8944 | Val R²: 0.8805
+Early stopping at epoch 8128 due to flat/negative trend (slope=0.000002)
+Epoch  8128 | Train Loss: 0.003004 | Val Loss: 0.003546 | Train R²: 0.8948 | Val R²: 0.8809
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.38 RMSE=5.64
+NT_GPP vs Custom_GPP R²=0.35 RMSE=5.72
+DT_RECO vs Custom_RECO R²=-4.68 RMSE=5.53
+NT_RECO vs Custom_RECO R²=-6.23 RMSE=5.42
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.760515 | Val Loss: 0.724028 | Train R²: -25.6305 | Val R²: -23.3226
+Epoch   500 | Train Loss: 0.010106 | Val Loss: 0.011240 | Train R²: 0.6461 | Val R²: 0.6224
+Epoch  1000 | Train Loss: 0.005404 | Val Loss: 0.005928 | Train R²: 0.8108 | Val R²: 0.8008
+Epoch  1500 | Train Loss: 0.004476 | Val Loss: 0.004844 | Train R²: 0.8433 | Val R²: 0.8373
+Epoch  2000 | Train Loss: 0.003925 | Val Loss: 0.004238 | Train R²: 0.8626 | Val R²: 0.8576
+Epoch  2500 | Train Loss: 0.003523 | Val Loss: 0.003799 | Train R²: 0.8766 | Val R²: 0.8724
+Epoch  3000 | Train Loss: 0.003183 | Val Loss: 0.003412 | Train R²: 0.8886 | Val R²: 0.8854
+Epoch  3500 | Train Loss: 0.002867 | Val Loss: 0.003064 | Train R²: 0.8996 | Val R²: 0.8971
+Epoch  4000 | Train Loss: 0.002680 | Val Loss: 0.002849 | Train R²: 0.9062 | Val R²: 0.9043
+Epoch  4500 | Train Loss: 0.002539 | Val Loss: 0.002695 | Train R²: 0.9111 | Val R²: 0.9095
+Epoch  5000 | Train Loss: 0.002421 | Val Loss: 0.002574 | Train R²: 0.9152 | Val R²: 0.9135
+Epoch  5500 | Train Loss: 0.002323 | Val Loss: 0.002473 | Train R²: 0.9187 | Val R²: 0.9169
+Epoch  6000 | Train Loss: 0.002251 | Val Loss: 0.002394 | Train R²: 0.9212 | Val R²: 0.9196
+Epoch  6500 | Train Loss: 0.002187 | Val Loss: 0.002323 | Train R²: 0.9234 | Val R²: 0.9220
+Epoch  7000 | Train Loss: 0.002122 | Val Loss: 0.002256 | Train R²: 0.9257 | Val R²: 0.9242
+Epoch  7500 | Train Loss: 0.002045 | Val Loss: 0.002162 | Train R²: 0.9284 | Val R²: 0.9274
+Epoch  8000 | Train Loss: 0.001982 | Val Loss: 0.002096 | Train R²: 0.9306 | Val R²: 0.9296
+Epoch  8500 | Train Loss: 0.001941 | Val Loss: 0.002053 | Train R²: 0.9320 | Val R²: 0.9310
+Early stopping at epoch 8746 due to flat/negative trend (slope=0.000002)
+Epoch  8746 | Train Loss: 0.001921 | Val Loss: 0.002036 | Train R²: 0.9327 | Val R²: 0.9316
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.81 RMSE=3.08
+NT_GPP vs Custom_GPP R²=0.79 RMSE=3.26
+DT_RECO vs Custom_RECO R²=-0.54 RMSE=2.88
+NT_RECO vs Custom_RECO R²=-1.10 RMSE=2.92
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.528802 | Val Loss: 0.498739 | Train R²: -17.5168 | Val R²: -15.7544
+Epoch   500 | Train Loss: 0.009447 | Val Loss: 0.010652 | Train R²: 0.6692 | Val R²: 0.6422
+Epoch  1000 | Train Loss: 0.004620 | Val Loss: 0.005025 | Train R²: 0.8382 | Val R²: 0.8312
+Epoch  1500 | Train Loss: 0.003433 | Val Loss: 0.003712 | Train R²: 0.8798 | Val R²: 0.8753
+Epoch  2000 | Train Loss: 0.002899 | Val Loss: 0.003108 | Train R²: 0.8985 | Val R²: 0.8956
+Epoch  2500 | Train Loss: 0.002656 | Val Loss: 0.002824 | Train R²: 0.9070 | Val R²: 0.9051
+Epoch  3000 | Train Loss: 0.002501 | Val Loss: 0.002654 | Train R²: 0.9124 | Val R²: 0.9108
+Epoch  3500 | Train Loss: 0.002371 | Val Loss: 0.002515 | Train R²: 0.9170 | Val R²: 0.9155
+Epoch  4000 | Train Loss: 0.002276 | Val Loss: 0.002409 | Train R²: 0.9203 | Val R²: 0.9191
+Epoch  4500 | Train Loss: 0.002205 | Val Loss: 0.002325 | Train R²: 0.9228 | Val R²: 0.9219
+Epoch  5000 | Train Loss: 0.002131 | Val Loss: 0.002242 | Train R²: 0.9254 | Val R²: 0.9247
+Epoch  5500 | Train Loss: 0.002072 | Val Loss: 0.002179 | Train R²: 0.9274 | Val R²: 0.9268
+Epoch  6000 | Train Loss: 0.002023 | Val Loss: 0.002135 | Train R²: 0.9291 | Val R²: 0.9283
+Epoch  6500 | Train Loss: 0.001985 | Val Loss: 0.002100 | Train R²: 0.9305 | Val R²: 0.9295
+Early stopping at epoch 6535 due to flat/negative trend (slope=0.000002)
+Epoch  6535 | Train Loss: 0.001983 | Val Loss: 0.002098 | Train R²: 0.9306 | Val R²: 0.9295
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.95 RMSE=1.58
+NT_GPP vs Custom_GPP R²=0.94 RMSE=1.80
+DT_RECO vs Custom_RECO R²=0.83 RMSE=0.96
+NT_RECO vs Custom_RECO R²=0.83 RMSE=0.84
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.525188 | Val Loss: 0.494858 | Train R²: -17.3902 | Val R²: -15.6240
+Epoch   500 | Train Loss: 0.008629 | Val Loss: 0.009525 | Train R²: 0.6978 | Val R²: 0.6800
+Epoch  1000 | Train Loss: 0.004681 | Val Loss: 0.005031 | Train R²: 0.8361 | Val R²: 0.8310
+Epoch  1500 | Train Loss: 0.003824 | Val Loss: 0.004156 | Train R²: 0.8661 | Val R²: 0.8604
+Epoch  2000 | Train Loss: 0.003281 | Val Loss: 0.003572 | Train R²: 0.8851 | Val R²: 0.8800
+Epoch  2500 | Train Loss: 0.002754 | Val Loss: 0.002940 | Train R²: 0.9035 | Val R²: 0.9012
+Epoch  3000 | Train Loss: 0.002512 | Val Loss: 0.002674 | Train R²: 0.9120 | Val R²: 0.9102
+Epoch  3500 | Train Loss: 0.002367 | Val Loss: 0.002511 | Train R²: 0.9171 | Val R²: 0.9156
+Epoch  4000 | Train Loss: 0.002281 | Val Loss: 0.002418 | Train R²: 0.9201 | Val R²: 0.9188
+Epoch  4500 | Train Loss: 0.002212 | Val Loss: 0.002347 | Train R²: 0.9226 | Val R²: 0.9212
+Epoch  5000 | Train Loss: 0.002155 | Val Loss: 0.002289 | Train R²: 0.9245 | Val R²: 0.9231
+Epoch  5500 | Train Loss: 0.002105 | Val Loss: 0.002241 | Train R²: 0.9263 | Val R²: 0.9247
+Epoch  6000 | Train Loss: 0.002068 | Val Loss: 0.002201 | Train R²: 0.9276 | Val R²: 0.9261
+Early stopping at epoch 6462 due to flat/negative trend (slope=0.000002)
+Epoch  6462 | Train Loss: 0.002035 | Val Loss: 0.002170 | Train R²: 0.9287 | Val R²: 0.9271
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.89 RMSE=2.33
+NT_GPP vs Custom_GPP R²=0.87 RMSE=2.56
+DT_RECO vs Custom_RECO R²=0.25 RMSE=2.00
+NT_RECO vs Custom_RECO R²=-0.02 RMSE=2.04
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.593668 | Val Loss: 0.561177 | Train R²: -19.7881 | Val R²: -17.8519
+Epoch   500 | Train Loss: 0.008698 | Val Loss: 0.009920 | Train R²: 0.6954 | Val R²: 0.6667
+Epoch  1000 | Train Loss: 0.005364 | Val Loss: 0.005969 | Train R²: 0.8122 | Val R²: 0.7995
+Epoch  1500 | Train Loss: 0.004260 | Val Loss: 0.004683 | Train R²: 0.8508 | Val R²: 0.8427
+Epoch  2000 | Train Loss: 0.003620 | Val Loss: 0.003939 | Train R²: 0.8733 | Val R²: 0.8677
+Epoch  2500 | Train Loss: 0.003211 | Val Loss: 0.003482 | Train R²: 0.8876 | Val R²: 0.8830
+Epoch  3000 | Train Loss: 0.002918 | Val Loss: 0.003179 | Train R²: 0.8978 | Val R²: 0.8932
+Epoch  3500 | Train Loss: 0.002699 | Val Loss: 0.002953 | Train R²: 0.9055 | Val R²: 0.9008
+Epoch  4000 | Train Loss: 0.002567 | Val Loss: 0.002818 | Train R²: 0.9101 | Val R²: 0.9053
+Epoch  4500 | Train Loss: 0.002471 | Val Loss: 0.002709 | Train R²: 0.9135 | Val R²: 0.9090
+Epoch  5000 | Train Loss: 0.002394 | Val Loss: 0.002613 | Train R²: 0.9162 | Val R²: 0.9122
+Epoch  5500 | Train Loss: 0.002323 | Val Loss: 0.002525 | Train R²: 0.9186 | Val R²: 0.9152
+Epoch  6000 | Train Loss: 0.002241 | Val Loss: 0.002437 | Train R²: 0.9215 | Val R²: 0.9181
+Epoch  6500 | Train Loss: 0.002161 | Val Loss: 0.002346 | Train R²: 0.9243 | Val R²: 0.9212
+Epoch  7000 | Train Loss: 0.002029 | Val Loss: 0.002195 | Train R²: 0.9290 | Val R²: 0.9263
+Epoch  7500 | Train Loss: 0.001911 | Val Loss: 0.002082 | Train R²: 0.9331 | Val R²: 0.9300
+Epoch  8000 | Train Loss: 0.001844 | Val Loss: 0.002015 | Train R²: 0.9354 | Val R²: 0.9323
+Epoch  8500 | Train Loss: 0.001790 | Val Loss: 0.001954 | Train R²: 0.9373 | Val R²: 0.9343
+Epoch  9000 | Train Loss: 0.001754 | Val Loss: 0.001900 | Train R²: 0.9386 | Val R²: 0.9362
+Early stopping at epoch 9347 due to flat/negative trend (slope=0.000002)
+Epoch  9347 | Train Loss: 0.001736 | Val Loss: 0.001874 | Train R²: 0.9392 | Val R²: 0.9371
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.96 RMSE=1.52
+NT_GPP vs Custom_GPP R²=0.94 RMSE=1.74
+DT_RECO vs Custom_RECO R²=0.82 RMSE=0.98
+NT_RECO vs Custom_RECO R²=0.81 RMSE=0.88
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.464504 | Val Loss: 0.437760 | Train R²: -15.2653 | Val R²: -13.7059
+Epoch   500 | Train Loss: 0.008116 | Val Loss: 0.008786 | Train R²: 0.7158 | Val R²: 0.7048
+Epoch  1000 | Train Loss: 0.005066 | Val Loss: 0.005343 | Train R²: 0.8226 | Val R²: 0.8205
+Epoch  1500 | Train Loss: 0.004131 | Val Loss: 0.004310 | Train R²: 0.8554 | Val R²: 0.8552
+Epoch  2000 | Train Loss: 0.003678 | Val Loss: 0.003812 | Train R²: 0.8712 | Val R²: 0.8719
+Epoch  2500 | Train Loss: 0.003393 | Val Loss: 0.003527 | Train R²: 0.8812 | Val R²: 0.8815
+Epoch  3000 | Train Loss: 0.003198 | Val Loss: 0.003344 | Train R²: 0.8880 | Val R²: 0.8877
+Epoch  3500 | Train Loss: 0.003033 | Val Loss: 0.003187 | Train R²: 0.8938 | Val R²: 0.8929
+Epoch  4000 | Train Loss: 0.002906 | Val Loss: 0.003058 | Train R²: 0.8982 | Val R²: 0.8973
+Epoch  4500 | Train Loss: 0.002803 | Val Loss: 0.002959 | Train R²: 0.9019 | Val R²: 0.9006
+Epoch  5000 | Train Loss: 0.002705 | Val Loss: 0.002865 | Train R²: 0.9053 | Val R²: 0.9038
+Epoch  5500 | Train Loss: 0.002594 | Val Loss: 0.002752 | Train R²: 0.9092 | Val R²: 0.9076
+Epoch  6000 | Train Loss: 0.002493 | Val Loss: 0.002649 | Train R²: 0.9127 | Val R²: 0.9110
+Epoch  6500 | Train Loss: 0.002429 | Val Loss: 0.002581 | Train R²: 0.9149 | Val R²: 0.9133
+Epoch  7000 | Train Loss: 0.002381 | Val Loss: 0.002532 | Train R²: 0.9166 | Val R²: 0.9149
+Epoch  7500 | Train Loss: 0.002336 | Val Loss: 0.002485 | Train R²: 0.9182 | Val R²: 0.9165
+Epoch  8000 | Train Loss: 0.002287 | Val Loss: 0.002436 | Train R²: 0.9199 | Val R²: 0.9182
+Epoch  8500 | Train Loss: 0.002236 | Val Loss: 0.002369 | Train R²: 0.9217 | Val R²: 0.9204
+Epoch  9000 | Train Loss: 0.002194 | Val Loss: 0.002324 | Train R²: 0.9232 | Val R²: 0.9219
+Early stopping at epoch 9170 due to flat/negative trend (slope=0.000002)
+Epoch  9170 | Train Loss: 0.002181 | Val Loss: 0.002312 | Train R²: 0.9236 | Val R²: 0.9223
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.18 RMSE=6.46
+NT_GPP vs Custom_GPP R²=0.11 RMSE=6.69
+DT_RECO vs Custom_RECO R²=-6.90 RMSE=6.53
+NT_RECO vs Custom_RECO R²=-9.69 RMSE=6.59
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.366589 | Val Loss: 0.343528 | Train R²: -11.8366 | Val R²: -10.5403
+Epoch   500 | Train Loss: 0.007231 | Val Loss: 0.008094 | Train R²: 0.7468 | Val R²: 0.7281
+Epoch  1000 | Train Loss: 0.004638 | Val Loss: 0.005302 | Train R²: 0.8376 | Val R²: 0.8219
+Epoch  1500 | Train Loss: 0.003692 | Val Loss: 0.004185 | Train R²: 0.8707 | Val R²: 0.8594
+Epoch  2000 | Train Loss: 0.003203 | Val Loss: 0.003567 | Train R²: 0.8878 | Val R²: 0.8802
+Epoch  2500 | Train Loss: 0.002906 | Val Loss: 0.003198 | Train R²: 0.8982 | Val R²: 0.8926
+Epoch  3000 | Train Loss: 0.002700 | Val Loss: 0.002946 | Train R²: 0.9055 | Val R²: 0.9010
+Epoch  3500 | Train Loss: 0.002542 | Val Loss: 0.002760 | Train R²: 0.9110 | Val R²: 0.9073
+Epoch  4000 | Train Loss: 0.002402 | Val Loss: 0.002604 | Train R²: 0.9159 | Val R²: 0.9125
+Epoch  4500 | Train Loss: 0.002306 | Val Loss: 0.002497 | Train R²: 0.9192 | Val R²: 0.9161
+Epoch  5000 | Train Loss: 0.002237 | Val Loss: 0.002419 | Train R²: 0.9217 | Val R²: 0.9187
+Epoch  5500 | Train Loss: 0.002182 | Val Loss: 0.002358 | Train R²: 0.9236 | Val R²: 0.9208
+Epoch  6000 | Train Loss: 0.002132 | Val Loss: 0.002295 | Train R²: 0.9254 | Val R²: 0.9229
+Epoch  6500 | Train Loss: 0.002088 | Val Loss: 0.002240 | Train R²: 0.9269 | Val R²: 0.9247
+Epoch  7000 | Train Loss: 0.002045 | Val Loss: 0.002191 | Train R²: 0.9284 | Val R²: 0.9264
+Early stopping at epoch 7482 due to flat/negative trend (slope=0.000002)
+Epoch  7482 | Train Loss: 0.002005 | Val Loss: 0.002147 | Train R²: 0.9298 | Val R²: 0.9279
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=-1.48 RMSE=11.26
+NT_GPP vs Custom_GPP R²=-1.63 RMSE=11.47
+DT_RECO vs Custom_RECO R²=-23.42 RMSE=11.47
+NT_RECO vs Custom_RECO R²=-31.97 RMSE=11.58
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.413062 | Val Loss: 0.387508 | Train R²: -13.4639 | Val R²: -12.0177
+Epoch   500 | Train Loss: 0.008230 | Val Loss: 0.008943 | Train R²: 0.7118 | Val R²: 0.6996
+Epoch  1000 | Train Loss: 0.005355 | Val Loss: 0.005893 | Train R²: 0.8125 | Val R²: 0.8020
+Epoch  1500 | Train Loss: 0.004448 | Val Loss: 0.004842 | Train R²: 0.8442 | Val R²: 0.8373
+Epoch  2000 | Train Loss: 0.003993 | Val Loss: 0.004348 | Train R²: 0.8602 | Val R²: 0.8539
+Epoch  2500 | Train Loss: 0.003686 | Val Loss: 0.004018 | Train R²: 0.8709 | Val R²: 0.8650
+Epoch  3000 | Train Loss: 0.003505 | Val Loss: 0.003835 | Train R²: 0.8773 | Val R²: 0.8712
+Epoch  3500 | Train Loss: 0.003367 | Val Loss: 0.003698 | Train R²: 0.8821 | Val R²: 0.8758
+Epoch  4000 | Train Loss: 0.003226 | Val Loss: 0.003551 | Train R²: 0.8870 | Val R²: 0.8807
+Epoch  4500 | Train Loss: 0.003040 | Val Loss: 0.003373 | Train R²: 0.8935 | Val R²: 0.8867
+Epoch  5000 | Train Loss: 0.002859 | Val Loss: 0.003177 | Train R²: 0.8999 | Val R²: 0.8933
+Epoch  5500 | Train Loss: 0.002701 | Val Loss: 0.003005 | Train R²: 0.9054 | Val R²: 0.8991
+Epoch  6000 | Train Loss: 0.002604 | Val Loss: 0.002888 | Train R²: 0.9088 | Val R²: 0.9030
+Epoch  6500 | Train Loss: 0.002526 | Val Loss: 0.002800 | Train R²: 0.9115 | Val R²: 0.9059
+Epoch  7000 | Train Loss: 0.002456 | Val Loss: 0.002728 | Train R²: 0.9140 | Val R²: 0.9084
+Epoch  7500 | Train Loss: 0.002382 | Val Loss: 0.002631 | Train R²: 0.9166 | Val R²: 0.9116
+Epoch  8000 | Train Loss: 0.002265 | Val Loss: 0.002481 | Train R²: 0.9207 | Val R²: 0.9167
+Epoch  8500 | Train Loss: 0.002213 | Val Loss: 0.002410 | Train R²: 0.9225 | Val R²: 0.9191
+Epoch  9000 | Train Loss: 0.002178 | Val Loss: 0.002367 | Train R²: 0.9237 | Val R²: 0.9205
+Early stopping at epoch 9225 due to flat/negative trend (slope=0.000002)
+Epoch  9225 | Train Loss: 0.002165 | Val Loss: 0.002352 | Train R²: 0.9242 | Val R²: 0.9210
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.39 RMSE=5.60
+NT_GPP vs Custom_GPP R²=0.33 RMSE=5.78
+DT_RECO vs Custom_RECO R²=-4.86 RMSE=5.62
+NT_RECO vs Custom_RECO R²=-6.86 RMSE=5.65
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'WD_COS', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.362155 | Val Loss: 0.343246 | Train R²: -11.6814 | Val R²: -10.5308
+Epoch   500 | Train Loss: 0.006743 | Val Loss: 0.007113 | Train R²: 0.7639 | Val R²: 0.7611
+Epoch  1000 | Train Loss: 0.005050 | Val Loss: 0.005375 | Train R²: 0.8232 | Val R²: 0.8194
+Epoch  1500 | Train Loss: 0.004244 | Val Loss: 0.004506 | Train R²: 0.8514 | Val R²: 0.8486
+Epoch  2000 | Train Loss: 0.003707 | Val Loss: 0.003903 | Train R²: 0.8702 | Val R²: 0.8689
+Epoch  2500 | Train Loss: 0.003270 | Val Loss: 0.003441 | Train R²: 0.8855 | Val R²: 0.8844
+Epoch  3000 | Train Loss: 0.003013 | Val Loss: 0.003177 | Train R²: 0.8945 | Val R²: 0.8933
+Epoch  3500 | Train Loss: 0.002862 | Val Loss: 0.003016 | Train R²: 0.8998 | Val R²: 0.8987
+Epoch  4000 | Train Loss: 0.002748 | Val Loss: 0.002886 | Train R²: 0.9038 | Val R²: 0.9030
+Epoch  4500 | Train Loss: 0.002634 | Val Loss: 0.002766 | Train R²: 0.9078 | Val R²: 0.9071
+Epoch  5000 | Train Loss: 0.002510 | Val Loss: 0.002641 | Train R²: 0.9121 | Val R²: 0.9113
+Epoch  5500 | Train Loss: 0.002394 | Val Loss: 0.002518 | Train R²: 0.9162 | Val R²: 0.9154
+Epoch  6000 | Train Loss: 0.002295 | Val Loss: 0.002416 | Train R²: 0.9197 | Val R²: 0.9188
+Epoch  6500 | Train Loss: 0.002225 | Val Loss: 0.002342 | Train R²: 0.9221 | Val R²: 0.9213
+Epoch  7000 | Train Loss: 0.002155 | Val Loss: 0.002263 | Train R²: 0.9245 | Val R²: 0.9240
+Epoch  7500 | Train Loss: 0.002090 | Val Loss: 0.002192 | Train R²: 0.9268 | Val R²: 0.9264
+Epoch  8000 | Train Loss: 0.002043 | Val Loss: 0.002147 | Train R²: 0.9285 | Val R²: 0.9279
+Early stopping at epoch 8104 due to flat/negative trend (slope=0.000002)
+Epoch  8104 | Train Loss: 0.002034 | Val Loss: 0.002142 | Train R²: 0.9288 | Val R²: 0.9280
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'WD_COS', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.86 RMSE=2.66
+NT_GPP vs Custom_GPP R²=0.82 RMSE=2.98
+DT_RECO vs Custom_RECO R²=-0.09 RMSE=2.43
+NT_RECO vs Custom_RECO R²=-0.63 RMSE=2.58
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_SIN', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.351732 | Val Loss: 0.333180 | Train R²: -11.3164 | Val R²: -10.1927
+Epoch   500 | Train Loss: 0.006312 | Val Loss: 0.006784 | Train R²: 0.7790 | Val R²: 0.7721
+Epoch  1000 | Train Loss: 0.004567 | Val Loss: 0.004964 | Train R²: 0.8401 | Val R²: 0.8332
+Epoch  1500 | Train Loss: 0.003921 | Val Loss: 0.004259 | Train R²: 0.8627 | Val R²: 0.8569
+Epoch  2000 | Train Loss: 0.003408 | Val Loss: 0.003680 | Train R²: 0.8807 | Val R²: 0.8764
+Epoch  2500 | Train Loss: 0.003108 | Val Loss: 0.003316 | Train R²: 0.8912 | Val R²: 0.8886
+Epoch  3000 | Train Loss: 0.002774 | Val Loss: 0.002899 | Train R²: 0.9029 | Val R²: 0.9026
+Epoch  3500 | Train Loss: 0.002498 | Val Loss: 0.002586 | Train R²: 0.9125 | Val R²: 0.9131
+Epoch  4000 | Train Loss: 0.002361 | Val Loss: 0.002448 | Train R²: 0.9173 | Val R²: 0.9178
+Epoch  4500 | Train Loss: 0.002263 | Val Loss: 0.002359 | Train R²: 0.9208 | Val R²: 0.9208
+Epoch  5000 | Train Loss: 0.002180 | Val Loss: 0.002288 | Train R²: 0.9236 | Val R²: 0.9232
+Epoch  5500 | Train Loss: 0.002121 | Val Loss: 0.002234 | Train R²: 0.9257 | Val R²: 0.9250
+Epoch  6000 | Train Loss: 0.002077 | Val Loss: 0.002191 | Train R²: 0.9273 | Val R²: 0.9264
+Early stopping at epoch 6308 due to flat/negative trend (slope=0.000002)
+Epoch  6308 | Train Loss: 0.002052 | Val Loss: 0.002171 | Train R²: 0.9281 | Val R²: 0.9271
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_SIN', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.76 RMSE=3.52
+NT_GPP vs Custom_GPP R²=0.72 RMSE=3.73
+DT_RECO vs Custom_RECO R²=-1.08 RMSE=3.35
+NT_RECO vs Custom_RECO R²=-1.90 RMSE=3.44
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'GPP_PROX'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.321651 | Val Loss: 0.309424 | Train R²: -10.2630 | Val R²: -9.3946
+Epoch   500 | Train Loss: 0.007898 | Val Loss: 0.008548 | Train R²: 0.7234 | Val R²: 0.7128
+Epoch  1000 | Train Loss: 0.004771 | Val Loss: 0.005187 | Train R²: 0.8329 | Val R²: 0.8258
+Epoch  1500 | Train Loss: 0.003668 | Val Loss: 0.003962 | Train R²: 0.8716 | Val R²: 0.8669
+Epoch  2000 | Train Loss: 0.003081 | Val Loss: 0.003275 | Train R²: 0.8921 | Val R²: 0.8900
+Epoch  2500 | Train Loss: 0.002721 | Val Loss: 0.002862 | Train R²: 0.9047 | Val R²: 0.9039
+Epoch  3000 | Train Loss: 0.002469 | Val Loss: 0.002586 | Train R²: 0.9136 | Val R²: 0.9131
+Epoch  3500 | Train Loss: 0.002317 | Val Loss: 0.002425 | Train R²: 0.9189 | Val R²: 0.9185
+Epoch  4000 | Train Loss: 0.002227 | Val Loss: 0.002340 | Train R²: 0.9220 | Val R²: 0.9214
+Epoch  4500 | Train Loss: 0.002159 | Val Loss: 0.002274 | Train R²: 0.9244 | Val R²: 0.9236
+Epoch  5000 | Train Loss: 0.002110 | Val Loss: 0.002214 | Train R²: 0.9261 | Val R²: 0.9256
+Epoch  5500 | Train Loss: 0.002066 | Val Loss: 0.002158 | Train R²: 0.9276 | Val R²: 0.9275
+Epoch  6000 | Train Loss: 0.002026 | Val Loss: 0.002104 | Train R²: 0.9291 | Val R²: 0.9293
+Early stopping at epoch 6302 due to flat/negative trend (slope=0.000002)
+Epoch  6302 | Train Loss: 0.002004 | Val Loss: 0.002083 | Train R²: 0.9298 | Val R²: 0.9300
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'GPP_PROX']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.89 RMSE=2.36
+NT_GPP vs Custom_GPP R²=0.86 RMSE=2.61
+DT_RECO vs Custom_RECO R²=0.11 RMSE=2.19
+NT_RECO vs Custom_RECO R²=-0.17 RMSE=2.18
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+gpp_input_names,  ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN'] 
+reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'] 
+true_nee_name,  ['NEE'] 
+
+Custom Running on GPU With hidden layer size of 12 Total epochs: 100000 lr: 0.001 patience: 500 min_delta 0.01
+SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+Custom will use the Tram vars
+Params are min slope: 2e-06, trend window: 100
+Epoch     0 | Train Loss: 0.228200 | Val Loss: 0.220372 | Train R²: -6.9908 | Val R²: -6.4031
+Epoch   500 | Train Loss: 0.006064 | Val Loss: 0.006691 | Train R²: 0.7877 | Val R²: 0.7752
+Epoch  1000 | Train Loss: 0.004065 | Val Loss: 0.004450 | Train R²: 0.8577 | Val R²: 0.8505
+Epoch  1500 | Train Loss: 0.003396 | Val Loss: 0.003707 | Train R²: 0.8811 | Val R²: 0.8755
+Epoch  2000 | Train Loss: 0.002936 | Val Loss: 0.003181 | Train R²: 0.8972 | Val R²: 0.8931
+Epoch  2500 | Train Loss: 0.002616 | Val Loss: 0.002833 | Train R²: 0.9084 | Val R²: 0.9048
+Epoch  3000 | Train Loss: 0.002430 | Val Loss: 0.002619 | Train R²: 0.9149 | Val R²: 0.9120
+Epoch  3500 | Train Loss: 0.002310 | Val Loss: 0.002476 | Train R²: 0.9191 | Val R²: 0.9168
+Epoch  4000 | Train Loss: 0.002214 | Val Loss: 0.002349 | Train R²: 0.9225 | Val R²: 0.9211
+Epoch  4500 | Train Loss: 0.002137 | Val Loss: 0.002261 | Train R²: 0.9252 | Val R²: 0.9240
+Epoch  5000 | Train Loss: 0.002071 | Val Loss: 0.002184 | Train R²: 0.9275 | Val R²: 0.9266
+Epoch  5500 | Train Loss: 0.002015 | Val Loss: 0.002124 | Train R²: 0.9294 | Val R²: 0.9287
+Epoch  6000 | Train Loss: 0.001968 | Val Loss: 0.002080 | Train R²: 0.9311 | Val R²: 0.9301
+Early stopping at epoch 6427 due to flat/negative trend (slope=0.000002)
+Epoch  6427 | Train Loss: 0.001936 | Val Loss: 0.002049 | Train R²: 0.9322 | Val R²: 0.9312
+Unpickling models
+Following models have been loaded and moved to cuda:
+trained gpp model:
+ SNN_GPP(
+  (net): Sequential(
+    (0): Linear(in_features=11, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+), trained_reco_model:
+ SNN_RECO(
+  (net): Sequential(
+    (0): Linear(in_features=12, out_features=12, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=12, out_features=1, bias=True)
+    (3): ReLU()
+  )
+)
+using full data set for visualization
+Un-normalizing the GPP and RECO predictions using NEE min: tensor([-36.1705]), NEE max: tensor([35.8634])
+
+
+
+Metrics for the Custom, with
+GPP inputs: ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN']
+RECO inputs: ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']:
+DT_GPP vs Custom_GPP R²=0.94 RMSE=1.82
+NT_GPP vs Custom_GPP R²=0.92 RMSE=2.00
+DT_RECO vs Custom_RECO R²=0.70 RMSE=1.27
+NT_RECO vs Custom_RECO R²=0.63 RMSE=1.22
+DT_GPP vs NT_GPP R²=0.95 RMSE=1.55
+DT_RECO vs NT_RECO R²=0.85 RMSE=1.00
+
+{
+    "experiment_0": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.38,
+                "rmse": 5.64
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.35,
+                "rmse": 5.72
+            },
+            "DT_RECO_vs_model": {
+                "r2": -4.68,
+                "rmse": 5.53
+            },
+            "NT_RECO_vs_model": {
+                "r2": -6.23,
+                "rmse": 5.42
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.8809
+        }
+    },
+    "experiment_1": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.81,
+                "rmse": 3.08
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.79,
+                "rmse": 3.26
+            },
+            "DT_RECO_vs_model": {
+                "r2": -0.54,
+                "rmse": 2.88
+            },
+            "NT_RECO_vs_model": {
+                "r2": -1.1,
+                "rmse": 2.92
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9316
+        }
+    },
+    "experiment_2": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.95,
+                "rmse": 1.58
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.94,
+                "rmse": 1.8
+            },
+            "DT_RECO_vs_model": {
+                "r2": 0.83,
+                "rmse": 0.96
+            },
+            "NT_RECO_vs_model": {
+                "r2": 0.83,
+                "rmse": 0.84
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9295
+        }
+    },
+    "experiment_3": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.89,
+                "rmse": 2.33
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.87,
+                "rmse": 2.56
+            },
+            "DT_RECO_vs_model": {
+                "r2": 0.25,
+                "rmse": 2.0
+            },
+            "NT_RECO_vs_model": {
+                "r2": -0.02,
+                "rmse": 2.04
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9271
+        }
+    },
+    "experiment_4": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.96,
+                "rmse": 1.52
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.94,
+                "rmse": 1.74
+            },
+            "DT_RECO_vs_model": {
+                "r2": 0.82,
+                "rmse": 0.98
+            },
+            "NT_RECO_vs_model": {
+                "r2": 0.81,
+                "rmse": 0.88
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9371
+        }
+    },
+    "experiment_5": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.18,
+                "rmse": 6.46
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.11,
+                "rmse": 6.69
+            },
+            "DT_RECO_vs_model": {
+                "r2": -6.9,
+                "rmse": 6.53
+            },
+            "NT_RECO_vs_model": {
+                "r2": -9.69,
+                "rmse": 6.59
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9223
+        }
+    },
+    "experiment_6": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": -1.48,
+                "rmse": 11.26
+            },
+            "NT_GPP_vs_model": {
+                "r2": -1.63,
+                "rmse": 11.47
+            },
+            "DT_RECO_vs_model": {
+                "r2": -23.42,
+                "rmse": 11.47
+            },
+            "NT_RECO_vs_model": {
+                "r2": -31.97,
+                "rmse": 11.58
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9279
+        }
+    },
+    "experiment_7": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.39,
+                "rmse": 5.6
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.33,
+                "rmse": 5.78
+            },
+            "DT_RECO_vs_model": {
+                "r2": -4.86,
+                "rmse": 5.62
+            },
+            "NT_RECO_vs_model": {
+                "r2": -6.86,
+                "rmse": 5.65
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.921
+        }
+    },
+    "experiment_8": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "WD_COS",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.86,
+                "rmse": 2.66
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.82,
+                "rmse": 2.98
+            },
+            "DT_RECO_vs_model": {
+                "r2": -0.09,
+                "rmse": 2.43
+            },
+            "NT_RECO_vs_model": {
+                "r2": -0.63,
+                "rmse": 2.58
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.928
+        }
+    },
+    "experiment_9": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_SIN",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.76,
+                "rmse": 3.52
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.72,
+                "rmse": 3.73
+            },
+            "DT_RECO_vs_model": {
+                "r2": -1.08,
+                "rmse": 3.35
+            },
+            "NT_RECO_vs_model": {
+                "r2": -1.9,
+                "rmse": 3.44
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9271
+        }
+    },
+    "experiment_10": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "GPP_PROX"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.89,
+                "rmse": 2.36
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.86,
+                "rmse": 2.61
+            },
+            "DT_RECO_vs_model": {
+                "r2": 0.11,
+                "rmse": 2.19
+            },
+            "NT_RECO_vs_model": {
+                "r2": -0.17,
+                "rmse": 2.18
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.93
+        }
+    },
+    "experiment_11": {
+        "run_type": "Custom",
+        "gpp_inputs": [
+            "SW_IN",
+            "VPD",
+            "TA",
+            "WTD",
+            "WS",
+            "PotRad",
+            "PotRadHalfHourlyDiff",
+            "PotRadDailyAvg",
+            "PotRadDailyDiff",
+            "WD_COS",
+            "WD_SIN"
+        ],
+        "reco_inputs": [
+            "DOY_sin",
+            "DOY_cos",
+            "TA",
+            "TS_1",
+            "TS_2",
+            "TS_3",
+            "TS_4",
+            "WTD",
+            "WS",
+            "WD_COS",
+            "WD_SIN",
+            "NIGHTLY_NEE_AVG"
+        ],
+        "metrics": {
+            "DT_GPP_vs_model": {
+                "r2": 0.94,
+                "rmse": 1.82
+            },
+            "NT_GPP_vs_model": {
+                "r2": 0.92,
+                "rmse": 2.0
+            },
+            "DT_RECO_vs_model": {
+                "r2": 0.7,
+                "rmse": 1.27
+            },
+            "NT_RECO_vs_model": {
+                "r2": 0.63,
+                "rmse": 1.22
+            },
+            "DT_GPP_vs_NT_GPP": {
+                "r2": 0.95,
+                "rmse": 1.55
+            },
+            "DT_RECO_vs_NT_RECO": {
+                "r2": 0.85,
+                "rmse": 1
+            },
+            "val_r2": 0.9312
+        }
+    }
+}
+0.8809,0.38,0.35,-4.68,-6.23
+0.9316,0.81,0.79,-0.54,-1.1
+0.9295,0.95,0.94,0.83,0.83
+0.9271,0.89,0.87,0.25,-0.02
+0.9371,0.96,0.94,0.82,0.81
+0.9223,0.18,0.11,-6.9,-9.69
+0.9279,-1.48,-1.63,-23.42,-31.97
+0.921,0.39,0.33,-4.86,-6.86
+0.928,0.86,0.82,-0.09,-0.63
+0.9271,0.76,0.72,-1.08,-1.9
+0.93,0.89,0.86,0.11,-0.17
+0.9312,0.94,0.92,0.7,0.63
