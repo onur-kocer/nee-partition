@@ -180,7 +180,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         # min_slope = 5e-7 # r2 .9306 seems to be overfitting. Low looking RECO results
         trend_window = 100 #95 94 72 73
         min_slope = 2e-6
-
+    print(f"Params are min slope: {min_slope}, trend window: {trend_window}")
 
 
     # --- History buffer ---
@@ -298,7 +298,7 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
         gpp_model.load_state_dict(best_gpp_model_state)
         reco_model.load_state_dict(best_reco_model_state)
 
-    return gpp_model, reco_model
+    return gpp_model, reco_model, val_r2
 
 
 def compute_doy_sin_cos(date_strings):
@@ -1164,7 +1164,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 
 
     if train_models:
-        gpp_model, reco_model = better_fit_gpu(
+        gpp_model, reco_model, val_r2 = better_fit_gpu(
             tram=tramontana_run,
             hidden_layer_size=hidden_size,
             X_gpp_train=splits['train']['gpp'],
@@ -1190,12 +1190,25 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
                        f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                        f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
+
     evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES)
+    results_dict[f"experiment_{experiment_id}"]['metrics']['val_r2'] = round(val_r2, 4)
 
 
 
 print(json.dumps(results_dict, indent = 4))
-
+for experiment_id in results_dict:
+  experiment = results_dict[experiment_id]
+  print(f""
+        # f"{experiment_id}\n"
+        # f"gpp inputs {'_'.join(experiment['gpp_inputs'])}\n"
+        # f"reco inputs {'_'.join(experiment['reco_inputs'])}\n"
+        f"{experiment['metrics']['val_r2']},"
+        f"{experiment['metrics']['DT_GPP_vs_model']['r2']},"
+        f"{experiment['metrics']['NT_GPP_vs_model']['r2']},"
+        f"{experiment['metrics']['DT_RECO_vs_model']['r2']},"
+        f"{experiment['metrics']['NT_RECO_vs_model']['r2']}"
+  )
 """
 TODO:
 - DONE - more elaborate early stopping condition
