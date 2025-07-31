@@ -10,6 +10,7 @@ import math
 import re
 from scipy.stats import linregress
 import json
+import sys
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -675,18 +676,29 @@ def prepare_data_using_csv (file_name, block_size):
     # 3. Collect all variables that haven't been normalized yet. 
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO"]
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
 
-    # 4. Prep the pot radiation half hourly diff, daily average, and daily average diff
+    # 4.1 Prep the WTD, WTD half hourly diff, WTD daily avg, WTD, daily diff.
+    wtd, _, feature_name, _ = load_data("data/{}".format(file_name), ["WTD"], [])
+    half_hourly_diff_wtd, daily_avg_wtd, daily_diff_wtd = block_average_and_diff_expand(wtd, block_size)
+    all_wtd_data = torch.cat((wtd, half_hourly_diff_wtd, daily_avg_wtd, daily_diff_wtd), 1)
+
+    all_feature_names.extend(feature_name)
+    all_feature_names.extend(["WTD_HalfHourlyDiff", "WTD_DailyAvg", "WTD_DailyDiff"])
+
+    # 4.2 Prep the pot radiation half hourly diff, daily average, and daily average diff
     pot_rad_half_hourly, _, feature_name, _ = load_data("data/{}".format(file_name), ["PotRad"], [])
-    half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size=48)
+    half_hourly_diff, daily_avg, daily_diff = block_average_and_diff_expand(pot_rad_half_hourly, block_size)
     all_pot_rad_data = torch.cat((pot_rad_half_hourly, half_hourly_diff, daily_avg, daily_diff), 1)
     
     all_feature_names.extend(feature_name)
     all_feature_names.extend(["PotRadHalfHourlyDiff", "PotRadDailyAvg", "PotRadDailyDiff"])
+
+
+
 
 
     # 5. For wind direction, convert degrees (0 to 360) into sin/cos representation
@@ -702,12 +714,12 @@ def prepare_data_using_csv (file_name, block_size):
     gpp_prox_and_nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
     all_feature_names.extend(["GPP_PROX", "NIGHTLY_NEE_AVG"])
 
-    return torch.cat((doy_cos_sin, time_float, measured_features_tensor_raw, \
+    return torch.cat((doy_cos_sin, time_float, measured_features_tensor_raw, all_wtd_data, \
                       all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average), 1), \
                         all_feature_names
     
 
-def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFrame:
+def load_and_clean_csv(file_path: str, block_size: int, drop_value: float = -9999.0) -> pd.DataFrame:
     """
     Loads a CSV file, drops rows where any value equals `drop_value`.
 
@@ -720,8 +732,25 @@ def load_and_clean_csv(file_path: str, drop_value: float = -9999.0) -> pd.DataFr
     """
     df = pd.read_csv(file_path)
 
-    # Drop rows where any column contains the drop_value
-    clean_df = df[~(df == drop_value).any(axis=1)].reset_index(drop=True)
+    # Count how many times drop_value appears in each column
+    missing_counts = (df == drop_value).sum()
+
+    # Calculate missing ratio as percentage
+    missing_ratio = (missing_counts / len(df)) * 100
+    print(f"Ratios of missing variables in file {file_path}:\n{missing_ratio.sort_values(ascending=False)}")
+
+    # Identify rows with any drop_value
+    drop_mask = (df == drop_value).any(axis=1)
+
+    # Extend mask to include 48*3 rows above and below. (48 is the data per day. And *3 is because a missing data
+    #   point can dirty up the day before and day after. So drop off 3 days of data around the missing data points.
+    # This is VERY IMPORTANT. OTHERWISE HALF HOURLY DIFF/ daily diff VARIABLES MIGHT HAVE VALUES LIKE 9997.531.
+    extended_mask = drop_mask.copy()
+    extended_mask |= drop_mask.shift(block_size*3, fill_value=False)
+    extended_mask |= drop_mask.shift(-block_size*3, fill_value=False)
+
+    # Drop the marked rows and reset index
+    clean_df = df[~extended_mask].reset_index(drop=True)
 
     return clean_df
 
@@ -999,14 +1028,15 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-train_models = True
-save_models = True
+run_experiments = False
+train_models = False # if you don't train, the existing model will be loaded for evaluation.
+save_models = False # you can train to see the results. But you don't have to save the model.
 hidden_size = 12
 
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = False
+tramontana_run = True
 run_type_str = get_run_type_str(tramontana_run=tramontana_run)
 
 print(f"pre_processing: {pre_processing}\
@@ -1018,7 +1048,8 @@ print(f"pre_processing: {pre_processing}\
       tramontana_run: {tramontana_run} \
       ")
 
-file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
+# file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
+file_name = "CADSM_nee_partition_202109170000_202505292359.csv"
 # site_name = get_first_5_letters(filename=file_name)
 site_name = "temp"
 if site_name is None:
@@ -1031,9 +1062,9 @@ clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that 
 
 # ONLY NORMALIZE THE CLEAN FILE. Otherwise -9999's will affect the normalization.
 normalized_file_name = "data/Normalized_{}".format(file_name)
+block_size = 48 #half hourly data leads to 48 data points per day.
 
 if pre_processing:
-    block_size = 48 #half hourly data leads to 48 data points per day.
     print("pre-processing the third stage file to obtain/calculate the necessary features")
     try:
         prepped_data, feature_names = prepare_data_using_csv(file_name, block_size)
@@ -1054,10 +1085,13 @@ if pre_processing:
 if drop_na:
     # load_and_clean will drop all rows at least one missing value (ie. -9999)
     print("dropping rows with missing values")
-    df_clean = load_and_clean_csv(processed_file_name)
+    df_clean = load_and_clean_csv(processed_file_name, block_size)
 
-    print(f"Original rows: {len(pd.read_csv(processed_file_name))}")
-    print(f"Cleaned rows:  {len(df_clean)}")
+    original_file_len = len(pd.read_csv(processed_file_name))
+    cleaned_file_len = len(df_clean)
+    print(f"Original rows: {original_file_len}")
+    print(f"Cleaned rows:  {cleaned_file_len}")
+    print(f"Preserved data ratio: {cleaned_file_len/original_file_len}")
     """
     Original rows: 87600
     Cleaned rows:  56870
@@ -1077,9 +1111,9 @@ if drop_na:
 
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
-    # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+    # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     
-    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
     
@@ -1102,9 +1136,10 @@ if normalize_raw_features:
     df_normalized = pd.DataFrame(all_features.numpy(), columns=all_feature_names)
     df_normalized.to_csv(normalized_file_name, index=False)    
 
-
+if not run_experiments:
+    sys.exit("Stopping before running the experiments.")
 # Read normalized values file then do backprop magic time.
-# all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG']
+
 # OG structure:
 # GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
 # RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
@@ -1121,6 +1156,8 @@ GPP_INPUT_FEATURES_SETS = [
     ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'],
     # DAILY VARS
     ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX']
+    # Non-daily vars
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'WD_COS', 'WD_SIN'],
 
 ]
 RECO_INPUT_FEATURES_SETS = [
@@ -1133,6 +1170,8 @@ RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'],
     # DAILY VARS
     ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG']
+    # Non-daily vars
+    ['TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN'],
 ]
 
 assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
