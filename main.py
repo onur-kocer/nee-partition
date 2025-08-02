@@ -1028,15 +1028,15 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
 pre_processing = False
 drop_na = False
 normalize_raw_features = False
-run_experiments = False
-train_models = False # if you don't train, the existing model will be loaded for evaluation.
-save_models = False # you can train to see the results. But you don't have to save the model.
+run_experiments = True
+train_models = True # if you don't train, the existing model will be loaded for evaluation.
+save_models = True # you can train to see the results. But you don't have to save the model.
 hidden_size = 12
 
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = True
+tramontana_run = False
 run_type_str = get_run_type_str(tramontana_run=tramontana_run)
 
 print(f"pre_processing: {pre_processing}\
@@ -1152,12 +1152,15 @@ GPP_INPUT_FEATURES_SETS = [
     ['SW_IN', 'TA', 'VPD', 'WS'],
     ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN'], # 4
     ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
 
-    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'],
     # DAILY VARS
-    ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX']
+    ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX'],
     # Non-daily vars
     ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'WD_COS', 'WD_SIN'],
+    # Full Vars
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'],
 
 ]
 RECO_INPUT_FEATURES_SETS = [
@@ -1166,12 +1169,15 @@ RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
     ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN'], # 4
     ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
 
-    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'],
     # DAILY VARS
-    ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG']
+    ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG'],
     # Non-daily vars
     ['TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN'],
+    # Full Vars
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'],
 ]
 
 assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
