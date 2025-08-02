@@ -5,12 +5,13 @@ import torch.nn.init as init
 import matplotlib.pyplot as plt
 import pandas as pd
 from typing import List, Tuple, Union
-from datetime import datetime
 import math
 import re
 from scipy.stats import linregress
 import json
 import sys
+import time as tm
+from datetime import datetime, timedelta
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -959,8 +960,8 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
     if save_plot:
         plt.savefig(plot_saving_str, dpi=300)  # Save the figure with high resolution
         plt.close()
-    else:
-        plt.show()
+    # else:
+    #     plt.show()
 
     run_metrics = True
     if run_metrics:
@@ -1023,6 +1024,9 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
             f"DT_RECO vs NT_RECO R²={metrics['DT_RECO_vs_NT_RECO']['r2']:.2f} RMSE={metrics['DT_RECO_vs_NT_RECO']['rmse']:.2f}\n"
         )
 
+
+def format_duration(seconds):
+    return str(timedelta(seconds=int(seconds)))
 
 
 pre_processing = False
@@ -1252,6 +1256,9 @@ RECO_INPUT_FEATURES_SETS = [
 
 assert len(GPP_INPUT_FEATURES_SETS) == len(RECO_INPUT_FEATURES_SETS), "You need to have the same number of subsets"
 
+start_time = tm.time()
+print(f"Run started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
 results_dict = {} # this will store all experiment outputs.
 for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[experiment_id]
@@ -1324,6 +1331,13 @@ for experiment_id in results_dict:
         f"{experiment['metrics']['DT_RECO_vs_model']['r2']},"
         f"{experiment['metrics']['NT_RECO_vs_model']['r2']}"
   )
+
+
+end_time = tm.time()
+duration = end_time - start_time
+
+print(f"Run ended at:   {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print(f"Total duration: {format_duration(duration)} (hh:mm:ss)")
 """
 TODO:
 - DONE - more elaborate early stopping condition
