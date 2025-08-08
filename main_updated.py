@@ -52,7 +52,14 @@ class SNN_GPP_Tram(nn.Module):
             nn.Sigmoid(),
             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
         )
+        self._init_weights()
 
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)
     def forward(self, x):
         return self.net(x)
 
@@ -65,6 +72,14 @@ class SNN_RECO_Tram(nn.Module):
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
         )
+        self._init_weights()
+
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)        
 
     def forward(self, x):
         return self.net(x)
@@ -159,8 +174,11 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     X_reco_val = X_reco_val.to(device)
     y_val = y_val.to(device)
     if tram:
+        # SW_IN_RAW_train = threshold_zero(SW_IN_RAW_train, threshold=10.0)
+        # SW_IN_RAW_val = threshold_zero(SW_IN_RAW_val, threshold=10.0)
         SW_IN_RAW_train = SW_IN_RAW_train.to(device)
         SW_IN_RAW_val = SW_IN_RAW_val.to(device)
+
     # Else these variables do not need to be moved to the GPU.
 
     # Instantiate models
@@ -705,7 +723,18 @@ def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch
     return ((X_norm / 2) + 0.5) * range_ + X_min # for -1 and 1
     result = X_norm * (range_) + X_min # for 0 and 1
 
+def threshold_zero(tensor: torch.Tensor, threshold: float) -> torch.Tensor:
+    """
+    Sets all values in the input tensor lower than the given threshold to zero.
 
+    Args:
+        tensor (torch.Tensor): Input tensor.
+        threshold (float): Threshold value.
+
+    Returns:
+        torch.Tensor: Tensor with values below threshold set to zero.
+    """
+    return torch.where(tensor < threshold, torch.tensor(0.0, device=tensor.device), tensor)
 
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
@@ -732,7 +761,7 @@ def prepare_data_using_csv (file_name, block_size):
     # 3. Collect all variables that haven't been normalized yet. 
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO"]
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
@@ -957,28 +986,29 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
         gpp_pred = trained_gpp_model(gpp_inputs.to(device))
         reco_pred = trained_reco_model(reco_inputs.to(device))
         if tramontana_run:
-            SW_IN_RAW_values = sw_in_raw.to(device)
-            gpp_pred = gpp_pred * SW_IN_RAW_values
+            # sw_in_raw = threshold_zero(sw_in_raw, threshold=10.0)
+            sw_in_raw = sw_in_raw.to(device)
+            gpp_pred = gpp_pred * sw_in_raw
             gpp_pred = torch.relu(gpp_pred)
 
 
 
     # The network is trained on the normalized NEE values. That means that the subnetwork predictions are also normalized.
     # So before plotting them, the values need to be un-normalized. For this we need the Raw NEE values from the clean file(clean_file_name)
-    # raw_nee_name =  ['NEE']
-    # # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
-    # raw_nee, _, _, _ = load_data("{}".format(clean_file_name), raw_nee_name, [], prep_doy_sin_cos = False);
+    raw_nee_name =  ['NEE']
+    # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
+    raw_nee, _, _, _ = load_data("{}".format(clean_file_name), raw_nee_name, [], prep_doy_sin_cos = False);
 
-    # # Normalize Raw Features just to get the nee_min and nee_max vals.
-    # _, nee_min, nee_max = normalize_features(raw_nee)
-    # print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NEE max: {nee_max}')
+    # Normalize Raw Features just to get the nee_min and nee_max vals.
+    _, nee_min, nee_max = normalize_features(raw_nee)
+    print(f'Un-normalizing the GPP and RECO predictions using NEE min: {nee_min}, NEE max: {nee_max}')
 
-    # reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
-    # gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
+    reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
+    gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
 
     #TODO: no normalization done here lolze
-    reco_pred_raw = reco_pred
-    gpp_pred_raw = gpp_pred
+    # reco_pred_raw = reco_pred
+    # gpp_pred_raw = gpp_pred
 
     df = pd.DataFrame({
         'hour': time.squeeze().cpu().numpy(),
@@ -1093,7 +1123,7 @@ def format_duration(seconds):
 
 pre_processing = False
 drop_na = False
-normalize_raw_features = True
+normalize_raw_features = False
 run_experiments = True
 train_models = True # if you don't train, the existing model will be loaded for evaluation.
 save_models = True # you can train to see the results. But you don't have to save the model.
@@ -1102,7 +1132,7 @@ hidden_size = 12
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = True
+tramontana_run = False
 run_type_str = get_run_type_str(tramontana_run=tramontana_run)
 
 print(f"pre_processing: {pre_processing}\
@@ -1117,7 +1147,8 @@ print(f"pre_processing: {pre_processing}\
 # file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
 # file_name = "CADSM_nee_partition_202109170000_202505292359.csv" #Working.
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025
-file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
+# file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
+file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
 # site_name = get_first_5_letters(filename=file_name)
 site_name = "temp"
 if site_name is None:
@@ -1180,13 +1211,10 @@ if drop_na:
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
-    
-
-    
-    # neeless
-    raw_feature_names =  ['SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+        
     # neely
-    # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+
     # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
@@ -1197,7 +1225,7 @@ if normalize_raw_features:
     # 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN' do not need to be normalized as the are already normalized.
     # 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO' will only be used for metrics. We don't need to normalize them.
     # Important Note: NEE is no longer normalized.
-    other_feature_names = ['NEE', 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
+    other_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
     other_features, _, other_feature_names, _ = \
             load_data("{}".format(clean_file_name), other_feature_names, [], prep_doy_sin_cos = False);
 
@@ -1306,6 +1334,7 @@ RECO_INPUT_FEATURES_SETS = [
 
     # # TRAM Full Vars (including WTD)
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12
+    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12 only ts1
     # # TRAM Full Vars + Salinity
     # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity'], # 13
     # # TRAM Full Vars + WTD_HalfHourlyDiff
@@ -1374,7 +1403,8 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 
 
     # Not sure if this is the cleanest way. But keep for now as we need to validate.
-    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+    # splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.8, val_ratio=0.2, test_ratio=0)
 
     val_r2 = float('-inf')
     if train_models:
@@ -1398,11 +1428,11 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     model_inputs_information = (f"\n\n\nMetrics for the {run_type_str}, with\n"
                 f"GPP inputs: {GPP_INPUT_FEATURES}\n"
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
-    save_plot = False # too long to save now # TODO: fix fig str if you need to plot with long list of vars
+    save_plot = True # too long to save now # TODO: fix fig str if you need to plot with long list of vars
     # prep the plot saving str
-    plot_saving_str = (f"./experiment_figures/{run_type_str}_"
-                       f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
-                       f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
+    plot_saving_str = (f"./experiment_figures/{run_type_str}_{experiment_id + 1}"
+                    #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
+                    #    f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
 
     evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES)
