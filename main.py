@@ -984,7 +984,7 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
     reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
     gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
 
-    #TODO: If NEE wasn't normalized, you'd use this:
+    # IF you use NEE_raw (raw NEE) for training your gpp and reco predictions will already be in the correct scale!
     # reco_pred_raw = reco_pred
     # gpp_pred_raw = gpp_pred
 
@@ -1202,7 +1202,7 @@ if normalize_raw_features:
     other_features, _, other_feature_names, _ = \
             load_data("{}".format(clean_file_name), other_feature_names, [], prep_doy_sin_cos = False);
 
-    
+
     all_feature_names = []
     all_feature_names.extend(other_feature_names)
     all_feature_names.extend(raw_feature_names)
@@ -1212,6 +1212,61 @@ if normalize_raw_features:
     df_normalized = pd.DataFrame(all_features.numpy(), columns=all_feature_names)
     df_normalized.to_csv(normalized_file_name, index=False)    
 
+observe_diurnal_variable_patterns = False
+if observe_diurnal_variable_patterns:
+    # USE the clean file for now so that you don't have to do ignoring
+    # if you later wanna do group by month or year stuff, you could add that stuff to processed and clean files
+    # as YYYY DDD tensors. Presently, just group by time.
+    time, _, feature_name_time, _ = load_data("{}".format(clean_file_name), ["TIME"] , [], prep_doy_sin_cos = False)
+    wtd, _, feature_name_wtd, _ = load_data("{}".format(clean_file_name), ["WTD"] , [], prep_doy_sin_cos = False)
+    ts, _, feature_name_ts, _ = load_data("{}".format(clean_file_name), ["TS_1"] , [], prep_doy_sin_cos = False)
+
+    df = pd.DataFrame({
+        'hour': time.squeeze().cpu().numpy(),
+        'wtd': wtd.squeeze().cpu().numpy(),
+        'ts': ts.squeeze().cpu().numpy(),
+    })
+    mean_or_median = 'mean'
+    # Group and compute mean ± std
+    wtd_stats = df.groupby('hour')['wtd'].agg([mean_or_median, 'std'])
+    ts_stats = df.groupby('hour')['ts'].agg([mean_or_median, 'std'])
+
+
+    # Extract stats
+    hours = wtd_stats.index
+    wtd_mean = wtd_stats[mean_or_median]
+    wtd_std = wtd_stats['std']
+
+    ts_mean = ts_stats[mean_or_median]
+    ts_std = ts_stats['std']
+
+    fig, ax1 = plt.subplots(figsize=(7, 5))
+    # --- Plot WTD on the left y-axis ---
+    color_wtd = 'tab:blue'
+    ax1.set_xlabel('Hour of Day')
+    ax1.set_ylabel('WTD', color=color_wtd)
+    ax1.plot(hours, wtd_mean, color=color_wtd, label='WTD')
+    # ax1.fill_between(hours, wtd_mean - wtd_std, wtd_mean + wtd_std,
+    #                 color=color_wtd, alpha=0.2, label='WTD ± 1 STD')
+    ax1.tick_params(axis='y', labelcolor=color_wtd)
+
+    # --- Plot TS on the right y-axis ---
+    ax2 = ax1.twinx()
+    color_ts = 'tab:red'
+    ax2.set_ylabel('TS', color=color_ts)
+    ax2.plot(hours, ts_mean, color=color_ts, label='TS')
+    # ax2.fill_between(hours, ts_mean - ts_std, ts_mean + ts_std,
+    #                 color=color_ts, alpha=0.2, label='TS ± 1 STD')
+    ax2.tick_params(axis='y', labelcolor=color_ts)
+
+    # --- Final touches ---
+    plt.title(f"WTD and TS over Hour of Day ({mean_or_median.capitalize()} ± 1 STD)")
+    fig.tight_layout()
+    plt.show()
+
+
+
+
 if not run_experiments:
     sys.exit("Stopping before running the experiments.")
 # Read normalized values file then do backprop magic time.
@@ -1219,6 +1274,7 @@ if not run_experiments:
 # OG structure:
 # GPP_INPUT_FEATURES = ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX']
 # RECO_INPUT_FEATURES = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+
 NEE = ['NEE']
 TIME = ['TIME']
 
@@ -1357,8 +1413,7 @@ results_dict = {} # this will store all experiment outputs.
 for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[experiment_id]
     RECO_INPUT_FEATURES = RECO_INPUT_FEATURES_SETS[experiment_id]
-
-# Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
+    # Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
     gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
     reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
     true_nee, _, true_nee_name, _ = load_data("{}".format(normalized_file_name), NEE, [], prep_doy_sin_cos = False)

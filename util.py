@@ -1,7 +1,7 @@
 def compare_two_models ():
   print(f"Hello!")
 
-dict = {
+results_dict = {
     "experiment_0": {
         "run_type": "Custom",
         "gpp_inputs": [
@@ -676,17 +676,38 @@ dict = {
     }
 }
   
-# print(dict)
-for experiment_id in dict:
-  experiment = dict[experiment_id]
-  print(f"{experiment_id}\n"
-        f"gpp inputs {'_'.join(experiment['gpp_inputs'])}\n"
-        f"reco inputs {'_'.join(experiment['reco_inputs'])}\n"
-        f"{experiment['metrics']['DT_GPP_vs_model']['r2']}\\t"
-        f"{experiment['metrics']['NT_GPP_vs_model']['r2']}\\t"
-        f"{experiment['metrics']['DT_RECO_vs_model']['r2']}\\t"
+# print(results_dict)
+for experiment_id in results_dict:
+  experiment = results_dict[experiment_id]
+  print(f""
+        # f"{experiment_id}\n"
+        # f"gpp inputs {'_'.join(experiment['gpp_inputs'])}\n"
+        # f"reco inputs {'_'.join(experiment['reco_inputs'])}\n"
+        f"{experiment['metrics']['DT_GPP_vs_model']['r2']},"
+        f"{experiment['metrics']['NT_GPP_vs_model']['r2']},"
+        f"{experiment['metrics']['DT_RECO_vs_model']['r2']},"
         f"{experiment['metrics']['NT_RECO_vs_model']['r2']}"
-        f"\n"
+        # f"\n"
         )
-0.38,0.35,-4.67,-6.22  
 
+list = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+
+for index in range(len(list)):
+  temp_list = list.copy()
+  temp_list.pop(index)
+  print(temp_list)
+"""
+['DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'NIGHTLY_NEE_AVG']
+['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN']
+
+"""
