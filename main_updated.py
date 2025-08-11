@@ -669,31 +669,14 @@ def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, tor
 
     # Prevent division by zero
     # range_ = (X_max - X_min).clamp(min=1e-8)
-
     # X_norm = 2 * ((X - X_min) / range_ - 0.5) - for -1 and 1 (this doesn't preserve 0 point)
     # X_norm = (X - X_min) / (range_) # for  0 and 1
+    # TRAM: Equation equiv to above.
+    # range_ = (X_max - X_min).clamp(min=1e-8) # this is equiv to just 2*X_max or -2*Xmin
 
-    # THIS I think is the best way to go.
-    # it still maps to -1 and 1. Preserves the 0 point. 
-    # ie preserves the meaning of the sign of values.
-    # BUT, DOES NOT RESCALE THE VALUES. 
-    # their paper does rescale either the neg or pos values unless 
-    # max(abs(X_min)) == max(abs(X_max))
-    
-    # the two rescaling versions are equivalent.
     # clamp to avoid div by 0
     x_abs_max = torch.maximum(abs(X_min), abs(X_max)).clamp(min=1e-8)
     X_norm = X / x_abs_max
-
-
-    # TRAM: Equation.
-    # print("normalizing the Tramontana way")
-    # x_abs_max = torch.maximum(abs(X_min), abs(X_max))
-    # X_min = - x_abs_max
-    # X_max = x_abs_max
-    # range_ = (X_max - X_min).clamp(min=1e-8) # this is equiv to just 2*X_max or -2*Xmin
-    # X_norm = 2 * ((X - X_min) / (range_) - 0.5)
-
 
     return X_norm, X_min, X_max
 
@@ -719,9 +702,7 @@ def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch
     X = X_norm * x_abs_max
 
     return X
-    # range_ = (X_max - X_min).clamp(min=1e-8)
-    return ((X_norm / 2) + 0.5) * range_ + X_min # for -1 and 1
-    result = X_norm * (range_) + X_min # for 0 and 1
+
 
 def threshold_zero(tensor: torch.Tensor, threshold: float) -> torch.Tensor:
     """
@@ -761,8 +742,9 @@ def prepare_data_using_csv (file_name, block_size):
     # 3. Collect all variables that haven't been normalized yet. 
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
+    # USEDN
     measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
-    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # CADSM measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
@@ -957,10 +939,6 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
           f"trained gpp model:\n {trained_gpp_model}, trained_reco_model:\n {trained_reco_model}")
 
 
-    # import pdb; pdb.set_trace()
-    # print("GPP  Linear layer bias data:", trained_gpp_model.bias.data)
-    # print("RECO Linear layer bias data:", trained_reco_model.bias.data)
-
     # Time for eval.
     trained_gpp_model.eval()
     trained_reco_model.eval()
@@ -1006,7 +984,7 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
     reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
     gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
 
-    #TODO: no normalization done here lolze
+    #TODO: If NEE wasn't normalized, you'd use this:
     # reco_pred_raw = reco_pred
     # gpp_pred_raw = gpp_pred
 
@@ -1211,11 +1189,7 @@ if drop_na:
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
-        
-    # neely
-    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
-
-    # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
     
@@ -1224,7 +1198,6 @@ if normalize_raw_features:
 
     # 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN' do not need to be normalized as the are already normalized.
     # 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO' will only be used for metrics. We don't need to normalize them.
-    # Important Note: NEE is no longer normalized.
     other_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
     other_features, _, other_feature_names, _ = \
             load_data("{}".format(clean_file_name), other_feature_names, [], prep_doy_sin_cos = False);
@@ -1250,36 +1223,36 @@ NEE = ['NEE']
 TIME = ['TIME']
 
 GPP_INPUT_FEATURES_SETS = [
-    # ['SW_IN', 'TA'],
-    # ['SW_IN', 'TA', 'VPD'],
-    # ['SW_IN', 'TA', 'VPD', 'WS'],
-    # ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN'], # 4
-    # ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
-    # ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
-    # ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
-    # ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 8
+    ['SW_IN', 'TA'],
+    ['SW_IN', 'TA', 'VPD'],
+    ['SW_IN', 'TA', 'VPD', 'WS'],
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN'], # 4
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
+    ['SW_IN', 'TA', 'VPD', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 8
 
-    # # DAILY VARS
-    # ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX'], # 9
-    # # Non-daily vars
-    # ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'WD_COS', 'WD_SIN'], # 10
+    # DAILY VARS
+    ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX'], # 9
+    # Non-daily vars
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'WD_COS', 'WD_SIN'], # 10
     
-    # # TRAM Full Vars (excluding WTD)
-    # ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 11
+    # TRAM Full Vars (excluding WTD)
+    ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 11
     
-    # # TRAM Full Vars (including WTD)
+    # TRAM Full Vars (including WTD)
     ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 12
-    # - sw_in
+    # # - sw_in
     # ['VPD', 'TA', 'WTD', 'WS', 'WD_COS', 'WD_SIN'], # 12
-    # # TRAM Full Vars + Salinity
-    # ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity'], # 13
-    # # TRAM Full Vars + WTD_HalfHourlyDiff
-    # ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'WTD_HalfHourlyDiff'], # 14
+    # TRAM Full Vars + Salinity
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity'], # 13
+    # TRAM Full Vars + WTD_HalfHourlyDiff
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'WTD_HalfHourlyDiff'], # 14
 
-    # # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
-    # ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
-    # # Full Vars (tidal diff and avg)
-    # ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
+    # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
+    # Full Vars (tidal diff and avg)
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
 
 
     # # GPP Leave one out experiments
@@ -1314,36 +1287,36 @@ GPP_INPUT_FEATURES_SETS = [
 
 ]
 RECO_INPUT_FEATURES_SETS = [
-    # ['DOY_sin', 'DOY_cos', 'TA'],
-    # ['DOY_sin', 'DOY_cos', 'TA'],
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN'], # 4
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
-    # ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 8
+    ['DOY_sin', 'DOY_cos', 'TA'],
+    ['DOY_sin', 'DOY_cos', 'TA'],
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS'],
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN'], # 4
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD'], # 5
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity'], # 6
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff'], # 7
+    ['DOY_sin', 'DOY_cos', 'TA', 'WS', 'WD_COS', 'WD_SIN', 'WTD', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 8
 
-    # # DAILY VARS
-    # ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG'], # 9
-    # # Non-daily vars
-    # ['TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN'], # 10
+    # DAILY VARS
+    ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG'], # 9
+    # Non-daily vars
+    ['TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN'], # 10
     
-    # # TRAM Full Vars (excluding WTD)
-    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 11
+    # TRAM Full Vars (excluding WTD)
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 11
     
 
-    # # TRAM Full Vars (including WTD)
+    # TRAM Full Vars (including WTD)
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12
     # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12 only ts1
-    # # TRAM Full Vars + Salinity
-    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity'], # 13
-    # # TRAM Full Vars + WTD_HalfHourlyDiff
-    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'WTD_HalfHourlyDiff'], # 14
+    # TRAM Full Vars + Salinity
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity'], # 13
+    # TRAM Full Vars + WTD_HalfHourlyDiff
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'WTD_HalfHourlyDiff'], # 14
     
-    # # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
-    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
-    # # Full Vars (tidal diff and avg)
-    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
+    # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
+    # Full Vars (tidal diff and avg)
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
 
 
     # # GPP Leave one out experiments
@@ -1384,7 +1357,7 @@ results_dict = {} # this will store all experiment outputs.
 for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     GPP_INPUT_FEATURES = GPP_INPUT_FEATURES_SETS[experiment_id]
     RECO_INPUT_FEATURES = RECO_INPUT_FEATURES_SETS[experiment_id]
-    # normalized_file_name = clean_file_name
+
 # Read all data. Both normalized variables, and the variables that do not need to be normalized are saved in this file.
     gpp_inputs, _, gpp_input_names, _ = load_data("{}".format(normalized_file_name), GPP_INPUT_FEATURES, [], prep_doy_sin_cos = False)
     reco_inputs, _, reco_input_names, _ = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES, [], prep_doy_sin_cos = False)
@@ -1428,7 +1401,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     model_inputs_information = (f"\n\n\nMetrics for the {run_type_str}, with\n"
                 f"GPP inputs: {GPP_INPUT_FEATURES}\n"
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
-    save_plot = True # too long to save now # TODO: fix fig str if you need to plot with long list of vars
+    save_plot = True
     # prep the plot saving str
     plot_saving_str = (f"./experiment_figures/{run_type_str}_{experiment_id + 1}"
                     #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
