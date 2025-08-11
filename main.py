@@ -16,6 +16,32 @@ from datetime import datetime, timedelta
 # from torchmetrics.functional import r2_score
 
 
+# class SNN_GPP_Tram(nn.Module):
+#     def __init__(self, input_dim, hidden_layer_size):
+#         super(SNN_GPP_Tram, self).__init__()
+#         self.net = nn.Sequential(
+#             nn.Linear(input_dim, hidden_layer_size),
+#             nn.Tanh(),
+#             nn.Linear(hidden_layer_size, 1),
+#             nn.Sigmoid(),
+#             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
+#         )
+
+#     def forward(self, x):
+#         return self.net(x)
+
+# class SNN_RECO_Tram(nn.Module):
+#     def __init__(self, input_dim, hidden_layer_size):
+#         super(SNN_RECO_Tram, self).__init__()
+#         self.net = nn.Sequential(
+#             nn.Linear(input_dim, hidden_layer_size),
+#             nn.Tanh(),
+#             nn.Linear(hidden_layer_size, 1),
+#             nn.Sigmoid(),
+#         )
+
+#     def forward(self, x):
+#         return self.net(x)
 class SNN_GPP_Tram(nn.Module):
     def __init__(self, input_dim, hidden_layer_size):
         super(SNN_GPP_Tram, self).__init__()
@@ -26,7 +52,14 @@ class SNN_GPP_Tram(nn.Module):
             nn.Sigmoid(),
             # TODO: NEED TO LATER ON MULTIPLY THE OUTPUT OF THIS WITH SW_IN, THEN PUSH IT THROUGH POSLIN.
         )
+        self._init_weights()
 
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)
     def forward(self, x):
         return self.net(x)
 
@@ -39,6 +72,14 @@ class SNN_RECO_Tram(nn.Module):
             nn.Linear(hidden_layer_size, 1),
             nn.Sigmoid(),
         )
+        self._init_weights()
+
+    def _init_weights(self):
+        for layer in self.net:
+            if isinstance(layer, nn.Linear):
+                init.xavier_uniform_(layer.weight)
+                if layer.bias is not None:
+                    init.zeros_(layer.bias)        
 
     def forward(self, x):
         return self.net(x)
@@ -133,8 +174,11 @@ def better_fit_gpu(X_gpp_train, X_reco_train, y_train,
     X_reco_val = X_reco_val.to(device)
     y_val = y_val.to(device)
     if tram:
+        # SW_IN_RAW_train = threshold_zero(SW_IN_RAW_train, threshold=10.0)
+        # SW_IN_RAW_val = threshold_zero(SW_IN_RAW_val, threshold=10.0)
         SW_IN_RAW_train = SW_IN_RAW_train.to(device)
         SW_IN_RAW_val = SW_IN_RAW_val.to(device)
+
     # Else these variables do not need to be moved to the GPU.
 
     # Instantiate models
@@ -624,9 +668,15 @@ def normalize_features(X: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, tor
     X_max = X.max(dim=0).values
 
     # Prevent division by zero
-    range_ = (X_max - X_min).clamp(min=1e-8)
+    # range_ = (X_max - X_min).clamp(min=1e-8)
+    # X_norm = 2 * ((X - X_min) / range_ - 0.5) - for -1 and 1 (this doesn't preserve 0 point)
+    # X_norm = (X - X_min) / (range_) # for  0 and 1
+    # TRAM: Equation equiv to above.
+    # range_ = (X_max - X_min).clamp(min=1e-8) # this is equiv to just 2*X_max or -2*Xmin
 
-    X_norm = 2 * ((X - X_min) / range_ - 0.5)
+    # clamp to avoid div by 0
+    x_abs_max = torch.maximum(abs(X_min), abs(X_max)).clamp(min=1e-8)
+    X_norm = X / x_abs_max
 
     return X_norm, X_min, X_max
 
@@ -648,9 +698,24 @@ def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch
     X_min = X_min.to(device)
     X_max = X_max.to(device)
 
-    range_ = (X_max - X_min).clamp(min=1e-8)
-    return ((X_norm / 2) + 0.5) * range_ + X_min
+    x_abs_max = torch.maximum(abs(X_min), abs(X_max)).clamp(min=1e-8)
+    X = X_norm * x_abs_max
 
+    return X
+
+
+def threshold_zero(tensor: torch.Tensor, threshold: float) -> torch.Tensor:
+    """
+    Sets all values in the input tensor lower than the given threshold to zero.
+
+    Args:
+        tensor (torch.Tensor): Input tensor.
+        threshold (float): Threshold value.
+
+    Returns:
+        torch.Tensor: Tensor with values below threshold set to zero.
+    """
+    return torch.where(tensor < threshold, torch.tensor(0.0, device=tensor.device), tensor)
 
 # TODO: there is a bug! when loading reco_input_features and reco_target_features, if you have the same variable (SW_IN_1_1_1)
 # the same data will be pulled two times to both tensors.
@@ -677,7 +742,9 @@ def prepare_data_using_csv (file_name, block_size):
     # 3. Collect all variables that haven't been normalized yet. 
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # USEDN
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # CADSM measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
@@ -897,8 +964,9 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
         gpp_pred = trained_gpp_model(gpp_inputs.to(device))
         reco_pred = trained_reco_model(reco_inputs.to(device))
         if tramontana_run:
-            SW_IN_RAW_values = sw_in_raw.to(device)
-            gpp_pred = gpp_pred * SW_IN_RAW_values
+            # sw_in_raw = threshold_zero(sw_in_raw, threshold=10.0)
+            sw_in_raw = sw_in_raw.to(device)
+            gpp_pred = gpp_pred * sw_in_raw
             gpp_pred = torch.relu(gpp_pred)
 
 
@@ -915,8 +983,10 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
 
     reco_pred_raw = unnormalize_features(reco_pred, nee_min, nee_max)
     gpp_pred_raw = unnormalize_features(gpp_pred, nee_min, nee_max)
-    # gpp_pred_raw = -gpp_pred_raw # just to flip the view #ignore for now
 
+    #TODO: If NEE wasn't normalized, you'd use this:
+    # reco_pred_raw = reco_pred
+    # gpp_pred_raw = gpp_pred
 
     df = pd.DataFrame({
         'hour': time.squeeze().cpu().numpy(),
@@ -960,8 +1030,8 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
     if save_plot:
         plt.savefig(plot_saving_str, dpi=300)  # Save the figure with high resolution
         plt.close()
-    # else:
-    #     plt.show()
+    else:
+        plt.show()
 
     run_metrics = True
     if run_metrics:
@@ -1053,7 +1123,10 @@ print(f"pre_processing: {pre_processing}\
       ")
 
 # file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-file_name = "CADSM_nee_partition_202109170000_202505292359.csv"
+# file_name = "CADSM_nee_partition_202109170000_202505292359.csv" #Working.
+# file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025
+# file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
+file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
 # site_name = get_first_5_letters(filename=file_name)
 site_name = "temp"
 if site_name is None:
@@ -1116,7 +1189,6 @@ if drop_na:
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
-    
     raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
@@ -1164,12 +1236,23 @@ GPP_INPUT_FEATURES_SETS = [
     ['PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX'], # 9
     # Non-daily vars
     ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'WD_COS', 'WD_SIN'], # 10
-    # Full Vars
-    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 11
-    # Full Vars (tidal diff and avg) NO DAILY TIDAL VARS
-    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff'], # 12
+    
+    # TRAM Full Vars (excluding WTD)
+    ['SW_IN', 'VPD', 'TA', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 11
+    
+    # TRAM Full Vars (including WTD)
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX'], # 12
+    # # - sw_in
+    # ['VPD', 'TA', 'WTD', 'WS', 'WD_COS', 'WD_SIN'], # 12
+    # TRAM Full Vars + Salinity
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity'], # 13
+    # TRAM Full Vars + WTD_HalfHourlyDiff
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'WTD_HalfHourlyDiff'], # 14
+
+    # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
     # Full Vars (tidal diff and avg)
-    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 13
+    ['SW_IN', 'VPD', 'TA', 'WTD', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
 
 
     # # GPP Leave one out experiments
@@ -1217,12 +1300,23 @@ RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'NIGHTLY_NEE_AVG'], # 9
     # Non-daily vars
     ['TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN'], # 10
-    # Full Vars
-    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 11
-    # Full Vars (tidal diff and avg) NO DAILY TIDAL VARS
-    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff'], # 12
+    
+    # TRAM Full Vars (excluding WTD)
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 11
+    
+
+    # TRAM Full Vars (including WTD)
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12
+    # ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG'], # 12 only ts1
+    # TRAM Full Vars + Salinity
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity'], # 13
+    # TRAM Full Vars + WTD_HalfHourlyDiff
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'WTD_HalfHourlyDiff'], # 14
+    
+    # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
     # Full Vars (tidal diff and avg)
-    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 13
+    ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff'], # 16
 
 
     # # GPP Leave one out experiments
@@ -1282,9 +1376,10 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 
 
     # Not sure if this is the cleanest way. But keep for now as we need to validate.
-    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+    # splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
+    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.8, val_ratio=0.2, test_ratio=0)
 
-
+    val_r2 = float('-inf')
     if train_models:
         gpp_model, reco_model, val_r2 = better_fit_gpu(
             tram=tramontana_run,
@@ -1306,11 +1401,11 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     model_inputs_information = (f"\n\n\nMetrics for the {run_type_str}, with\n"
                 f"GPP inputs: {GPP_INPUT_FEATURES}\n"
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
-    save_plot = False # too long to save now # TODO: fix fig str if you need to plot with long list of vars
+    save_plot = True
     # prep the plot saving str
-    plot_saving_str = (f"./experiment_figures/{run_type_str}_"
-                       f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
-                       f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
+    plot_saving_str = (f"./experiment_figures/{run_type_str}_{experiment_id + 1}"
+                    #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
+                    #    f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
 
     evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES)
@@ -1338,6 +1433,8 @@ duration = end_time - start_time
 
 print(f"Run ended at:   {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print(f"Total duration: {format_duration(duration)} (hh:mm:ss)")
+
+
 """
 TODO:
 - DONE - more elaborate early stopping condition
