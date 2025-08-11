@@ -1,0 +1,137 @@
+
+# Make a copy of this template file and delete the "_template" from the name
+# Then define the requests accordingly
+# Each to level key is one request, that will output a csv with:
+#   * The corresponding traces 
+#   * For the specified stage
+#   * With the desired formatting
+# In this example:
+#   EP_biomet is one request; EP_dynamic_metadata is a separate request
+#   This template would produce two .csv files
+
+nee_partition:
+  stage: Third
+  formatting:
+    units_in_header: True
+    na_value: -9999
+    time_vectors: # Split (or don't) and format timestamp.  See EP_dynamic_metadata for example of split date & time columns
+      date:
+        output_name: DATE
+        fmt: '%Y-%m-%d'
+        units: yyyy-mm-dd
+      time:
+        output_name: TIME
+        fmt: '%H%M'
+        units: HHMM
+      # timestamp:
+      #   output_name: TIMESTAMP_1
+      #   fmt: '%Y-%m-%d %H%M'
+      #   units: yyyy-mm-dd HHMM
+  traces:
+    SW_IN_1_1_1:
+      units: W+1m-2
+      output_name: SW_IN
+    PotRad_uStar:
+      units: W+1m-2
+      output_name: PotRad
+    VPD_F_1_1_1: #CADSM USES VPD_1_1_1:
+      units: degC # ignore unit - shouldn't have too many gaps. BUT THERE IS A GAPFILLED VERSION
+      output_name: VPD
+    TA_1_1_1:
+      units: degC # shouldn't have too many gaps. BUT THERE IS A GAPFILLED VERSION
+      output_name: TA
+    TS_1_1_1: # IS NOT GAPFILLED CURRENTLY. THIS IS GOING TO LEAD TO DATA LOSS. LARGER GAPS (not necessarily for all the sites)
+      units: degC # ignore unit -
+      output_name: TS_1
+    # TS_2_1_1: # LENGTH OF THIS VARIABLE IS BROKEN IN USEDN
+    #   units: degC # ignore unit -
+    #   output_name: TS_2
+    TS_3_1_1:
+      units: degC # ignore unit -
+      output_name: TS_2
+    TS_4_1_1:
+      units: degC # ignore unit -
+      output_name: TS_3
+    TS_5_1_1:
+      units: degC # ignore unit -
+      output_name: TS_4
+    TS_6_1_1:
+      units: degC # ignore unit -
+      output_name: TS_5
+    TS_7_1_1:
+      units: degC # ignore unit -
+      output_name: TS_6
+    TS_8_1_1:
+      units: degC # ignore unit -
+      output_name: TS_7
+    WTD_1_1_1: # IS NOT GAPFILLED CURRENTLY. THIS IS GOING TO LEAD TO DATA LOSS. LARGER GAPS (not necessarily for all the sites)
+      units: degC # ignore unit -
+      output_name: WTD
+    WS_1_1_1: # IS NOT GAPFILLED CURRENTLY. 
+      units: degC # ignore unit -
+      output_name: WS
+    WD_1_1_1:
+      units: degC # ignore unit -
+      output_name: WD
+    SAL_LF_PI_F_2:  #CADSM  uses Salinity:
+      units: degC # ignore unit -
+      output_name: Salinity
+    # FP_NEEnight_uStar:
+    #   units: degC # ignore unit -
+    #   output_name: NEEnight #okay? # WE DON'T CARE FOR THIS ANYMORE! AS WE CALCULATE IT OURSELF USING NEE AND SW_IN
+    # NEE:
+    #   units: degC # ignore unit -
+    #   output_name: NEE
+    # FP_NEEnight_U95:
+    #   units: degC # ignore unit -
+    #   output_name: FP_NEEnight_U95
+    # GPP_U95_f:
+    #   units: degC # ignore unit -
+    #   output_name: GPP_U95_f
+    # NEE:
+    #   units: degC # ignore unit -
+    #   output_name: NEE
+    # NEE_PI_SC_JSZ_MAD_RP_uStar_orig:
+    #   units: degC # ignore unit -
+    #   output_name: NEE_PI_SC_JSZ_MAD_RP_uStar_orig
+    NEE_PI_JSZ_MAD_RP_uStar_f: # CADSM USES: NEE_PI_SC_JSZ_MAD_RP_uStar_f:
+      units: degC # ignore unit -
+      output_name: NEE
+    GPP_DT_uStar: #daytime gpp
+      units: degC # ignore unit -
+      output_name: DT_GPP
+    GPP_uStar_f: # nighttime GPP
+      units: degC # ignore unit -
+      output_name: NT_GPP
+    Reco_DT_uStar: # daytime RECO
+      units: degC # ignore unit -
+      output_name: DT_RECO
+    Reco_uStar_f: # nighttime RECO
+      units: degC # ignore unit -
+      output_name: NT_RECO
+    
+
+
+
+# From Lisa
+# GPP_DT_uStar = daytime GPP
+# GPP_uStar_f = nighttime GPP
+# Reco_DT_uStar = daytime RECO
+# Reco_uStar_f = nighttime RECO
+
+
+
+    # LW_IN_1_1_1:
+    #   units: W+1m-2
+    #   output_name: LW_IN_1_1_1
+    # PA_1_1_1:
+    #   units: kPa
+    #   output_name: PA_1_1_1
+    # PPFD_IN_1_1_1:
+    #   units: umol+1m-2s-1
+    #   output_name: PPFD_IN_1_1_1
+    # RH_1_1_1:
+    #   units: '%'
+    #   output_name: RH_1_1_1
+
+
