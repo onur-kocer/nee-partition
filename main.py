@@ -742,8 +742,11 @@ def prepare_data_using_csv (file_name, block_size):
     # 3. Collect all variables that haven't been normalized yet. 
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
+
+    # USSRR
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     # USEDN
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     # CADSM measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
@@ -1126,9 +1129,10 @@ print(f"pre_processing: {pre_processing}\
 # file_name = "CADSM_nee_partition_202109170000_202505292359.csv" #Working.
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025
 # file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
-file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
-# site_name = get_first_5_letters(filename=file_name)
-site_name = "temp"
+# file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
+file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
+site_name = get_first_5_letters(filename=file_name)
+# site_name = "temp"
 if site_name is None:
     raise Exception(f"\n\n\nTried getting the site name using the file_name variable but failed.\n"
                     "Make sure you specified a file name using the variable file_name.")
@@ -1458,7 +1462,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
     save_plot = True
     # prep the plot saving str
-    plot_saving_str = (f"./experiment_figures/{run_type_str}_{experiment_id + 1}"
+    plot_saving_str = (f"./experiment_figures/{site_name}/{site_name}_{run_type_str}_{experiment_id + 1}"
                     #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                     #    f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
