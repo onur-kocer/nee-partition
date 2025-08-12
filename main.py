@@ -12,6 +12,7 @@ import json
 import sys
 import time as tm
 from datetime import datetime, timedelta
+import os
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
 
@@ -743,10 +744,12 @@ def prepare_data_using_csv (file_name, block_size):
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
 
+    # USDMG
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # USSRR
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # USEDN
-    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # CADSM measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
@@ -1130,7 +1133,8 @@ print(f"pre_processing: {pre_processing}\
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025
 # file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
 # file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
-file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
+# file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
+file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
 site_name = get_first_5_letters(filename=file_name)
 # site_name = "temp"
 if site_name is None:
@@ -1375,6 +1379,7 @@ RECO_INPUT_FEATURES_SETS = [
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity'], # 13
     # TRAM Full Vars + WTD_HalfHourlyDiff
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'WTD_HalfHourlyDiff'], # 14
+
     
     # Full Vars (salinity, tidal diff) NO DAILY TIDAL VARS
     ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD_HalfHourlyDiff'], # 15
@@ -1465,10 +1470,15 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
     save_plot = True
     # prep the plot saving str
-    plot_saving_str = (f"./experiment_figures/{site_name}/{site_name}_{run_type_str}_{experiment_id + 1}"
+    plot_saving_location = (f"./experiment_figures/{site_name}")
+    plot_saving_str = (f"{plot_saving_location}/{site_name}_{run_type_str}_{experiment_id + 1}"
                     #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                     #    f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
                        )
+    if not os.path.isdir(plot_saving_location): # if the plot saving directory doesn't already exist, create it.
+        os.mkdir(plot_saving_location)
+        print(f"Directory '{plot_saving_location}' created successfully for plot saving.")
+
 
     evaluate_single_model(gpp_inputs, reco_inputs, time, sw_in_raw, model_inputs_information, save_plot, plot_saving_str, results_dict, experiment_id, GPP_INPUT_FEATURES, RECO_INPUT_FEATURES)
     results_dict[f"experiment_{experiment_id}"]['metrics']['val_r2'] = round(val_r2, 4)
