@@ -1137,6 +1137,9 @@ if site_name is None:
     raise Exception(f"\n\n\nTried getting the site name using the file_name variable but failed.\n"
                     "Make sure you specified a file name using the variable file_name.")
 
+print(f"Site name: {site_name}\
+      Full file name: {file_name}\
+      ")
 
 processed_file_name = "data/Processed_{}".format(file_name)
 clean_file_name = "data/Cleaned_{}".format(file_name) # Will hold the rows that doesn't have NaN values
