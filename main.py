@@ -371,6 +371,20 @@ def compute_doy_sin_cos(date_strings):
     return doy_sin, doy_cos
 
 
+def compute_year_month_day(date_strings):
+    """
+    Given a 1D torch tensor or list of strings in format 'YYYY-MM-DD',
+    return Year, Month, Day as torch tensors.
+    """
+    dates = [datetime.strptime(date_str, "%Y-%m-%d") for date_str in date_strings]
+
+    years = torch.tensor([d.year for d in dates], dtype=torch.int32)
+    months = torch.tensor([d.month for d in dates], dtype=torch.int32)
+    days = torch.tensor([d.day for d in dates], dtype=torch.int32)
+
+    return years, months, days
+
+
 def convert_hhmm_to_float_hour(time_tensor: torch.Tensor) -> torch.Tensor:
     """
     Converts a tensor of HHMM-style times (e.g., 30, 1330, 0) into float hours (e.g., 0.5, 13.5, 0.0).
@@ -392,8 +406,8 @@ def load_data(
     file_path: str,
     input_features: List[str],
     target_features: List[str],
-    dropna: bool = False,
-    prep_doy_sin_cos: bool = True,
+    prep_doy_sin_cos: bool = False,
+    prep_year_month_day: bool = False,
     return_feature_names: bool = True,
 ) -> Union[ # Either return the feature name lists or not.
     Tuple[torch.Tensor, torch.Tensor],
@@ -424,7 +438,8 @@ def load_data(
     if prep_doy_sin_cos:
         df["DOY_sin"], df["DOY_cos"] = compute_doy_sin_cos(df["DATE"])
         # print(df["DOY_sin"], df["DOY_cos"])
-
+    if prep_year_month_day:
+        df["Year"], df["Month"], df["Day"] = compute_year_month_day(df["DATE"])
 
     # Select only the required columns
     data = df[input_features + target_features]
@@ -728,11 +743,17 @@ def prepare_data_using_csv (file_name, block_size):
     # ALL NECESSARY RECO FEATURES = ["TA", "TS_1", "TS_2", "TS_3", "TS_4", "WTD", "WS", "WD"]
     # ALL NECESSARY OUTPUT FEATURES = ["NEE"]
     
-    # 1. Calculate Day of Year Cos/Sine
-    doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [])
+    # 1.1 Add Year Month Day fieds to the processed file.
+    year_month_day, _, feature_name, _ = load_data("data/{}".format(file_name), ["Year", "Month", "Day"] , [], prep_year_month_day = True)
     all_feature_names.extend(feature_name)
 
-    # 1.5 Ensure that all we have a multiple of 48 (ie. every single day is covered completely.)
+
+    # 1.2 Calculate Day of Year Cos/Sine
+    doy_cos_sin, _, feature_name, _ = load_data("data/{}".format(file_name), ["DOY_sin", "DOY_cos"] , [], prep_doy_sin_cos = True)
+    all_feature_names.extend(feature_name)
+
+    # 1.3 Ensure that all we have a multiple of 48 (ie. every single day is covered completely.)
+    assert year_month_day.shape[0] % block_size == 0, f"Number of data rows must be multiple of block_size={block_size}"
     assert doy_cos_sin.shape[0] % block_size == 0, f"Number of data rows must be multiple of block_size={block_size}"
 
     # 2. Just import the time of day variable. Currently, will only be used for visualization.
@@ -745,12 +766,13 @@ def prepare_data_using_csv (file_name, block_size):
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
 
     # USDMG
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # USSRR
     # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # USEDN
     # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "TS_5", "TS_6", "TS_7", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
-    # CADSM measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # CADSM
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, _, feature_name, _ = load_data("data/{}".format(file_name), measured_features_raw, [])
     all_feature_names.extend(feature_name)
 
@@ -788,9 +810,9 @@ def prepare_data_using_csv (file_name, block_size):
     gpp_prox_and_nightly_nee_average = compute_gpp_prox_and_nightly_nee_avg(sw_in, nee)
     all_feature_names.extend(["GPP_PROX", "NIGHTLY_NEE_AVG"])
 
-    return torch.cat((doy_cos_sin, time_float, measured_features_tensor_raw, all_wtd_data, \
-                      all_pot_rad_data, wd_cos_sin, gpp_prox_and_nightly_nee_average), 1), \
-                        all_feature_names
+    return torch.cat((year_month_day, doy_cos_sin, time_float, measured_features_tensor_raw, \
+                      all_wtd_data, all_pot_rad_data, wd_cos_sin, \
+                      gpp_prox_and_nightly_nee_average), 1), all_feature_names
     
 
 def load_and_clean_csv(file_path: str, block_size: int, drop_value: float = -9999.0) -> pd.DataFrame:
@@ -1129,12 +1151,12 @@ print(f"pre_processing: {pre_processing}\
       ")
 
 # file_name = "CADSM_nee_partition_202101010000_202512312359.csv"
-# file_name = "CADSM_nee_partition_202109170000_202505292359.csv" #Working.
+file_name = "CADSM_nee_partition_202109170000_202505292359.csv" #Working.
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025
 # file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025
 # file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
 # file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
-file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
+# file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
 site_name = get_first_5_letters(filename=file_name)
 # site_name = "temp"
 if site_name is None:
@@ -1200,16 +1222,22 @@ if drop_na:
 # then take the clean file, and normalize all that has to be normalized.
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    # USEDN USDMG USSRR
     raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff', 'WV']
+    # CADSM (doesn't have WV)
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, _, raw_feature_name, _ = load_data("{}".format(clean_file_name), raw_feature_names, [], prep_doy_sin_cos = False);
     
     # Normalize Raw Features:
     normalized_raw_features, _, _ = normalize_features(raw_features)
 
-    # 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN' do not need to be normalized as the are already normalized.
-    # 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO' will only be used for metrics. We don't need to normalize them.
-    other_feature_names = ['DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
+    """
+    'Year', 'Month', 'Day' does not need to be normalized as they are not inputs to the networks but just for keeping track of data points.
+    'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN' do not need to be normalized as the are already "normalized".
+    'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO' will only be used for metrics. We don't need to normalize them.
+    """
+    other_feature_names = ['Year', 'Month', 'Day', 'DOY_sin', 'DOY_cos', 'TIME', 'WD_COS', 'WD_SIN', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO']
     other_features, _, other_feature_names, _ = \
             load_data("{}".format(clean_file_name), other_feature_names, [], prep_doy_sin_cos = False);
 
