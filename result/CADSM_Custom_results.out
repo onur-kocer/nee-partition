@@ -1,5 +1,5 @@
-created virtual environment CPython3.10.13.final.0-64 in 13872ms
-  creator CPython3Posix(dest=/localscratch/onurk.65891396.0/env, clear=False, no_vcs_ignore=False, global=False)
+created virtual environment CPython3.10.13.final.0-64 in 14030ms
+  creator CPython3Posix(dest=/localscratch/onurk.65893446.0/env, clear=False, no_vcs_ignore=False, global=False)
   seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/onurk/.local/share/virtualenv)
     added seed packages: pip==25.1.1, setuptools==80.9.0, wheel==0.45.1+computecanada
   activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
@@ -18,13 +18,13 @@ Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/network
 Installing collected packages: sympy, networkx, MarkupSafe, fsspec, filelock, jinja2, torch
   Attempting uninstall: sympy
     Found existing installation: sympy 1.13.3+computecanada
-    Not uninstalling sympy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages, outside environment /localscratch/onurk.65891396.0/env
+    Not uninstalling sympy at /cvmfs/soft.computecanada.ca/easybuild/software/2023/x86-64-v3/Compiler/gcccore/scipy-stack/2025a/lib/python3.10/site-packages, outside environment /localscratch/onurk.65893446.0/env
     Can't uninstall 'sympy'. No files were found to uninstall.
 
 Successfully installed MarkupSafe-2.1.5+computecanada filelock-3.18.0+computecanada fsspec-2025.7.0+computecanada jinja2-3.1.6+computecanada networkx-3.4.2+computecanada sympy-1.13.1+computecanada torch-2.6.0+computecanada
 pre_processing: False      drop_na: False       normalize_raw_features: False       train_models: True       save_models: True       hidden_size: 12       tramontana_run: False       
 Site name: CADSM      Full file name: CADSM_nee_partition_202109170000_202505292359.csv      
-Run started at: 2025-08-14 21:55:45
+Run started at: 2025-08-14 22:51:09
 gpp_input_names,  ['SW_IN', 'TA'] 
 reco_input_names,  ['DOY_sin', 'DOY_cos', 'TA'] 
 true_nee_name,  ['NEE'] 
@@ -48,10 +48,10 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.034777 | Val Loss: 0.035240 | Train R²: -0.2296 | Val R²: -0.2189 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3300
-Epoch   500 | Train Loss: 0.027770 | Val Loss: 0.028434 | Train R²: 0.0181 | Val R²: 0.0165 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  1000 | Train Loss: 0.026885 | Val Loss: 0.027519 | Train R²: 0.0494 | Val R²: 0.0482 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  1500 | Train Loss: 0.025768 | Val Loss: 0.026429 | Train R²: 0.0889 | Val R²: 0.0859 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
+Epoch     0 | Train Loss: 0.034777 | Val Loss: 0.035240 | Train R²: -0.2296 | Val R²: -0.2189 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.5900 | NightHrsTrueNee vs NightHrsModelNee R²: -4.5900
+Epoch   500 | Train Loss: 0.027770 | Val Loss: 0.028434 | Train R²: 0.0181 | Val R²: 0.0165 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7800 | NightHrsTrueNee vs NightHrsModelNee R²: -1.7800
+Epoch  1000 | Train Loss: 0.026885 | Val Loss: 0.027519 | Train R²: 0.0494 | Val R²: 0.0482 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: -1.3300
+Epoch  1500 | Train Loss: 0.025768 | Val Loss: 0.026429 | Train R²: 0.0889 | Val R²: 0.0859 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4600 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4600
 Early stopping at epoch 1787 due to flat/negative trend (slope=0.000002)
 Epoch  1787 | Train Loss: 0.025736 | Val Loss: 0.026399 | Train R²: 0.0901 | Val R²: 0.0869
 Unpickling models
@@ -85,8 +85,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-1.36 RMSE=3.59
 nt_reco vs Custom_RECO R²=-1.53 RMSE=3.22
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.23 RMSE=8.16
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.23 RMSE=8.16
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.44 RMSE=2.42
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.44 RMSE=2.42
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -113,13 +113,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.065598 | Val Loss: 0.065308 | Train R²: -1.3194 | Val R²: -1.2588 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8600 | NightHrsTrueNee vs NightHrsModelNee R²: -1.5300
-Epoch   500 | Train Loss: 0.025979 | Val Loss: 0.026628 | Train R²: 0.0815 | Val R²: 0.0790 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
-Epoch  1000 | Train Loss: 0.006005 | Val Loss: 0.005779 | Train R²: 0.7877 | Val R²: 0.8001 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
-Epoch  1500 | Train Loss: 0.004730 | Val Loss: 0.004634 | Train R²: 0.8328 | Val R²: 0.8397 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8200
-Epoch  2000 | Train Loss: 0.004250 | Val Loss: 0.004210 | Train R²: 0.8497 | Val R²: 0.8544 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8300
-Epoch  2500 | Train Loss: 0.004113 | Val Loss: 0.004085 | Train R²: 0.8546 | Val R²: 0.8587 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  3000 | Train Loss: 0.004058 | Val Loss: 0.004040 | Train R²: 0.8565 | Val R²: 0.8603 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
+Epoch     0 | Train Loss: 0.065598 | Val Loss: 0.065308 | Train R²: -1.3194 | Val R²: -1.2588 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7100 | NightHrsTrueNee vs NightHrsModelNee R²: -8.6600
+Epoch   500 | Train Loss: 0.025979 | Val Loss: 0.026628 | Train R²: 0.0815 | Val R²: 0.0790 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.6500 | NightHrsTrueNee vs NightHrsModelNee R²: -0.6500
+Epoch  1000 | Train Loss: 0.006005 | Val Loss: 0.005779 | Train R²: 0.7877 | Val R²: 0.8001 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.1800
+Epoch  1500 | Train Loss: 0.004730 | Val Loss: 0.004634 | Train R²: 0.8328 | Val R²: 0.8397 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3400
+Epoch  2000 | Train Loss: 0.004250 | Val Loss: 0.004210 | Train R²: 0.8497 | Val R²: 0.8544 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4000
+Epoch  2500 | Train Loss: 0.004113 | Val Loss: 0.004085 | Train R²: 0.8546 | Val R²: 0.8587 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4300
+Epoch  3000 | Train Loss: 0.004058 | Val Loss: 0.004040 | Train R²: 0.8565 | Val R²: 0.8603 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4500
 Early stopping at epoch 3398 due to flat/negative trend (slope=0.000002)
 Epoch  3398 | Train Loss: 0.004023 | Val Loss: 0.004004 | Train R²: 0.8578 | Val R²: 0.8615
 Unpickling models
@@ -153,8 +153,8 @@ dt_gpp vs Custom_GPP R²=0.81 RMSE=3.13
 nt_gpp vs Custom_GPP R²=0.76 RMSE=3.43
 dt_reco vs Custom_RECO R²=-0.24 RMSE=2.60
 nt_reco vs Custom_RECO R²=-0.60 RMSE=2.56
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.18 RMSE=2.96
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.18 RMSE=2.96
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.41 RMSE=1.50
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.41 RMSE=1.50
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -181,10 +181,10 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.030139 | Val Loss: 0.030421 | Train R²: -0.0656 | Val R²: -0.0522 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3400
-Epoch   500 | Train Loss: 0.027424 | Val Loss: 0.027966 | Train R²: 0.0304 | Val R²: 0.0327 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2400
-Epoch  1000 | Train Loss: 0.025894 | Val Loss: 0.026493 | Train R²: 0.0845 | Val R²: 0.0837 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2400
-Epoch  1500 | Train Loss: 0.025637 | Val Loss: 0.026276 | Train R²: 0.0936 | Val R²: 0.0912 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2400
+Epoch     0 | Train Loss: 0.030139 | Val Loss: 0.030421 | Train R²: -0.0656 | Val R²: -0.0522 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: -1.6600
+Epoch   500 | Train Loss: 0.027424 | Val Loss: 0.027966 | Train R²: 0.0304 | Val R²: 0.0327 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: -1.3200
+Epoch  1000 | Train Loss: 0.025894 | Val Loss: 0.026493 | Train R²: 0.0845 | Val R²: 0.0837 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4600 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4600
+Epoch  1500 | Train Loss: 0.025637 | Val Loss: 0.026276 | Train R²: 0.0936 | Val R²: 0.0912 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3500 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3500
 Early stopping at epoch 1782 due to flat/negative trend (slope=0.000002)
 Epoch  1782 | Train Loss: 0.025614 | Val Loss: 0.026255 | Train R²: 0.0943 | Val R²: 0.0919
 Unpickling models
@@ -218,8 +218,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-1.31 RMSE=3.55
 nt_reco vs Custom_RECO R²=-1.45 RMSE=3.18
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.23 RMSE=8.17
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.23 RMSE=8.17
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.35 RMSE=2.34
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.35 RMSE=2.34
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -246,22 +246,22 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.205417 | Val Loss: 0.197363 | Train R²: -6.2630 | Val R²: -5.8263 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.9500 | NightHrsTrueNee vs NightHrsModelNee R²: -6.8600
-Epoch   500 | Train Loss: 0.011112 | Val Loss: 0.010758 | Train R²: 0.6071 | Val R²: 0.6279 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6600
-Epoch  1000 | Train Loss: 0.009773 | Val Loss: 0.009610 | Train R²: 0.6545 | Val R²: 0.6676 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
-Epoch  1500 | Train Loss: 0.008569 | Val Loss: 0.008429 | Train R²: 0.6970 | Val R²: 0.7084 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
-Epoch  2000 | Train Loss: 0.006339 | Val Loss: 0.006202 | Train R²: 0.7759 | Val R²: 0.7855 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
-Epoch  2500 | Train Loss: 0.005175 | Val Loss: 0.005099 | Train R²: 0.8170 | Val R²: 0.8237 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8100
-Epoch  3000 | Train Loss: 0.004603 | Val Loss: 0.004560 | Train R²: 0.8372 | Val R²: 0.8423 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8300
-Epoch  3500 | Train Loss: 0.004290 | Val Loss: 0.004234 | Train R²: 0.8483 | Val R²: 0.8535 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  4000 | Train Loss: 0.004121 | Val Loss: 0.004071 | Train R²: 0.8543 | Val R²: 0.8592 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  4500 | Train Loss: 0.004020 | Val Loss: 0.003965 | Train R²: 0.8579 | Val R²: 0.8629 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.4600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  5000 | Train Loss: 0.003954 | Val Loss: 0.003908 | Train R²: 0.8602 | Val R²: 0.8648 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  5500 | Train Loss: 0.003886 | Val Loss: 0.003859 | Train R²: 0.8626 | Val R²: 0.8665 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.0400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  6000 | Train Loss: 0.003805 | Val Loss: 0.003795 | Train R²: 0.8654 | Val R²: 0.8687 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  6500 | Train Loss: 0.003724 | Val Loss: 0.003720 | Train R²: 0.8683 | Val R²: 0.8713 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  7000 | Train Loss: 0.003603 | Val Loss: 0.003610 | Train R²: 0.8726 | Val R²: 0.8751 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.5500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  7500 | Train Loss: 0.003552 | Val Loss: 0.003556 | Train R²: 0.8744 | Val R²: 0.8770 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
+Epoch     0 | Train Loss: 0.205417 | Val Loss: 0.197363 | Train R²: -6.2630 | Val R²: -5.8263 | NightHrsTrueNEE vs NightHrsModelReco R²: -17.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -25.8400
+Epoch   500 | Train Loss: 0.011112 | Val Loss: 0.010758 | Train R²: 0.6071 | Val R²: 0.6279 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: -1.5300
+Epoch  1000 | Train Loss: 0.009773 | Val Loss: 0.009610 | Train R²: 0.6545 | Val R²: 0.6676 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1700 | NightHrsTrueNee vs NightHrsModelNee R²: -1.2500
+Epoch  1500 | Train Loss: 0.008569 | Val Loss: 0.008429 | Train R²: 0.6970 | Val R²: 0.7084 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.9800
+Epoch  2000 | Train Loss: 0.006339 | Val Loss: 0.006202 | Train R²: 0.7759 | Val R²: 0.7855 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.0900 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2100
+Epoch  2500 | Train Loss: 0.005175 | Val Loss: 0.005099 | Train R²: 0.8170 | Val R²: 0.8237 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.1200
+Epoch  3000 | Train Loss: 0.004603 | Val Loss: 0.004560 | Train R²: 0.8372 | Val R²: 0.8423 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2600
+Epoch  3500 | Train Loss: 0.004290 | Val Loss: 0.004234 | Train R²: 0.8483 | Val R²: 0.8535 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.6000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3000
+Epoch  4000 | Train Loss: 0.004121 | Val Loss: 0.004071 | Train R²: 0.8543 | Val R²: 0.8592 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3300
+Epoch  4500 | Train Loss: 0.004020 | Val Loss: 0.003965 | Train R²: 0.8579 | Val R²: 0.8629 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.5400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3500
+Epoch  5000 | Train Loss: 0.003954 | Val Loss: 0.003908 | Train R²: 0.8602 | Val R²: 0.8648 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3600
+Epoch  5500 | Train Loss: 0.003886 | Val Loss: 0.003859 | Train R²: 0.8626 | Val R²: 0.8665 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.9800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3700
+Epoch  6000 | Train Loss: 0.003805 | Val Loss: 0.003795 | Train R²: 0.8654 | Val R²: 0.8687 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3900
+Epoch  6500 | Train Loss: 0.003724 | Val Loss: 0.003720 | Train R²: 0.8683 | Val R²: 0.8713 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4100
+Epoch  7000 | Train Loss: 0.003603 | Val Loss: 0.003610 | Train R²: 0.8726 | Val R²: 0.8751 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4700
+Epoch  7500 | Train Loss: 0.003552 | Val Loss: 0.003556 | Train R²: 0.8744 | Val R²: 0.8770 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4800
 Early stopping at epoch 7546 due to flat/negative trend (slope=0.000002)
 Epoch  7546 | Train Loss: 0.003547 | Val Loss: 0.003554 | Train R²: 0.8746 | Val R²: 0.8771
 Unpickling models
@@ -295,8 +295,8 @@ dt_gpp vs Custom_GPP R²=0.55 RMSE=4.79
 nt_gpp vs Custom_GPP R²=0.48 RMSE=5.08
 dt_reco vs Custom_RECO R²=-2.71 RMSE=4.50
 nt_reco vs Custom_RECO R²=-4.20 RMSE=4.62
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-3.86 RMSE=2.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-3.86 RMSE=2.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.51 RMSE=1.49
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.51 RMSE=1.49
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -323,20 +323,20 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.158040 | Val Loss: 0.147332 | Train R²: -4.5879 | Val R²: -4.0958 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.2500 | NightHrsTrueNee vs NightHrsModelNee R²: -2.9000
-Epoch   500 | Train Loss: 0.008559 | Val Loss: 0.008584 | Train R²: 0.6974 | Val R²: 0.7031 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
-Epoch  1000 | Train Loss: 0.006637 | Val Loss: 0.006723 | Train R²: 0.7653 | Val R²: 0.7675 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
-Epoch  1500 | Train Loss: 0.005526 | Val Loss: 0.005537 | Train R²: 0.8046 | Val R²: 0.8085 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
-Epoch  2000 | Train Loss: 0.004709 | Val Loss: 0.004707 | Train R²: 0.8335 | Val R²: 0.8372 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8100
-Epoch  2500 | Train Loss: 0.004475 | Val Loss: 0.004453 | Train R²: 0.8418 | Val R²: 0.8460 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8200
-Epoch  3000 | Train Loss: 0.004287 | Val Loss: 0.004258 | Train R²: 0.8484 | Val R²: 0.8527 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8300
-Epoch  3500 | Train Loss: 0.004086 | Val Loss: 0.004073 | Train R²: 0.8555 | Val R²: 0.8591 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  4000 | Train Loss: 0.003959 | Val Loss: 0.003957 | Train R²: 0.8600 | Val R²: 0.8632 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  4500 | Train Loss: 0.003866 | Val Loss: 0.003860 | Train R²: 0.8633 | Val R²: 0.8665 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  5000 | Train Loss: 0.003777 | Val Loss: 0.003751 | Train R²: 0.8664 | Val R²: 0.8703 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  5500 | Train Loss: 0.003692 | Val Loss: 0.003653 | Train R²: 0.8695 | Val R²: 0.8737 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  6000 | Train Loss: 0.003603 | Val Loss: 0.003582 | Train R²: 0.8726 | Val R²: 0.8761 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  6500 | Train Loss: 0.003520 | Val Loss: 0.003510 | Train R²: 0.8755 | Val R²: 0.8786 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
+Epoch     0 | Train Loss: 0.158040 | Val Loss: 0.147332 | Train R²: -4.5879 | Val R²: -4.0958 | NightHrsTrueNEE vs NightHrsModelReco R²: -32.0700 | NightHrsTrueNee vs NightHrsModelNee R²: -42.0100
+Epoch   500 | Train Loss: 0.008559 | Val Loss: 0.008584 | Train R²: 0.6974 | Val R²: 0.7031 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.9700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.9900
+Epoch  1000 | Train Loss: 0.006637 | Val Loss: 0.006723 | Train R²: 0.7653 | Val R²: 0.7675 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.6600 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4900
+Epoch  1500 | Train Loss: 0.005526 | Val Loss: 0.005537 | Train R²: 0.8046 | Val R²: 0.8085 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.1000
+Epoch  2000 | Train Loss: 0.004709 | Val Loss: 0.004707 | Train R²: 0.8335 | Val R²: 0.8372 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3400
+Epoch  2500 | Train Loss: 0.004475 | Val Loss: 0.004453 | Train R²: 0.8418 | Val R²: 0.8460 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3700
+Epoch  3000 | Train Loss: 0.004287 | Val Loss: 0.004258 | Train R²: 0.8484 | Val R²: 0.8527 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4000
+Epoch  3500 | Train Loss: 0.004086 | Val Loss: 0.004073 | Train R²: 0.8555 | Val R²: 0.8591 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4000
+Epoch  4000 | Train Loss: 0.003959 | Val Loss: 0.003957 | Train R²: 0.8600 | Val R²: 0.8632 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4000
+Epoch  4500 | Train Loss: 0.003866 | Val Loss: 0.003860 | Train R²: 0.8633 | Val R²: 0.8665 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4100
+Epoch  5000 | Train Loss: 0.003777 | Val Loss: 0.003751 | Train R²: 0.8664 | Val R²: 0.8703 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4300
+Epoch  5500 | Train Loss: 0.003692 | Val Loss: 0.003653 | Train R²: 0.8695 | Val R²: 0.8737 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4400
+Epoch  6000 | Train Loss: 0.003603 | Val Loss: 0.003582 | Train R²: 0.8726 | Val R²: 0.8761 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4400
+Epoch  6500 | Train Loss: 0.003520 | Val Loss: 0.003510 | Train R²: 0.8755 | Val R²: 0.8786 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4400
 Early stopping at epoch 6833 due to flat/negative trend (slope=0.000002)
 Epoch  6833 | Train Loss: 0.003481 | Val Loss: 0.003480 | Train R²: 0.8769 | Val R²: 0.8796
 Unpickling models
@@ -370,8 +370,8 @@ dt_gpp vs Custom_GPP R²=0.72 RMSE=3.75
 nt_gpp vs Custom_GPP R²=0.68 RMSE=4.02
 dt_reco vs Custom_RECO R²=-1.11 RMSE=3.39
 nt_reco vs Custom_RECO R²=-1.87 RMSE=3.43
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.80 RMSE=2.68
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.80 RMSE=2.68
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.30 RMSE=1.52
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.30 RMSE=1.52
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -398,17 +398,17 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.095172 | Val Loss: 0.091194 | Train R²: -2.3650 | Val R²: -2.1542 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.5700
-Epoch   500 | Train Loss: 0.007627 | Val Loss: 0.007343 | Train R²: 0.7303 | Val R²: 0.7460 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
-Epoch  1000 | Train Loss: 0.005456 | Val Loss: 0.005289 | Train R²: 0.8071 | Val R²: 0.8171 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.9300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
-Epoch  1500 | Train Loss: 0.004563 | Val Loss: 0.004493 | Train R²: 0.8387 | Val R²: 0.8446 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8200
-Epoch  2000 | Train Loss: 0.004225 | Val Loss: 0.004174 | Train R²: 0.8506 | Val R²: 0.8556 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  2500 | Train Loss: 0.003985 | Val Loss: 0.003934 | Train R²: 0.8591 | Val R²: 0.8639 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  3000 | Train Loss: 0.003671 | Val Loss: 0.003637 | Train R²: 0.8702 | Val R²: 0.8742 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  3500 | Train Loss: 0.003428 | Val Loss: 0.003380 | Train R²: 0.8788 | Val R²: 0.8831 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.9900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  4000 | Train Loss: 0.003284 | Val Loss: 0.003242 | Train R²: 0.8839 | Val R²: 0.8879 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.4700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  4500 | Train Loss: 0.003191 | Val Loss: 0.003146 | Train R²: 0.8872 | Val R²: 0.8912 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  5000 | Train Loss: 0.003131 | Val Loss: 0.003091 | Train R²: 0.8893 | Val R²: 0.8931 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.9800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
+Epoch     0 | Train Loss: 0.095172 | Val Loss: 0.091194 | Train R²: -2.3650 | Val R²: -2.1542 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.5100 | NightHrsTrueNee vs NightHrsModelNee R²: -35.5800
+Epoch   500 | Train Loss: 0.007627 | Val Loss: 0.007343 | Train R²: 0.7303 | Val R²: 0.7460 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.7400 | NightHrsTrueNee vs NightHrsModelNee R²: -0.1000
+Epoch  1000 | Train Loss: 0.005456 | Val Loss: 0.005289 | Train R²: 0.8071 | Val R²: 0.8171 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2700
+Epoch  1500 | Train Loss: 0.004563 | Val Loss: 0.004493 | Train R²: 0.8387 | Val R²: 0.8446 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.0700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3500
+Epoch  2000 | Train Loss: 0.004225 | Val Loss: 0.004174 | Train R²: 0.8506 | Val R²: 0.8556 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.0500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3700
+Epoch  2500 | Train Loss: 0.003985 | Val Loss: 0.003934 | Train R²: 0.8591 | Val R²: 0.8639 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.0100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3700
+Epoch  3000 | Train Loss: 0.003671 | Val Loss: 0.003637 | Train R²: 0.8702 | Val R²: 0.8742 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4200
+Epoch  3500 | Train Loss: 0.003428 | Val Loss: 0.003380 | Train R²: 0.8788 | Val R²: 0.8831 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4600
+Epoch  4000 | Train Loss: 0.003284 | Val Loss: 0.003242 | Train R²: 0.8839 | Val R²: 0.8879 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4700
+Epoch  4500 | Train Loss: 0.003191 | Val Loss: 0.003146 | Train R²: 0.8872 | Val R²: 0.8912 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4800
+Epoch  5000 | Train Loss: 0.003131 | Val Loss: 0.003091 | Train R²: 0.8893 | Val R²: 0.8931 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4900
 Early stopping at epoch 5154 due to flat/negative trend (slope=0.000002)
 Epoch  5154 | Train Loss: 0.003120 | Val Loss: 0.003081 | Train R²: 0.8897 | Val R²: 0.8934
 Unpickling models
@@ -442,8 +442,8 @@ dt_gpp vs Custom_GPP R²=0.40 RMSE=5.54
 nt_gpp vs Custom_GPP R²=0.33 RMSE=5.78
 dt_reco vs Custom_RECO R²=-4.24 RMSE=5.34
 nt_reco vs Custom_RECO R²=-6.20 RMSE=5.44
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-4.17 RMSE=2.52
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-4.17 RMSE=2.52
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.28 RMSE=1.46
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.28 RMSE=1.46
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -470,11 +470,11 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.340327 | Val Loss: 0.326625 | Train R²: -11.0330 | Val R²: -10.2971 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2500 | NightHrsTrueNee vs NightHrsModelNee R²: -5.1300
-Epoch   500 | Train Loss: 0.027404 | Val Loss: 0.028040 | Train R²: 0.0311 | Val R²: 0.0302 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2100 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2100
-Epoch  1000 | Train Loss: 0.025523 | Val Loss: 0.026134 | Train R²: 0.0976 | Val R²: 0.0961 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
-Epoch  1500 | Train Loss: 0.025348 | Val Loss: 0.025935 | Train R²: 0.1038 | Val R²: 0.1030 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
-Epoch  2000 | Train Loss: 0.025260 | Val Loss: 0.025852 | Train R²: 0.1069 | Val R²: 0.1059 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
+Epoch     0 | Train Loss: 0.340327 | Val Loss: 0.326625 | Train R²: -11.0330 | Val R²: -10.2971 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1100 | NightHrsTrueNee vs NightHrsModelNee R²: -123.9900
+Epoch   500 | Train Loss: 0.027404 | Val Loss: 0.028040 | Train R²: 0.0311 | Val R²: 0.0302 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6500 | NightHrsTrueNee vs NightHrsModelNee R²: -1.6600
+Epoch  1000 | Train Loss: 0.025523 | Val Loss: 0.026134 | Train R²: 0.0976 | Val R²: 0.0961 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3200
+Epoch  1500 | Train Loss: 0.025348 | Val Loss: 0.025935 | Train R²: 0.1038 | Val R²: 0.1030 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
+Epoch  2000 | Train Loss: 0.025260 | Val Loss: 0.025852 | Train R²: 0.1069 | Val R²: 0.1059 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.1800 | NightHrsTrueNee vs NightHrsModelNee R²: -0.1800
 Early stopping at epoch 2119 due to flat/negative trend (slope=0.000002)
 Epoch  2119 | Train Loss: 0.025251 | Val Loss: 0.025845 | Train R²: 0.1072 | Val R²: 0.1061
 Unpickling models
@@ -508,8 +508,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-1.23 RMSE=3.49
 nt_reco vs Custom_RECO R²=-1.36 RMSE=3.12
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.23 RMSE=8.15
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.23 RMSE=8.15
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.20 RMSE=2.20
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.20 RMSE=2.20
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -536,17 +536,17 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.130920 | Val Loss: 0.126086 | Train R²: -3.6290 | Val R²: -3.3610 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -1.1000
-Epoch   500 | Train Loss: 0.011687 | Val Loss: 0.011335 | Train R²: 0.5868 | Val R²: 0.6080 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6800
-Epoch  1000 | Train Loss: 0.011039 | Val Loss: 0.010795 | Train R²: 0.6097 | Val R²: 0.6266 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
-Epoch  1500 | Train Loss: 0.010488 | Val Loss: 0.010342 | Train R²: 0.6292 | Val R²: 0.6423 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
-Epoch  2000 | Train Loss: 0.010276 | Val Loss: 0.010150 | Train R²: 0.6367 | Val R²: 0.6489 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
-Epoch  2500 | Train Loss: 0.010074 | Val Loss: 0.009948 | Train R²: 0.6438 | Val R²: 0.6559 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
-Epoch  3000 | Train Loss: 0.009666 | Val Loss: 0.009517 | Train R²: 0.6582 | Val R²: 0.6708 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
-Epoch  3500 | Train Loss: 0.009451 | Val Loss: 0.009334 | Train R²: 0.6658 | Val R²: 0.6772 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
-Epoch  4000 | Train Loss: 0.009334 | Val Loss: 0.009237 | Train R²: 0.6700 | Val R²: 0.6805 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
-Epoch  4500 | Train Loss: 0.009258 | Val Loss: 0.009167 | Train R²: 0.6727 | Val R²: 0.6829 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
-Epoch  5000 | Train Loss: 0.009210 | Val Loss: 0.009123 | Train R²: 0.6743 | Val R²: 0.6845 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
+Epoch     0 | Train Loss: 0.130920 | Val Loss: 0.126086 | Train R²: -3.6290 | Val R²: -3.3610 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -50.3400
+Epoch   500 | Train Loss: 0.011687 | Val Loss: 0.011335 | Train R²: 0.5868 | Val R²: 0.6080 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.1000
+Epoch  1000 | Train Loss: 0.011039 | Val Loss: 0.010795 | Train R²: 0.6097 | Val R²: 0.6266 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  1500 | Train Loss: 0.010488 | Val Loss: 0.010342 | Train R²: 0.6292 | Val R²: 0.6423 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  2000 | Train Loss: 0.010276 | Val Loss: 0.010150 | Train R²: 0.6367 | Val R²: 0.6489 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  2500 | Train Loss: 0.010074 | Val Loss: 0.009948 | Train R²: 0.6438 | Val R²: 0.6559 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  3000 | Train Loss: 0.009666 | Val Loss: 0.009517 | Train R²: 0.6582 | Val R²: 0.6708 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  3500 | Train Loss: 0.009451 | Val Loss: 0.009334 | Train R²: 0.6658 | Val R²: 0.6772 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  4000 | Train Loss: 0.009334 | Val Loss: 0.009237 | Train R²: 0.6700 | Val R²: 0.6805 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  4500 | Train Loss: 0.009258 | Val Loss: 0.009167 | Train R²: 0.6727 | Val R²: 0.6829 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  5000 | Train Loss: 0.009210 | Val Loss: 0.009123 | Train R²: 0.6743 | Val R²: 0.6845 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
 Early stopping at epoch 5027 due to flat/negative trend (slope=0.000002)
 Epoch  5027 | Train Loss: 0.009208 | Val Loss: 0.009123 | Train R²: 0.6744 | Val R²: 0.6845
 Unpickling models
@@ -580,8 +580,8 @@ dt_gpp vs Custom_GPP R²=0.72 RMSE=3.77
 nt_gpp vs Custom_GPP R²=0.72 RMSE=3.74
 dt_reco vs Custom_RECO R²=-2.34 RMSE=4.27
 nt_reco vs Custom_RECO R²=-2.88 RMSE=3.99
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.22 RMSE=3.37
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.22 RMSE=3.37
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.10 RMSE=3.55
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.10 RMSE=3.55
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -608,9 +608,9 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.116082 | Val Loss: 0.113779 | Train R²: -3.1043 | Val R²: -2.9353 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
-Epoch   500 | Train Loss: 0.023958 | Val Loss: 0.023914 | Train R²: 0.1529 | Val R²: 0.1729 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2100
-Epoch  1000 | Train Loss: 0.023496 | Val Loss: 0.023486 | Train R²: 0.1692 | Val R²: 0.1877 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2200
+Epoch     0 | Train Loss: 0.116082 | Val Loss: 0.113779 | Train R²: -3.1043 | Val R²: -2.9353 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.6400 | NightHrsTrueNee vs NightHrsModelNee R²: -31.3100
+Epoch   500 | Train Loss: 0.023958 | Val Loss: 0.023914 | Train R²: 0.1529 | Val R²: 0.1729 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.6900 | NightHrsTrueNee vs NightHrsModelNee R²: -4.1000
+Epoch  1000 | Train Loss: 0.023496 | Val Loss: 0.023486 | Train R²: 0.1692 | Val R²: 0.1877 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.6100 | NightHrsTrueNee vs NightHrsModelNee R²: -3.9700
 Early stopping at epoch 1461 due to flat/negative trend (slope=0.000002)
 Epoch  1461 | Train Loss: 0.023449 | Val Loss: 0.023424 | Train R²: 0.1709 | Val R²: 0.1898
 Unpickling models
@@ -644,8 +644,8 @@ dt_gpp vs Custom_GPP R²=0.04 RMSE=7.02
 nt_gpp vs Custom_GPP R²=0.02 RMSE=6.99
 dt_reco vs Custom_RECO R²=-2.39 RMSE=4.30
 nt_reco vs Custom_RECO R²=-3.06 RMSE=4.08
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.22 RMSE=6.53
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.22 RMSE=6.53
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-3.50 RMSE=4.52
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-3.50 RMSE=4.52
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -672,18 +672,18 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.157076 | Val Loss: 0.147098 | Train R²: -4.5538 | Val R²: -4.0877 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: -3.0600
-Epoch   500 | Train Loss: 0.006922 | Val Loss: 0.006830 | Train R²: 0.7552 | Val R²: 0.7638 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
-Epoch  1000 | Train Loss: 0.005516 | Val Loss: 0.005404 | Train R²: 0.8050 | Val R²: 0.8131 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
-Epoch  1500 | Train Loss: 0.004794 | Val Loss: 0.004711 | Train R²: 0.8305 | Val R²: 0.8371 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8000
-Epoch  2000 | Train Loss: 0.004092 | Val Loss: 0.004059 | Train R²: 0.8553 | Val R²: 0.8596 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8300
-Epoch  2500 | Train Loss: 0.003536 | Val Loss: 0.003561 | Train R²: 0.8750 | Val R²: 0.8768 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  3000 | Train Loss: 0.003209 | Val Loss: 0.003255 | Train R²: 0.8865 | Val R²: 0.8874 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  3500 | Train Loss: 0.003112 | Val Loss: 0.003145 | Train R²: 0.8900 | Val R²: 0.8912 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  4000 | Train Loss: 0.003007 | Val Loss: 0.003049 | Train R²: 0.8937 | Val R²: 0.8945 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  4500 | Train Loss: 0.002914 | Val Loss: 0.002955 | Train R²: 0.8970 | Val R²: 0.8978 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  5000 | Train Loss: 0.002858 | Val Loss: 0.002869 | Train R²: 0.8989 | Val R²: 0.9008 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  5500 | Train Loss: 0.002814 | Val Loss: 0.002823 | Train R²: 0.9005 | Val R²: 0.9024 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
+Epoch     0 | Train Loss: 0.157076 | Val Loss: 0.147098 | Train R²: -4.5538 | Val R²: -4.0877 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: -40.0900
+Epoch   500 | Train Loss: 0.006922 | Val Loss: 0.006830 | Train R²: 0.7552 | Val R²: 0.7638 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.1200
+Epoch  1000 | Train Loss: 0.005516 | Val Loss: 0.005404 | Train R²: 0.8050 | Val R²: 0.8131 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3300
+Epoch  1500 | Train Loss: 0.004794 | Val Loss: 0.004711 | Train R²: 0.8305 | Val R²: 0.8371 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4600
+Epoch  2000 | Train Loss: 0.004092 | Val Loss: 0.004059 | Train R²: 0.8553 | Val R²: 0.8596 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.0000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5100
+Epoch  2500 | Train Loss: 0.003536 | Val Loss: 0.003561 | Train R²: 0.8750 | Val R²: 0.8768 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5600
+Epoch  3000 | Train Loss: 0.003209 | Val Loss: 0.003255 | Train R²: 0.8865 | Val R²: 0.8874 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.5400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5800
+Epoch  3500 | Train Loss: 0.003112 | Val Loss: 0.003145 | Train R²: 0.8900 | Val R²: 0.8912 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.5800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5900
+Epoch  4000 | Train Loss: 0.003007 | Val Loss: 0.003049 | Train R²: 0.8937 | Val R²: 0.8945 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6000
+Epoch  4500 | Train Loss: 0.002914 | Val Loss: 0.002955 | Train R²: 0.8970 | Val R²: 0.8978 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6100
+Epoch  5000 | Train Loss: 0.002858 | Val Loss: 0.002869 | Train R²: 0.8989 | Val R²: 0.9008 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6100
+Epoch  5500 | Train Loss: 0.002814 | Val Loss: 0.002823 | Train R²: 0.9005 | Val R²: 0.9024 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6200
 Early stopping at epoch 5838 due to flat/negative trend (slope=0.000002)
 Epoch  5838 | Train Loss: 0.002787 | Val Loss: 0.002798 | Train R²: 0.9015 | Val R²: 0.9032
 Unpickling models
@@ -717,8 +717,8 @@ dt_gpp vs Custom_GPP R²=0.91 RMSE=2.18
 nt_gpp vs Custom_GPP R²=0.89 RMSE=2.36
 dt_reco vs Custom_RECO R²=0.50 RMSE=1.66
 nt_reco vs Custom_RECO R²=0.49 RMSE=1.45
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.37 RMSE=2.46
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.37 RMSE=2.46
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.60 RMSE=1.27
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.60 RMSE=1.27
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -745,13 +745,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.062353 | Val Loss: 0.059197 | Train R²: -1.2046 | Val R²: -1.0475 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3500
-Epoch   500 | Train Loss: 0.008206 | Val Loss: 0.008110 | Train R²: 0.7098 | Val R²: 0.7195 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  1000 | Train Loss: 0.007728 | Val Loss: 0.007628 | Train R²: 0.7268 | Val R²: 0.7362 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1500 | Train Loss: 0.007484 | Val Loss: 0.007393 | Train R²: 0.7354 | Val R²: 0.7443 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  2000 | Train Loss: 0.007118 | Val Loss: 0.007029 | Train R²: 0.7483 | Val R²: 0.7569 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  2500 | Train Loss: 0.007057 | Val Loss: 0.006962 | Train R²: 0.7505 | Val R²: 0.7592 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  3000 | Train Loss: 0.007016 | Val Loss: 0.006910 | Train R²: 0.7519 | Val R²: 0.7610 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
+Epoch     0 | Train Loss: 0.062353 | Val Loss: 0.059197 | Train R²: -1.2046 | Val R²: -1.0475 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -18.8300
+Epoch   500 | Train Loss: 0.008206 | Val Loss: 0.008110 | Train R²: 0.7098 | Val R²: 0.7195 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.1000
+Epoch  1000 | Train Loss: 0.007728 | Val Loss: 0.007628 | Train R²: 0.7268 | Val R²: 0.7362 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0900
+Epoch  1500 | Train Loss: 0.007484 | Val Loss: 0.007393 | Train R²: 0.7354 | Val R²: 0.7443 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  2000 | Train Loss: 0.007118 | Val Loss: 0.007029 | Train R²: 0.7483 | Val R²: 0.7569 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  2500 | Train Loss: 0.007057 | Val Loss: 0.006962 | Train R²: 0.7505 | Val R²: 0.7592 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
+Epoch  3000 | Train Loss: 0.007016 | Val Loss: 0.006910 | Train R²: 0.7519 | Val R²: 0.7610 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0800
 Early stopping at epoch 3447 due to flat/negative trend (slope=0.000002)
 Epoch  3447 | Train Loss: 0.006990 | Val Loss: 0.006878 | Train R²: 0.7529 | Val R²: 0.7621
 Unpickling models
@@ -785,8 +785,8 @@ dt_gpp vs Custom_GPP R²=0.79 RMSE=3.28
 nt_gpp vs Custom_GPP R²=0.80 RMSE=3.12
 dt_reco vs Custom_RECO R²=-2.34 RMSE=4.27
 nt_reco vs Custom_RECO R²=-2.88 RMSE=3.99
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.22 RMSE=2.24
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.22 RMSE=2.24
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.10 RMSE=3.55
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.10 RMSE=3.55
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -813,13 +813,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.076527 | Val Loss: 0.073547 | Train R²: -1.7058 | Val R²: -1.5438 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4500 | NightHrsTrueNee vs NightHrsModelNee R²: -0.9800
-Epoch   500 | Train Loss: 0.003391 | Val Loss: 0.003417 | Train R²: 0.8801 | Val R²: 0.8818 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1000 | Train Loss: 0.001992 | Val Loss: 0.001979 | Train R²: 0.9296 | Val R²: 0.9316 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  1500 | Train Loss: 0.001789 | Val Loss: 0.001752 | Train R²: 0.9368 | Val R²: 0.9394 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001667 | Val Loss: 0.001623 | Train R²: 0.9411 | Val R²: 0.9439 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001569 | Val Loss: 0.001530 | Train R²: 0.9445 | Val R²: 0.9471 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001498 | Val Loss: 0.001459 | Train R²: 0.9470 | Val R²: 0.9495 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.076527 | Val Loss: 0.073547 | Train R²: -1.7058 | Val R²: -1.5438 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.3800 | NightHrsTrueNee vs NightHrsModelNee R²: -20.1500
+Epoch   500 | Train Loss: 0.003391 | Val Loss: 0.003417 | Train R²: 0.8801 | Val R²: 0.8818 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2500
+Epoch  1000 | Train Loss: 0.001992 | Val Loss: 0.001979 | Train R²: 0.9296 | Val R²: 0.9316 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  1500 | Train Loss: 0.001789 | Val Loss: 0.001752 | Train R²: 0.9368 | Val R²: 0.9394 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001667 | Val Loss: 0.001623 | Train R²: 0.9411 | Val R²: 0.9439 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001569 | Val Loss: 0.001530 | Train R²: 0.9445 | Val R²: 0.9471 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001498 | Val Loss: 0.001459 | Train R²: 0.9470 | Val R²: 0.9495 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3430 due to flat/negative trend (slope=0.000002)
 Epoch  3430 | Train Loss: 0.001464 | Val Loss: 0.001426 | Train R²: 0.9482 | Val R²: 0.9507
 Unpickling models
@@ -853,8 +853,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.30
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.47
 dt_reco vs Custom_RECO R²=0.83 RMSE=0.98
 nt_reco vs Custom_RECO R²=0.94 RMSE=0.51
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.36 RMSE=1.73
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.36 RMSE=1.73
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -881,7 +881,7 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.035936 | Val Loss: 0.035300 | Train R²: -0.2706 | Val R²: -0.2209 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2900 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4100
+Epoch     0 | Train Loss: 0.035936 | Val Loss: 0.035300 | Train R²: -0.2706 | Val R²: -0.2209 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.1100 | NightHrsTrueNee vs NightHrsModelNee R²: -3.8000
 Early stopping at epoch 248 due to flat/negative trend (slope=0.000002)
 Epoch   248 | Train Loss: 0.028286 | Val Loss: 0.028918 | Train R²: -0.0001 | Val R²: -0.0002
 Unpickling models
@@ -915,8 +915,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-2.34 RMSE=4.27
 nt_reco vs Custom_RECO R²=-2.88 RMSE=3.99
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.22 RMSE=8.12
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.22 RMSE=8.12
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.11 RMSE=3.55
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.11 RMSE=3.55
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -943,7 +943,7 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.034587 | Val Loss: 0.034567 | Train R²: -0.2229 | Val R²: -0.1956 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.3600
+Epoch     0 | Train Loss: 0.034587 | Val Loss: 0.034567 | Train R²: -0.2229 | Val R²: -0.1956 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.7300 | NightHrsTrueNee vs NightHrsModelNee R²: -3.8500
 Early stopping at epoch 375 due to flat/negative trend (slope=0.000002)
 Epoch   375 | Train Loss: 0.028284 | Val Loss: 0.028916 | Train R²: -0.0000 | Val R²: -0.0001
 Unpickling models
@@ -977,8 +977,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-2.34 RMSE=4.27
 nt_reco vs Custom_RECO R²=-2.88 RMSE=3.99
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.22 RMSE=8.12
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.22 RMSE=8.12
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.11 RMSE=3.55
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.11 RMSE=3.55
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1005,16 +1005,16 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.097617 | Val Loss: 0.090526 | Train R²: -2.4515 | Val R²: -2.1310 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.4800 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0700
-Epoch   500 | Train Loss: 0.025147 | Val Loss: 0.025792 | Train R²: 0.1109 | Val R²: 0.1079 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
-Epoch  1000 | Train Loss: 0.024661 | Val Loss: 0.025337 | Train R²: 0.1281 | Val R²: 0.1237 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2300
-Epoch  1500 | Train Loss: 0.024434 | Val Loss: 0.025110 | Train R²: 0.1361 | Val R²: 0.1315 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  2000 | Train Loss: 0.024273 | Val Loss: 0.024954 | Train R²: 0.1418 | Val R²: 0.1369 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  2500 | Train Loss: 0.024173 | Val Loss: 0.024845 | Train R²: 0.1453 | Val R²: 0.1407 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  3000 | Train Loss: 0.024112 | Val Loss: 0.024788 | Train R²: 0.1475 | Val R²: 0.1427 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  3500 | Train Loss: 0.024041 | Val Loss: 0.024710 | Train R²: 0.1500 | Val R²: 0.1453 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  4000 | Train Loss: 0.023969 | Val Loss: 0.024635 | Train R²: 0.1525 | Val R²: 0.1479 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
-Epoch  4500 | Train Loss: 0.023922 | Val Loss: 0.024593 | Train R²: 0.1542 | Val R²: 0.1494 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2200
+Epoch     0 | Train Loss: 0.097617 | Val Loss: 0.090526 | Train R²: -2.4515 | Val R²: -2.1310 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.9100 | NightHrsTrueNee vs NightHrsModelNee R²: -17.5700
+Epoch   500 | Train Loss: 0.025147 | Val Loss: 0.025792 | Train R²: 0.1109 | Val R²: 0.1079 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.0900 | NightHrsTrueNee vs NightHrsModelNee R²: -0.1000
+Epoch  1000 | Train Loss: 0.024661 | Val Loss: 0.025337 | Train R²: 0.1281 | Val R²: 0.1237 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.0900
+Epoch  1500 | Train Loss: 0.024434 | Val Loss: 0.025110 | Train R²: 0.1361 | Val R²: 0.1315 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2000
+Epoch  2000 | Train Loss: 0.024273 | Val Loss: 0.024954 | Train R²: 0.1418 | Val R²: 0.1369 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.2600
+Epoch  2500 | Train Loss: 0.024173 | Val Loss: 0.024845 | Train R²: 0.1453 | Val R²: 0.1407 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3100
+Epoch  3000 | Train Loss: 0.024112 | Val Loss: 0.024788 | Train R²: 0.1475 | Val R²: 0.1427 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3300
+Epoch  3500 | Train Loss: 0.024041 | Val Loss: 0.024710 | Train R²: 0.1500 | Val R²: 0.1453 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3800
+Epoch  4000 | Train Loss: 0.023969 | Val Loss: 0.024635 | Train R²: 0.1525 | Val R²: 0.1479 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4100
+Epoch  4500 | Train Loss: 0.023922 | Val Loss: 0.024593 | Train R²: 0.1542 | Val R²: 0.1494 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4200
 Early stopping at epoch 4904 due to flat/negative trend (slope=0.000002)
 Epoch  4904 | Train Loss: 0.023902 | Val Loss: 0.024577 | Train R²: 0.1549 | Val R²: 0.1499
 Unpickling models
@@ -1048,8 +1048,8 @@ dt_gpp vs Custom_GPP R²=-0.26 RMSE=8.02
 nt_gpp vs Custom_GPP R²=-0.24 RMSE=7.86
 dt_reco vs Custom_RECO R²=-1.01 RMSE=3.31
 nt_reco vs Custom_RECO R²=-1.08 RMSE=2.92
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-0.21 RMSE=8.09
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-0.21 RMSE=8.09
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.38 RMSE=1.58
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.38 RMSE=1.58
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1076,11 +1076,11 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.052459 | Val Loss: 0.050180 | Train R²: -0.8548 | Val R²: -0.7356 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8700
-Epoch   500 | Train Loss: 0.003695 | Val Loss: 0.003668 | Train R²: 0.8693 | Val R²: 0.8731 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1000 | Train Loss: 0.001977 | Val Loss: 0.001951 | Train R²: 0.9301 | Val R²: 0.9325 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  1500 | Train Loss: 0.001620 | Val Loss: 0.001600 | Train R²: 0.9427 | Val R²: 0.9447 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2000 | Train Loss: 0.001507 | Val Loss: 0.001481 | Train R²: 0.9467 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.052459 | Val Loss: 0.050180 | Train R²: -0.8548 | Val R²: -0.7356 | NightHrsTrueNEE vs NightHrsModelReco R²: -7.1400 | NightHrsTrueNee vs NightHrsModelNee R²: -7.3000
+Epoch   500 | Train Loss: 0.003695 | Val Loss: 0.003668 | Train R²: 0.8693 | Val R²: 0.8731 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.0700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.0600
+Epoch  1000 | Train Loss: 0.001977 | Val Loss: 0.001951 | Train R²: 0.9301 | Val R²: 0.9325 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6400
+Epoch  1500 | Train Loss: 0.001620 | Val Loss: 0.001600 | Train R²: 0.9427 | Val R²: 0.9447 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001507 | Val Loss: 0.001481 | Train R²: 0.9467 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 2433 due to flat/negative trend (slope=0.000002)
 Epoch  2433 | Train Loss: 0.001474 | Val Loss: 0.001442 | Train R²: 0.9479 | Val R²: 0.9501
 Unpickling models
@@ -1114,8 +1114,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.31
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.48
 dt_reco vs Custom_RECO R²=0.82 RMSE=0.99
 nt_reco vs Custom_RECO R²=0.93 RMSE=0.52
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.35 RMSE=1.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.35 RMSE=1.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1142,13 +1142,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.061406 | Val Loss: 0.058624 | Train R²: -1.1711 | Val R²: -1.0276 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2600 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4000
-Epoch   500 | Train Loss: 0.003627 | Val Loss: 0.003659 | Train R²: 0.8718 | Val R²: 0.8734 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  1000 | Train Loss: 0.002588 | Val Loss: 0.002564 | Train R²: 0.9085 | Val R²: 0.9113 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1500 | Train Loss: 0.002375 | Val Loss: 0.002328 | Train R²: 0.9160 | Val R²: 0.9195 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  2000 | Train Loss: 0.002289 | Val Loss: 0.002228 | Train R²: 0.9191 | Val R²: 0.9230 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  2500 | Train Loss: 0.002241 | Val Loss: 0.002180 | Train R²: 0.9208 | Val R²: 0.9246 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  3000 | Train Loss: 0.002201 | Val Loss: 0.002134 | Train R²: 0.9222 | Val R²: 0.9262 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
+Epoch     0 | Train Loss: 0.061406 | Val Loss: 0.058624 | Train R²: -1.1711 | Val R²: -1.0276 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.8600 | NightHrsTrueNee vs NightHrsModelNee R²: -17.8700
+Epoch   500 | Train Loss: 0.003627 | Val Loss: 0.003659 | Train R²: 0.8718 | Val R²: 0.8734 | NightHrsTrueNEE vs NightHrsModelReco R²: -10.5200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4700
+Epoch  1000 | Train Loss: 0.002588 | Val Loss: 0.002564 | Train R²: 0.9085 | Val R²: 0.9113 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6900
+Epoch  1500 | Train Loss: 0.002375 | Val Loss: 0.002328 | Train R²: 0.9160 | Val R²: 0.9195 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  2000 | Train Loss: 0.002289 | Val Loss: 0.002228 | Train R²: 0.9191 | Val R²: 0.9230 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.4600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2500 | Train Loss: 0.002241 | Val Loss: 0.002180 | Train R²: 0.9208 | Val R²: 0.9246 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.5600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.002201 | Val Loss: 0.002134 | Train R²: 0.9222 | Val R²: 0.9262 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3447 due to flat/negative trend (slope=0.000002)
 Epoch  3447 | Train Loss: 0.002176 | Val Loss: 0.002102 | Train R²: 0.9231 | Val R²: 0.9273
 Unpickling models
@@ -1182,8 +1182,8 @@ dt_gpp vs Custom_GPP R²=0.84 RMSE=2.89
 nt_gpp vs Custom_GPP R²=0.82 RMSE=2.97
 dt_reco vs Custom_RECO R²=-0.36 RMSE=2.72
 nt_reco vs Custom_RECO R²=-0.45 RMSE=2.44
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.39 RMSE=2.23
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.39 RMSE=2.23
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.22 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.22 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1210,14 +1210,14 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.062909 | Val Loss: 0.059884 | Train R²: -1.2243 | Val R²: -1.0712 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2600 | NightHrsTrueNee vs NightHrsModelNee R²: -0.5000
-Epoch   500 | Train Loss: 0.003434 | Val Loss: 0.003441 | Train R²: 0.8786 | Val R²: 0.8810 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002141 | Val Loss: 0.002076 | Train R²: 0.9243 | Val R²: 0.9282 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  1500 | Train Loss: 0.001871 | Val Loss: 0.001815 | Train R²: 0.9339 | Val R²: 0.9372 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001745 | Val Loss: 0.001704 | Train R²: 0.9383 | Val R²: 0.9411 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001666 | Val Loss: 0.001637 | Train R²: 0.9411 | Val R²: 0.9434 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001598 | Val Loss: 0.001577 | Train R²: 0.9435 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001546 | Val Loss: 0.001536 | Train R²: 0.9453 | Val R²: 0.9469 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.062909 | Val Loss: 0.059884 | Train R²: -1.2243 | Val R²: -1.0712 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.8900 | NightHrsTrueNee vs NightHrsModelNee R²: -17.4700
+Epoch   500 | Train Loss: 0.003434 | Val Loss: 0.003441 | Train R²: 0.8786 | Val R²: 0.8810 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.1600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4700
+Epoch  1000 | Train Loss: 0.002141 | Val Loss: 0.002076 | Train R²: 0.9243 | Val R²: 0.9282 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.9400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6900
+Epoch  1500 | Train Loss: 0.001871 | Val Loss: 0.001815 | Train R²: 0.9339 | Val R²: 0.9372 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  2000 | Train Loss: 0.001745 | Val Loss: 0.001704 | Train R²: 0.9383 | Val R²: 0.9411 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  2500 | Train Loss: 0.001666 | Val Loss: 0.001637 | Train R²: 0.9411 | Val R²: 0.9434 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.1800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3000 | Train Loss: 0.001598 | Val Loss: 0.001577 | Train R²: 0.9435 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.0600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3500 | Train Loss: 0.001546 | Val Loss: 0.001536 | Train R²: 0.9453 | Val R²: 0.9469 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.0000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
 Early stopping at epoch 3503 due to flat/negative trend (slope=0.000002)
 Epoch  3503 | Train Loss: 0.001545 | Val Loss: 0.001536 | Train R²: 0.9454 | Val R²: 0.9469
 Unpickling models
@@ -1251,8 +1251,8 @@ dt_gpp vs Custom_GPP R²=0.93 RMSE=1.95
 nt_gpp vs Custom_GPP R²=0.91 RMSE=2.09
 dt_reco vs Custom_RECO R²=0.37 RMSE=1.86
 nt_reco vs Custom_RECO R²=0.42 RMSE=1.54
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.44 RMSE=1.79
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.44 RMSE=1.79
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.00 RMSE=1.01
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.00 RMSE=1.01
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1279,16 +1279,16 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.074855 | Val Loss: 0.069109 | Train R²: -1.6467 | Val R²: -1.3903 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8800
-Epoch   500 | Train Loss: 0.003954 | Val Loss: 0.003982 | Train R²: 0.8602 | Val R²: 0.8623 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  1000 | Train Loss: 0.002535 | Val Loss: 0.002507 | Train R²: 0.9104 | Val R²: 0.9133 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  1500 | Train Loss: 0.002027 | Val Loss: 0.001963 | Train R²: 0.9283 | Val R²: 0.9321 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001807 | Val Loss: 0.001746 | Train R²: 0.9361 | Val R²: 0.9396 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001675 | Val Loss: 0.001625 | Train R²: 0.9408 | Val R²: 0.9438 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001593 | Val Loss: 0.001555 | Train R²: 0.9437 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001540 | Val Loss: 0.001511 | Train R²: 0.9456 | Val R²: 0.9477 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001496 | Val Loss: 0.001464 | Train R²: 0.9471 | Val R²: 0.9493 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
-Epoch  4500 | Train Loss: 0.001445 | Val Loss: 0.001423 | Train R²: 0.9489 | Val R²: 0.9508 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
+Epoch     0 | Train Loss: 0.074855 | Val Loss: 0.069109 | Train R²: -1.6467 | Val R²: -1.3903 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6600 | NightHrsTrueNee vs NightHrsModelNee R²: -18.5800
+Epoch   500 | Train Loss: 0.003954 | Val Loss: 0.003982 | Train R²: 0.8602 | Val R²: 0.8623 | NightHrsTrueNEE vs NightHrsModelReco R²: -16.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3100
+Epoch  1000 | Train Loss: 0.002535 | Val Loss: 0.002507 | Train R²: 0.9104 | Val R²: 0.9133 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.9500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6100
+Epoch  1500 | Train Loss: 0.002027 | Val Loss: 0.001963 | Train R²: 0.9283 | Val R²: 0.9321 | NightHrsTrueNEE vs NightHrsModelReco R²: -7.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
+Epoch  2000 | Train Loss: 0.001807 | Val Loss: 0.001746 | Train R²: 0.9361 | Val R²: 0.9396 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.6100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  2500 | Train Loss: 0.001675 | Val Loss: 0.001625 | Train R²: 0.9408 | Val R²: 0.9438 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.1300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3000 | Train Loss: 0.001593 | Val Loss: 0.001555 | Train R²: 0.9437 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.0400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3500 | Train Loss: 0.001540 | Val Loss: 0.001511 | Train R²: 0.9456 | Val R²: 0.9477 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4000 | Train Loss: 0.001496 | Val Loss: 0.001464 | Train R²: 0.9471 | Val R²: 0.9493 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4500 | Train Loss: 0.001445 | Val Loss: 0.001423 | Train R²: 0.9489 | Val R²: 0.9508 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
 Early stopping at epoch 4832 due to flat/negative trend (slope=0.000002)
 Epoch  4832 | Train Loss: 0.001420 | Val Loss: 0.001402 | Train R²: 0.9498 | Val R²: 0.9515
 Unpickling models
@@ -1322,8 +1322,8 @@ dt_gpp vs Custom_GPP R²=0.84 RMSE=2.88
 nt_gpp vs Custom_GPP R²=0.82 RMSE=2.97
 dt_reco vs Custom_RECO R²=-0.52 RMSE=2.88
 nt_reco vs Custom_RECO R²=-0.70 RMSE=2.64
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.55 RMSE=1.69
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.55 RMSE=1.69
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.61 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.61 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1350,15 +1350,15 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.105731 | Val Loss: 0.097065 | Train R²: -2.7383 | Val R²: -2.3572 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -1.8600
-Epoch   500 | Train Loss: 0.004206 | Val Loss: 0.004213 | Train R²: 0.8513 | Val R²: 0.8543 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  1000 | Train Loss: 0.002500 | Val Loss: 0.002439 | Train R²: 0.9116 | Val R²: 0.9156 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.002118 | Val Loss: 0.002040 | Train R²: 0.9251 | Val R²: 0.9294 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2000 | Train Loss: 0.001917 | Val Loss: 0.001841 | Train R²: 0.9322 | Val R²: 0.9363 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001756 | Val Loss: 0.001703 | Train R²: 0.9379 | Val R²: 0.9411 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001648 | Val Loss: 0.001608 | Train R²: 0.9417 | Val R²: 0.9444 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001579 | Val Loss: 0.001543 | Train R²: 0.9442 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001535 | Val Loss: 0.001503 | Train R²: 0.9457 | Val R²: 0.9480 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.105731 | Val Loss: 0.097065 | Train R²: -2.7383 | Val R²: -2.3572 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6600 | NightHrsTrueNee vs NightHrsModelNee R²: -23.9200
+Epoch   500 | Train Loss: 0.004206 | Val Loss: 0.004213 | Train R²: 0.8513 | Val R²: 0.8543 | NightHrsTrueNEE vs NightHrsModelReco R²: -16.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.1000
+Epoch  1000 | Train Loss: 0.002500 | Val Loss: 0.002439 | Train R²: 0.9116 | Val R²: 0.9156 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.0400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5700
+Epoch  1500 | Train Loss: 0.002118 | Val Loss: 0.002040 | Train R²: 0.9251 | Val R²: 0.9294 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.0200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  2000 | Train Loss: 0.001917 | Val Loss: 0.001841 | Train R²: 0.9322 | Val R²: 0.9363 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.7400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
+Epoch  2500 | Train Loss: 0.001756 | Val Loss: 0.001703 | Train R²: 0.9379 | Val R²: 0.9411 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  3000 | Train Loss: 0.001648 | Val Loss: 0.001608 | Train R²: 0.9417 | Val R²: 0.9444 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.0700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  3500 | Train Loss: 0.001579 | Val Loss: 0.001543 | Train R²: 0.9442 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.6400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  4000 | Train Loss: 0.001535 | Val Loss: 0.001503 | Train R²: 0.9457 | Val R²: 0.9480 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
 Early stopping at epoch 4074 due to flat/negative trend (slope=0.000002)
 Epoch  4074 | Train Loss: 0.001529 | Val Loss: 0.001499 | Train R²: 0.9459 | Val R²: 0.9481
 Unpickling models
@@ -1392,8 +1392,8 @@ dt_gpp vs Custom_GPP R²=0.80 RMSE=3.21
 nt_gpp vs Custom_GPP R²=0.78 RMSE=3.30
 dt_reco vs Custom_RECO R²=-0.92 RMSE=3.23
 nt_reco vs Custom_RECO R²=-1.17 RMSE=2.99
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.46 RMSE=1.76
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.46 RMSE=1.76
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.26 RMSE=1.02
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.26 RMSE=1.02
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1420,16 +1420,16 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.109464 | Val Loss: 0.100807 | Train R²: -2.8703 | Val R²: -2.4866 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -2.1100
-Epoch   500 | Train Loss: 0.004767 | Val Loss: 0.004801 | Train R²: 0.8315 | Val R²: 0.8339 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  1000 | Train Loss: 0.002672 | Val Loss: 0.002642 | Train R²: 0.9055 | Val R²: 0.9086 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  1500 | Train Loss: 0.002127 | Val Loss: 0.002080 | Train R²: 0.9248 | Val R²: 0.9281 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2000 | Train Loss: 0.001881 | Val Loss: 0.001829 | Train R²: 0.9335 | Val R²: 0.9367 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001725 | Val Loss: 0.001674 | Train R²: 0.9390 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001622 | Val Loss: 0.001572 | Train R²: 0.9426 | Val R²: 0.9456 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001559 | Val Loss: 0.001515 | Train R²: 0.9449 | Val R²: 0.9476 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001504 | Val Loss: 0.001469 | Train R²: 0.9468 | Val R²: 0.9492 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
-Epoch  4500 | Train Loss: 0.001455 | Val Loss: 0.001430 | Train R²: 0.9485 | Val R²: 0.9505 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
+Epoch     0 | Train Loss: 0.109464 | Val Loss: 0.100807 | Train R²: -2.8703 | Val R²: -2.4866 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6700 | NightHrsTrueNee vs NightHrsModelNee R²: -23.2700
+Epoch   500 | Train Loss: 0.004767 | Val Loss: 0.004801 | Train R²: 0.8315 | Val R²: 0.8339 | NightHrsTrueNEE vs NightHrsModelReco R²: -14.7700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.0100
+Epoch  1000 | Train Loss: 0.002672 | Val Loss: 0.002642 | Train R²: 0.9055 | Val R²: 0.9086 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.2000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5600
+Epoch  1500 | Train Loss: 0.002127 | Val Loss: 0.002080 | Train R²: 0.9248 | Val R²: 0.9281 | NightHrsTrueNEE vs NightHrsModelReco R²: -7.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  2000 | Train Loss: 0.001881 | Val Loss: 0.001829 | Train R²: 0.9335 | Val R²: 0.9367 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  2500 | Train Loss: 0.001725 | Val Loss: 0.001674 | Train R²: 0.9390 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: -6.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  3000 | Train Loss: 0.001622 | Val Loss: 0.001572 | Train R²: 0.9426 | Val R²: 0.9456 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.4600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  3500 | Train Loss: 0.001559 | Val Loss: 0.001515 | Train R²: 0.9449 | Val R²: 0.9476 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  4000 | Train Loss: 0.001504 | Val Loss: 0.001469 | Train R²: 0.9468 | Val R²: 0.9492 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.9000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4500 | Train Loss: 0.001455 | Val Loss: 0.001430 | Train R²: 0.9485 | Val R²: 0.9505 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.0700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
 Early stopping at epoch 4937 due to flat/negative trend (slope=0.000002)
 Epoch  4937 | Train Loss: 0.001426 | Val Loss: 0.001401 | Train R²: 0.9496 | Val R²: 0.9516
 Unpickling models
@@ -1463,8 +1463,8 @@ dt_gpp vs Custom_GPP R²=0.79 RMSE=3.28
 nt_gpp vs Custom_GPP R²=0.77 RMSE=3.36
 dt_reco vs Custom_RECO R²=-1.02 RMSE=3.32
 nt_reco vs Custom_RECO R²=-1.30 RMSE=3.07
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.52 RMSE=1.69
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.52 RMSE=1.69
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.53 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.53 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1491,21 +1491,21 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.116434 | Val Loss: 0.107356 | Train R²: -3.1168 | Val R²: -2.7131 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0200
-Epoch   500 | Train Loss: 0.006599 | Val Loss: 0.006534 | Train R²: 0.7667 | Val R²: 0.7740 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
-Epoch  1000 | Train Loss: 0.003358 | Val Loss: 0.003312 | Train R²: 0.8813 | Val R²: 0.8854 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1500 | Train Loss: 0.002268 | Val Loss: 0.002239 | Train R²: 0.9198 | Val R²: 0.9226 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  2000 | Train Loss: 0.002015 | Val Loss: 0.001992 | Train R²: 0.9288 | Val R²: 0.9311 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2500 | Train Loss: 0.001915 | Val Loss: 0.001900 | Train R²: 0.9323 | Val R²: 0.9343 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001862 | Val Loss: 0.001849 | Train R²: 0.9342 | Val R²: 0.9360 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3500 | Train Loss: 0.001824 | Val Loss: 0.001809 | Train R²: 0.9355 | Val R²: 0.9374 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  4000 | Train Loss: 0.001788 | Val Loss: 0.001769 | Train R²: 0.9368 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  4500 | Train Loss: 0.001745 | Val Loss: 0.001722 | Train R²: 0.9383 | Val R²: 0.9404 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  5000 | Train Loss: 0.001675 | Val Loss: 0.001645 | Train R²: 0.9408 | Val R²: 0.9431 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  5500 | Train Loss: 0.001609 | Val Loss: 0.001577 | Train R²: 0.9431 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  6000 | Train Loss: 0.001560 | Val Loss: 0.001519 | Train R²: 0.9448 | Val R²: 0.9475 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  6500 | Train Loss: 0.001514 | Val Loss: 0.001469 | Train R²: 0.9465 | Val R²: 0.9492 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  7000 | Train Loss: 0.001483 | Val Loss: 0.001429 | Train R²: 0.9476 | Val R²: 0.9506 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
+Epoch     0 | Train Loss: 0.116434 | Val Loss: 0.107356 | Train R²: -3.1168 | Val R²: -2.7131 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6700 | NightHrsTrueNee vs NightHrsModelNee R²: -28.2900
+Epoch   500 | Train Loss: 0.006599 | Val Loss: 0.006534 | Train R²: 0.7667 | Val R²: 0.7740 | NightHrsTrueNEE vs NightHrsModelReco R²: -18.1700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.1800
+Epoch  1000 | Train Loss: 0.003358 | Val Loss: 0.003312 | Train R²: 0.8813 | Val R²: 0.8854 | NightHrsTrueNEE vs NightHrsModelReco R²: -14.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4700
+Epoch  1500 | Train Loss: 0.002268 | Val Loss: 0.002239 | Train R²: 0.9198 | Val R²: 0.9226 | NightHrsTrueNEE vs NightHrsModelReco R²: -12.1900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6500
+Epoch  2000 | Train Loss: 0.002015 | Val Loss: 0.001992 | Train R²: 0.9288 | Val R²: 0.9311 | NightHrsTrueNEE vs NightHrsModelReco R²: -11.0700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
+Epoch  2500 | Train Loss: 0.001915 | Val Loss: 0.001900 | Train R²: 0.9323 | Val R²: 0.9343 | NightHrsTrueNEE vs NightHrsModelReco R²: -11.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  3000 | Train Loss: 0.001862 | Val Loss: 0.001849 | Train R²: 0.9342 | Val R²: 0.9360 | NightHrsTrueNEE vs NightHrsModelReco R²: -12.1100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  3500 | Train Loss: 0.001824 | Val Loss: 0.001809 | Train R²: 0.9355 | Val R²: 0.9374 | NightHrsTrueNEE vs NightHrsModelReco R²: -12.0600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  4000 | Train Loss: 0.001788 | Val Loss: 0.001769 | Train R²: 0.9368 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: -11.9300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  4500 | Train Loss: 0.001745 | Val Loss: 0.001722 | Train R²: 0.9383 | Val R²: 0.9404 | NightHrsTrueNEE vs NightHrsModelReco R²: -11.2700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  5000 | Train Loss: 0.001675 | Val Loss: 0.001645 | Train R²: 0.9408 | Val R²: 0.9431 | NightHrsTrueNEE vs NightHrsModelReco R²: -10.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  5500 | Train Loss: 0.001609 | Val Loss: 0.001577 | Train R²: 0.9431 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -8.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  6000 | Train Loss: 0.001560 | Val Loss: 0.001519 | Train R²: 0.9448 | Val R²: 0.9475 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.9200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  6500 | Train Loss: 0.001514 | Val Loss: 0.001469 | Train R²: 0.9465 | Val R²: 0.9492 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.2900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  7000 | Train Loss: 0.001483 | Val Loss: 0.001429 | Train R²: 0.9476 | Val R²: 0.9506 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
 Early stopping at epoch 7405 due to flat/negative trend (slope=0.000002)
 Epoch  7405 | Train Loss: 0.001459 | Val Loss: 0.001401 | Train R²: 0.9484 | Val R²: 0.9516
 Unpickling models
@@ -1539,8 +1539,8 @@ dt_gpp vs Custom_GPP R²=0.77 RMSE=3.41
 nt_gpp vs Custom_GPP R²=0.75 RMSE=3.50
 dt_reco vs Custom_RECO R²=-1.16 RMSE=3.43
 nt_reco vs Custom_RECO R²=-1.54 RMSE=3.23
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.60 RMSE=1.71
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.60 RMSE=1.71
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.79 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.79 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1567,16 +1567,16 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.115769 | Val Loss: 0.106189 | Train R²: -3.0933 | Val R²: -2.6728 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9900
-Epoch   500 | Train Loss: 0.004870 | Val Loss: 0.004904 | Train R²: 0.8278 | Val R²: 0.8304 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  1000 | Train Loss: 0.002512 | Val Loss: 0.002510 | Train R²: 0.9112 | Val R²: 0.9132 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.2700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.002049 | Val Loss: 0.002035 | Train R²: 0.9276 | Val R²: 0.9296 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001901 | Val Loss: 0.001886 | Train R²: 0.9328 | Val R²: 0.9348 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001825 | Val Loss: 0.001811 | Train R²: 0.9355 | Val R²: 0.9374 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001746 | Val Loss: 0.001730 | Train R²: 0.9383 | Val R²: 0.9402 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001685 | Val Loss: 0.001668 | Train R²: 0.9404 | Val R²: 0.9423 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001637 | Val Loss: 0.001620 | Train R²: 0.9421 | Val R²: 0.9440 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4500 | Train Loss: 0.001599 | Val Loss: 0.001586 | Train R²: 0.9434 | Val R²: 0.9452 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.115769 | Val Loss: 0.106189 | Train R²: -3.0933 | Val R²: -2.6728 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6600 | NightHrsTrueNee vs NightHrsModelNee R²: -27.9300
+Epoch   500 | Train Loss: 0.004870 | Val Loss: 0.004904 | Train R²: 0.8278 | Val R²: 0.8304 | NightHrsTrueNEE vs NightHrsModelReco R²: -17.0100 | NightHrsTrueNee vs NightHrsModelNee R²: -0.1400
+Epoch  1000 | Train Loss: 0.002512 | Val Loss: 0.002510 | Train R²: 0.9112 | Val R²: 0.9132 | NightHrsTrueNEE vs NightHrsModelReco R²: -17.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5300
+Epoch  1500 | Train Loss: 0.002049 | Val Loss: 0.002035 | Train R²: 0.9276 | Val R²: 0.9296 | NightHrsTrueNEE vs NightHrsModelReco R²: -13.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6300
+Epoch  2000 | Train Loss: 0.001901 | Val Loss: 0.001886 | Train R²: 0.9328 | Val R²: 0.9348 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  2500 | Train Loss: 0.001825 | Val Loss: 0.001811 | Train R²: 0.9355 | Val R²: 0.9374 | NightHrsTrueNEE vs NightHrsModelReco R²: -7.5100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6900
+Epoch  3000 | Train Loss: 0.001746 | Val Loss: 0.001730 | Train R²: 0.9383 | Val R²: 0.9402 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.6100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  3500 | Train Loss: 0.001685 | Val Loss: 0.001668 | Train R²: 0.9404 | Val R²: 0.9423 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.1900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  4000 | Train Loss: 0.001637 | Val Loss: 0.001620 | Train R²: 0.9421 | Val R²: 0.9440 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.0200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  4500 | Train Loss: 0.001599 | Val Loss: 0.001586 | Train R²: 0.9434 | Val R²: 0.9452 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.9100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
 Early stopping at epoch 4526 due to flat/negative trend (slope=0.000002)
 Epoch  4526 | Train Loss: 0.001598 | Val Loss: 0.001584 | Train R²: 0.9435 | Val R²: 0.9452
 Unpickling models
@@ -1610,8 +1610,8 @@ dt_gpp vs Custom_GPP R²=0.76 RMSE=3.53
 nt_gpp vs Custom_GPP R²=0.74 RMSE=3.62
 dt_reco vs Custom_RECO R²=-1.28 RMSE=3.53
 nt_reco vs Custom_RECO R²=-1.68 RMSE=3.32
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.60 RMSE=1.81
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.60 RMSE=1.81
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-2.94 RMSE=1.04
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-2.94 RMSE=1.04
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1638,14 +1638,14 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.114497 | Val Loss: 0.107244 | Train R²: -3.0483 | Val R²: -2.7093 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2100 | NightHrsTrueNee vs NightHrsModelNee R²: -2.2100
-Epoch   500 | Train Loss: 0.004704 | Val Loss: 0.004731 | Train R²: 0.8337 | Val R²: 0.8364 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.0600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  1000 | Train Loss: 0.003078 | Val Loss: 0.003126 | Train R²: 0.8912 | Val R²: 0.8919 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  1500 | Train Loss: 0.002231 | Val Loss: 0.002260 | Train R²: 0.9211 | Val R²: 0.9218 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  2000 | Train Loss: 0.001879 | Val Loss: 0.001883 | Train R²: 0.9336 | Val R²: 0.9349 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001760 | Val Loss: 0.001750 | Train R²: 0.9378 | Val R²: 0.9395 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001665 | Val Loss: 0.001646 | Train R²: 0.9411 | Val R²: 0.9431 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001596 | Val Loss: 0.001575 | Train R²: 0.9436 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.114497 | Val Loss: 0.107244 | Train R²: -3.0483 | Val R²: -2.7093 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6700 | NightHrsTrueNee vs NightHrsModelNee R²: -25.9800
+Epoch   500 | Train Loss: 0.004704 | Val Loss: 0.004731 | Train R²: 0.8337 | Val R²: 0.8364 | NightHrsTrueNEE vs NightHrsModelReco R²: -8.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.0200
+Epoch  1000 | Train Loss: 0.003078 | Val Loss: 0.003126 | Train R²: 0.8912 | Val R²: 0.8919 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.0500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5500
+Epoch  1500 | Train Loss: 0.002231 | Val Loss: 0.002260 | Train R²: 0.9211 | Val R²: 0.9218 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.9800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  2000 | Train Loss: 0.001879 | Val Loss: 0.001883 | Train R²: 0.9336 | Val R²: 0.9349 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  2500 | Train Loss: 0.001760 | Val Loss: 0.001750 | Train R²: 0.9378 | Val R²: 0.9395 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  3000 | Train Loss: 0.001665 | Val Loss: 0.001646 | Train R²: 0.9411 | Val R²: 0.9431 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  3500 | Train Loss: 0.001596 | Val Loss: 0.001575 | Train R²: 0.9436 | Val R²: 0.9455 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
 Early stopping at epoch 3991 due to flat/negative trend (slope=0.000002)
 Epoch  3991 | Train Loss: 0.001558 | Val Loss: 0.001539 | Train R²: 0.9449 | Val R²: 0.9468
 Unpickling models
@@ -1679,8 +1679,8 @@ dt_gpp vs Custom_GPP R²=0.84 RMSE=2.86
 nt_gpp vs Custom_GPP R²=0.82 RMSE=2.96
 dt_reco vs Custom_RECO R²=-0.49 RMSE=2.85
 nt_reco vs Custom_RECO R²=-0.64 RMSE=2.59
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.50 RMSE=1.79
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.50 RMSE=1.79
+night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.52 RMSE=1.02
+night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.52 RMSE=1.02
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1707,15 +1707,15 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.109534 | Val Loss: 0.103472 | Train R²: -2.8728 | Val R²: -2.5788 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2600 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9300
-Epoch   500 | Train Loss: 0.004015 | Val Loss: 0.003929 | Train R²: 0.8581 | Val R²: 0.8641 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8500
-Epoch  1000 | Train Loss: 0.003041 | Val Loss: 0.002997 | Train R²: 0.8925 | Val R²: 0.8964 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  1500 | Train Loss: 0.002606 | Val Loss: 0.002557 | Train R²: 0.9079 | Val R²: 0.9115 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  2000 | Train Loss: 0.002016 | Val Loss: 0.001951 | Train R²: 0.9287 | Val R²: 0.9325 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2500 | Train Loss: 0.001809 | Val Loss: 0.001769 | Train R²: 0.9361 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001710 | Val Loss: 0.001683 | Train R²: 0.9395 | Val R²: 0.9418 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3500 | Train Loss: 0.001661 | Val Loss: 0.001628 | Train R²: 0.9413 | Val R²: 0.9437 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001625 | Val Loss: 0.001590 | Train R²: 0.9426 | Val R²: 0.9450 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.109534 | Val Loss: 0.103472 | Train R²: -2.8728 | Val R²: -2.5788 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.8200 | NightHrsTrueNee vs NightHrsModelNee R²: -26.9900
+Epoch   500 | Train Loss: 0.004015 | Val Loss: 0.003929 | Train R²: 0.8581 | Val R²: 0.8641 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.1300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3600
+Epoch  1000 | Train Loss: 0.003041 | Val Loss: 0.002997 | Train R²: 0.8925 | Val R²: 0.8964 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6300
+Epoch  1500 | Train Loss: 0.002606 | Val Loss: 0.002557 | Train R²: 0.9079 | Val R²: 0.9115 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
+Epoch  2000 | Train Loss: 0.002016 | Val Loss: 0.001951 | Train R²: 0.9287 | Val R²: 0.9325 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  2500 | Train Loss: 0.001809 | Val Loss: 0.001769 | Train R²: 0.9361 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  3000 | Train Loss: 0.001710 | Val Loss: 0.001683 | Train R²: 0.9395 | Val R²: 0.9418 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3500 | Train Loss: 0.001661 | Val Loss: 0.001628 | Train R²: 0.9413 | Val R²: 0.9437 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4000 | Train Loss: 0.001625 | Val Loss: 0.001590 | Train R²: 0.9426 | Val R²: 0.9450 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
 Early stopping at epoch 4236 due to flat/negative trend (slope=0.000002)
 Epoch  4236 | Train Loss: 0.001598 | Val Loss: 0.001569 | Train R²: 0.9435 | Val R²: 0.9457
 Unpickling models
@@ -1749,8 +1749,8 @@ dt_gpp vs Custom_GPP R²=0.96 RMSE=1.35
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.55
 dt_reco vs Custom_RECO R²=0.81 RMSE=1.03
 nt_reco vs Custom_RECO R²=0.92 RMSE=0.58
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.37 RMSE=1.83
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.37 RMSE=1.83
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.75 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.75 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1777,16 +1777,16 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.097797 | Val Loss: 0.092129 | Train R²: -2.4578 | Val R²: -2.1865 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2600 | NightHrsTrueNee vs NightHrsModelNee R²: -1.4400
-Epoch   500 | Train Loss: 0.003736 | Val Loss: 0.003644 | Train R²: 0.8679 | Val R²: 0.8739 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  1000 | Train Loss: 0.002871 | Val Loss: 0.002822 | Train R²: 0.8985 | Val R²: 0.9024 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1500 | Train Loss: 0.002373 | Val Loss: 0.002343 | Train R²: 0.9161 | Val R²: 0.9190 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  2000 | Train Loss: 0.002046 | Val Loss: 0.002016 | Train R²: 0.9277 | Val R²: 0.9303 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2500 | Train Loss: 0.001775 | Val Loss: 0.001728 | Train R²: 0.9372 | Val R²: 0.9402 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001604 | Val Loss: 0.001569 | Train R²: 0.9433 | Val R²: 0.9457 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001515 | Val Loss: 0.001485 | Train R²: 0.9464 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.8800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001466 | Val Loss: 0.001438 | Train R²: 0.9482 | Val R²: 0.9503 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
-Epoch  4500 | Train Loss: 0.001427 | Val Loss: 0.001404 | Train R²: 0.9495 | Val R²: 0.9514 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
+Epoch     0 | Train Loss: 0.097797 | Val Loss: 0.092129 | Train R²: -2.4578 | Val R²: -2.1865 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -25.9600
+Epoch   500 | Train Loss: 0.003736 | Val Loss: 0.003644 | Train R²: 0.8679 | Val R²: 0.8739 | NightHrsTrueNEE vs NightHrsModelReco R²: -10.5500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4300
+Epoch  1000 | Train Loss: 0.002871 | Val Loss: 0.002822 | Train R²: 0.8985 | Val R²: 0.9024 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5800
+Epoch  1500 | Train Loss: 0.002373 | Val Loss: 0.002343 | Train R²: 0.9161 | Val R²: 0.9190 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.5400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  2000 | Train Loss: 0.002046 | Val Loss: 0.002016 | Train R²: 0.9277 | Val R²: 0.9303 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  2500 | Train Loss: 0.001775 | Val Loss: 0.001728 | Train R²: 0.9372 | Val R²: 0.9402 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  3000 | Train Loss: 0.001604 | Val Loss: 0.001569 | Train R²: 0.9433 | Val R²: 0.9457 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3500 | Train Loss: 0.001515 | Val Loss: 0.001485 | Train R²: 0.9464 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4000 | Train Loss: 0.001466 | Val Loss: 0.001438 | Train R²: 0.9482 | Val R²: 0.9503 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  4500 | Train Loss: 0.001427 | Val Loss: 0.001404 | Train R²: 0.9495 | Val R²: 0.9514 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.5100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 4638 due to flat/negative trend (slope=0.000002)
 Epoch  4638 | Train Loss: 0.001420 | Val Loss: 0.001396 | Train R²: 0.9498 | Val R²: 0.9517
 Unpickling models
@@ -1820,8 +1820,8 @@ dt_gpp vs Custom_GPP R²=0.95 RMSE=1.61
 nt_gpp vs Custom_GPP R²=0.93 RMSE=1.90
 dt_reco vs Custom_RECO R²=0.69 RMSE=1.30
 nt_reco vs Custom_RECO R²=0.57 RMSE=1.33
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.98 RMSE=1.69
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.98 RMSE=1.69
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.49 RMSE=1.00
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.49 RMSE=1.00
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1848,15 +1848,15 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.121891 | Val Loss: 0.117598 | Train R²: -3.3097 | Val R²: -3.0674 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2300 | NightHrsTrueNee vs NightHrsModelNee R²: -1.8600
-Epoch   500 | Train Loss: 0.003782 | Val Loss: 0.003793 | Train R²: 0.8663 | Val R²: 0.8688 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  1000 | Train Loss: 0.002822 | Val Loss: 0.002832 | Train R²: 0.9002 | Val R²: 0.9020 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1500 | Train Loss: 0.002258 | Val Loss: 0.002239 | Train R²: 0.9202 | Val R²: 0.9225 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  2000 | Train Loss: 0.002003 | Val Loss: 0.001980 | Train R²: 0.9292 | Val R²: 0.9315 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  2500 | Train Loss: 0.001777 | Val Loss: 0.001749 | Train R²: 0.9372 | Val R²: 0.9395 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  3000 | Train Loss: 0.001609 | Val Loss: 0.001589 | Train R²: 0.9431 | Val R²: 0.9451 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001516 | Val Loss: 0.001497 | Train R²: 0.9464 | Val R²: 0.9482 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  4000 | Train Loss: 0.001461 | Val Loss: 0.001443 | Train R²: 0.9483 | Val R²: 0.9501 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9500
+Epoch     0 | Train Loss: 0.121891 | Val Loss: 0.117598 | Train R²: -3.3097 | Val R²: -3.0674 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.7300 | NightHrsTrueNee vs NightHrsModelNee R²: -36.3700
+Epoch   500 | Train Loss: 0.003782 | Val Loss: 0.003793 | Train R²: 0.8663 | Val R²: 0.8688 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.6200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.4100
+Epoch  1000 | Train Loss: 0.002822 | Val Loss: 0.002832 | Train R²: 0.9002 | Val R²: 0.9020 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.5500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6000
+Epoch  1500 | Train Loss: 0.002258 | Val Loss: 0.002239 | Train R²: 0.9202 | Val R²: 0.9225 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  2000 | Train Loss: 0.002003 | Val Loss: 0.001980 | Train R²: 0.9292 | Val R²: 0.9315 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2500 | Train Loss: 0.001777 | Val Loss: 0.001749 | Train R²: 0.9372 | Val R²: 0.9395 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  3000 | Train Loss: 0.001609 | Val Loss: 0.001589 | Train R²: 0.9431 | Val R²: 0.9451 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3500 | Train Loss: 0.001516 | Val Loss: 0.001497 | Train R²: 0.9464 | Val R²: 0.9482 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  4000 | Train Loss: 0.001461 | Val Loss: 0.001443 | Train R²: 0.9483 | Val R²: 0.9501 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 4291 due to flat/negative trend (slope=0.000002)
 Epoch  4291 | Train Loss: 0.001442 | Val Loss: 0.001423 | Train R²: 0.9490 | Val R²: 0.9508
 Unpickling models
@@ -1890,8 +1890,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.27
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.45
 dt_reco vs Custom_RECO R²=0.82 RMSE=0.99
 nt_reco vs Custom_RECO R²=0.94 RMSE=0.49
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.36 RMSE=1.71
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.36 RMSE=1.71
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1918,20 +1918,20 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.109931 | Val Loss: 0.105290 | Train R²: -2.8869 | Val R²: -2.6417 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9000
-Epoch   500 | Train Loss: 0.005006 | Val Loss: 0.005041 | Train R²: 0.8230 | Val R²: 0.8257 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7900
-Epoch  1000 | Train Loss: 0.003862 | Val Loss: 0.003877 | Train R²: 0.8634 | Val R²: 0.8659 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8400
-Epoch  1500 | Train Loss: 0.003292 | Val Loss: 0.003271 | Train R²: 0.8836 | Val R²: 0.8869 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  2000 | Train Loss: 0.002849 | Val Loss: 0.002798 | Train R²: 0.8993 | Val R²: 0.9032 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  2500 | Train Loss: 0.002570 | Val Loss: 0.002505 | Train R²: 0.9091 | Val R²: 0.9134 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  3000 | Train Loss: 0.002303 | Val Loss: 0.002252 | Train R²: 0.9186 | Val R²: 0.9221 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  3500 | Train Loss: 0.002171 | Val Loss: 0.002145 | Train R²: 0.9232 | Val R²: 0.9258 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  4000 | Train Loss: 0.002072 | Val Loss: 0.002050 | Train R²: 0.9267 | Val R²: 0.9291 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  4500 | Train Loss: 0.001972 | Val Loss: 0.001964 | Train R²: 0.9303 | Val R²: 0.9321 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  5000 | Train Loss: 0.001888 | Val Loss: 0.001870 | Train R²: 0.9332 | Val R²: 0.9353 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  5500 | Train Loss: 0.001834 | Val Loss: 0.001816 | Train R²: 0.9351 | Val R²: 0.9372 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  6000 | Train Loss: 0.001789 | Val Loss: 0.001763 | Train R²: 0.9367 | Val R²: 0.9390 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  6500 | Train Loss: 0.001733 | Val Loss: 0.001695 | Train R²: 0.9387 | Val R²: 0.9414 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
+Epoch     0 | Train Loss: 0.109931 | Val Loss: 0.105290 | Train R²: -2.8869 | Val R²: -2.6417 | NightHrsTrueNEE vs NightHrsModelReco R²: -51.6800 | NightHrsTrueNee vs NightHrsModelNee R²: -28.4700
+Epoch   500 | Train Loss: 0.005006 | Val Loss: 0.005041 | Train R²: 0.8230 | Val R²: 0.8257 | NightHrsTrueNEE vs NightHrsModelReco R²: -8.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.3900
+Epoch  1000 | Train Loss: 0.003862 | Val Loss: 0.003877 | Train R²: 0.8634 | Val R²: 0.8659 | NightHrsTrueNEE vs NightHrsModelReco R²: -3.5200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5700
+Epoch  1500 | Train Loss: 0.003292 | Val Loss: 0.003271 | Train R²: 0.8836 | Val R²: 0.8869 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6300
+Epoch  2000 | Train Loss: 0.002849 | Val Loss: 0.002798 | Train R²: 0.8993 | Val R²: 0.9032 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6900
+Epoch  2500 | Train Loss: 0.002570 | Val Loss: 0.002505 | Train R²: 0.9091 | Val R²: 0.9134 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.1700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7000
+Epoch  3000 | Train Loss: 0.002303 | Val Loss: 0.002252 | Train R²: 0.9186 | Val R²: 0.9221 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  3500 | Train Loss: 0.002171 | Val Loss: 0.002145 | Train R²: 0.9232 | Val R²: 0.9258 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  4000 | Train Loss: 0.002072 | Val Loss: 0.002050 | Train R²: 0.9267 | Val R²: 0.9291 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  4500 | Train Loss: 0.001972 | Val Loss: 0.001964 | Train R²: 0.9303 | Val R²: 0.9321 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.5100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  5000 | Train Loss: 0.001888 | Val Loss: 0.001870 | Train R²: 0.9332 | Val R²: 0.9353 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.4400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  5500 | Train Loss: 0.001834 | Val Loss: 0.001816 | Train R²: 0.9351 | Val R²: 0.9372 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  6000 | Train Loss: 0.001789 | Val Loss: 0.001763 | Train R²: 0.9367 | Val R²: 0.9390 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.2900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  6500 | Train Loss: 0.001733 | Val Loss: 0.001695 | Train R²: 0.9387 | Val R²: 0.9414 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
 Early stopping at epoch 6940 due to flat/negative trend (slope=0.000002)
 Epoch  6940 | Train Loss: 0.001681 | Val Loss: 0.001645 | Train R²: 0.9406 | Val R²: 0.9431
 Unpickling models
@@ -1965,8 +1965,8 @@ dt_gpp vs Custom_GPP R²=0.93 RMSE=1.84
 nt_gpp vs Custom_GPP R²=0.92 RMSE=2.05
 dt_reco vs Custom_RECO R²=0.55 RMSE=1.57
 nt_reco vs Custom_RECO R²=0.52 RMSE=1.40
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.56 RMSE=1.87
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.56 RMSE=1.87
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.28 RMSE=1.04
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.28 RMSE=1.04
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -1993,14 +1993,14 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.107476 | Val Loss: 0.104798 | Train R²: -2.8000 | Val R²: -2.6247 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.5700 | NightHrsTrueNee vs NightHrsModelNee R²: -1.1700
-Epoch   500 | Train Loss: 0.002711 | Val Loss: 0.002724 | Train R²: 0.9042 | Val R²: 0.9058 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1000 | Train Loss: 0.002052 | Val Loss: 0.002062 | Train R²: 0.9274 | Val R²: 0.9287 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  1500 | Train Loss: 0.001837 | Val Loss: 0.001834 | Train R²: 0.9351 | Val R²: 0.9366 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001683 | Val Loss: 0.001673 | Train R²: 0.9405 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001587 | Val Loss: 0.001579 | Train R²: 0.9439 | Val R²: 0.9454 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001518 | Val Loss: 0.001514 | Train R²: 0.9463 | Val R²: 0.9476 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001469 | Val Loss: 0.001458 | Train R²: 0.9481 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.107476 | Val Loss: 0.104798 | Train R²: -2.8000 | Val R²: -2.6247 | NightHrsTrueNEE vs NightHrsModelReco R²: -5.4600 | NightHrsTrueNee vs NightHrsModelNee R²: -36.7200
+Epoch   500 | Train Loss: 0.002711 | Val Loss: 0.002724 | Train R²: 0.9042 | Val R²: 0.9058 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6500
+Epoch  1000 | Train Loss: 0.002052 | Val Loss: 0.002062 | Train R²: 0.9274 | Val R²: 0.9287 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  1500 | Train Loss: 0.001837 | Val Loss: 0.001834 | Train R²: 0.9351 | Val R²: 0.9366 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001683 | Val Loss: 0.001673 | Train R²: 0.9405 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001587 | Val Loss: 0.001579 | Train R²: 0.9439 | Val R²: 0.9454 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001518 | Val Loss: 0.001514 | Train R²: 0.9463 | Val R²: 0.9476 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3500 | Train Loss: 0.001469 | Val Loss: 0.001458 | Train R²: 0.9481 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3809 due to flat/negative trend (slope=0.000002)
 Epoch  3809 | Train Loss: 0.001449 | Val Loss: 0.001436 | Train R²: 0.9488 | Val R²: 0.9503
 Unpickling models
@@ -2034,8 +2034,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.26
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.51
 dt_reco vs Custom_RECO R²=0.84 RMSE=0.93
 nt_reco vs Custom_RECO R²=0.91 RMSE=0.62
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.54 RMSE=1.73
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.54 RMSE=1.73
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.98
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.98
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2062,13 +2062,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.105544 | Val Loss: 0.103348 | Train R²: -2.7317 | Val R²: -2.5745 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5700 | NightHrsTrueNee vs NightHrsModelNee R²: -1.3000
-Epoch   500 | Train Loss: 0.003012 | Val Loss: 0.003040 | Train R²: 0.8935 | Val R²: 0.8949 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8800
-Epoch  1000 | Train Loss: 0.002119 | Val Loss: 0.002112 | Train R²: 0.9251 | Val R²: 0.9269 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001822 | Val Loss: 0.001793 | Train R²: 0.9356 | Val R²: 0.9380 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001661 | Val Loss: 0.001615 | Train R²: 0.9413 | Val R²: 0.9441 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001574 | Val Loss: 0.001526 | Train R²: 0.9444 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001525 | Val Loss: 0.001484 | Train R²: 0.9461 | Val R²: 0.9487 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.105544 | Val Loss: 0.103348 | Train R²: -2.7317 | Val R²: -2.5745 | NightHrsTrueNEE vs NightHrsModelReco R²: -4.8400 | NightHrsTrueNee vs NightHrsModelNee R²: -34.3300
+Epoch   500 | Train Loss: 0.003012 | Val Loss: 0.003040 | Train R²: 0.8935 | Val R²: 0.8949 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6200
+Epoch  1000 | Train Loss: 0.002119 | Val Loss: 0.002112 | Train R²: 0.9251 | Val R²: 0.9269 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  1500 | Train Loss: 0.001822 | Val Loss: 0.001793 | Train R²: 0.9356 | Val R²: 0.9380 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001661 | Val Loss: 0.001615 | Train R²: 0.9413 | Val R²: 0.9441 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001574 | Val Loss: 0.001526 | Train R²: 0.9444 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001525 | Val Loss: 0.001484 | Train R²: 0.9461 | Val R²: 0.9487 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3176 due to flat/negative trend (slope=0.000002)
 Epoch  3176 | Train Loss: 0.001511 | Val Loss: 0.001472 | Train R²: 0.9466 | Val R²: 0.9491
 Unpickling models
@@ -2102,8 +2102,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.32
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.51
 dt_reco vs Custom_RECO R²=0.81 RMSE=1.01
 nt_reco vs Custom_RECO R²=0.93 RMSE=0.55
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.34 RMSE=1.77
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.34 RMSE=1.77
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2130,13 +2130,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.091148 | Val Loss: 0.086922 | Train R²: -2.2227 | Val R²: -2.0064 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8500
-Epoch   500 | Train Loss: 0.007596 | Val Loss: 0.007526 | Train R²: 0.7314 | Val R²: 0.7397 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002142 | Val Loss: 0.002139 | Train R²: 0.9243 | Val R²: 0.9260 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001802 | Val Loss: 0.001785 | Train R²: 0.9363 | Val R²: 0.9383 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001660 | Val Loss: 0.001637 | Train R²: 0.9413 | Val R²: 0.9434 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001570 | Val Loss: 0.001544 | Train R²: 0.9445 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001521 | Val Loss: 0.001491 | Train R²: 0.9462 | Val R²: 0.9484 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.091148 | Val Loss: 0.086922 | Train R²: -2.2227 | Val R²: -2.0064 | NightHrsTrueNEE vs NightHrsModelReco R²: -8.2500 | NightHrsTrueNee vs NightHrsModelNee R²: -29.6800
+Epoch   500 | Train Loss: 0.007596 | Val Loss: 0.007526 | Train R²: 0.7314 | Val R²: 0.7397 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9600 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9700
+Epoch  1000 | Train Loss: 0.002142 | Val Loss: 0.002139 | Train R²: 0.9243 | Val R²: 0.9260 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  1500 | Train Loss: 0.001802 | Val Loss: 0.001785 | Train R²: 0.9363 | Val R²: 0.9383 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2000 | Train Loss: 0.001660 | Val Loss: 0.001637 | Train R²: 0.9413 | Val R²: 0.9434 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001570 | Val Loss: 0.001544 | Train R²: 0.9445 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.001521 | Val Loss: 0.001491 | Train R²: 0.9462 | Val R²: 0.9484 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3188 due to flat/negative trend (slope=0.000002)
 Epoch  3188 | Train Loss: 0.001508 | Val Loss: 0.001479 | Train R²: 0.9467 | Val R²: 0.9488
 Unpickling models
@@ -2170,8 +2170,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.33
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.51
 dt_reco vs Custom_RECO R²=0.82 RMSE=1.00
 nt_reco vs Custom_RECO R²=0.92 RMSE=0.56
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.37 RMSE=1.76
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.37 RMSE=1.76
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2198,14 +2198,14 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.088760 | Val Loss: 0.084290 | Train R²: -2.1383 | Val R²: -1.9154 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8900 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8300
-Epoch   500 | Train Loss: 0.007525 | Val Loss: 0.007450 | Train R²: 0.7340 | Val R²: 0.7423 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002279 | Val Loss: 0.002270 | Train R²: 0.9194 | Val R²: 0.9215 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001799 | Val Loss: 0.001777 | Train R²: 0.9364 | Val R²: 0.9385 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001650 | Val Loss: 0.001626 | Train R²: 0.9417 | Val R²: 0.9437 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001565 | Val Loss: 0.001545 | Train R²: 0.9447 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001503 | Val Loss: 0.001490 | Train R²: 0.9468 | Val R²: 0.9485 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001465 | Val Loss: 0.001456 | Train R²: 0.9482 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.088760 | Val Loss: 0.084290 | Train R²: -2.1383 | Val R²: -1.9154 | NightHrsTrueNEE vs NightHrsModelReco R²: -8.9200 | NightHrsTrueNee vs NightHrsModelNee R²: -28.3800
+Epoch   500 | Train Loss: 0.007525 | Val Loss: 0.007450 | Train R²: 0.7340 | Val R²: 0.7423 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9300 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9400
+Epoch  1000 | Train Loss: 0.002279 | Val Loss: 0.002270 | Train R²: 0.9194 | Val R²: 0.9215 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6500
+Epoch  1500 | Train Loss: 0.001799 | Val Loss: 0.001777 | Train R²: 0.9364 | Val R²: 0.9385 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7400
+Epoch  2000 | Train Loss: 0.001650 | Val Loss: 0.001626 | Train R²: 0.9417 | Val R²: 0.9437 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001565 | Val Loss: 0.001545 | Train R²: 0.9447 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.001503 | Val Loss: 0.001490 | Train R²: 0.9468 | Val R²: 0.9485 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3500 | Train Loss: 0.001465 | Val Loss: 0.001456 | Train R²: 0.9482 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3546 due to flat/negative trend (slope=0.000002)
 Epoch  3546 | Train Loss: 0.001463 | Val Loss: 0.001454 | Train R²: 0.9483 | Val R²: 0.9497
 Unpickling models
@@ -2239,8 +2239,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.28
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.50
 dt_reco vs Custom_RECO R²=0.83 RMSE=0.95
 nt_reco vs Custom_RECO R²=0.92 RMSE=0.57
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.46 RMSE=1.73
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.46 RMSE=1.73
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2267,13 +2267,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.088226 | Val Loss: 0.083751 | Train R²: -2.1194 | Val R²: -1.8967 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.9000 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8200
-Epoch   500 | Train Loss: 0.007532 | Val Loss: 0.007461 | Train R²: 0.7337 | Val R²: 0.7419 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002258 | Val Loss: 0.002258 | Train R²: 0.9202 | Val R²: 0.9219 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001783 | Val Loss: 0.001762 | Train R²: 0.9369 | Val R²: 0.9390 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001654 | Val Loss: 0.001632 | Train R²: 0.9415 | Val R²: 0.9436 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001557 | Train R²: 0.9444 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001515 | Val Loss: 0.001506 | Train R²: 0.9464 | Val R²: 0.9479 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.088226 | Val Loss: 0.083751 | Train R²: -2.1194 | Val R²: -1.8967 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.2000 | NightHrsTrueNee vs NightHrsModelNee R²: -28.1200
+Epoch   500 | Train Loss: 0.007532 | Val Loss: 0.007461 | Train R²: 0.7337 | Val R²: 0.7419 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9300 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9400
+Epoch  1000 | Train Loss: 0.002258 | Val Loss: 0.002258 | Train R²: 0.9202 | Val R²: 0.9219 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6600
+Epoch  1500 | Train Loss: 0.001783 | Val Loss: 0.001762 | Train R²: 0.9369 | Val R²: 0.9390 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2000 | Train Loss: 0.001654 | Val Loss: 0.001632 | Train R²: 0.9415 | Val R²: 0.9436 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001557 | Train R²: 0.9444 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.001515 | Val Loss: 0.001506 | Train R²: 0.9464 | Val R²: 0.9479 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3406 due to flat/negative trend (slope=0.000002)
 Epoch  3406 | Train Loss: 0.001479 | Val Loss: 0.001476 | Train R²: 0.9477 | Val R²: 0.9490
 Unpickling models
@@ -2307,8 +2307,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.29
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.51
 dt_reco vs Custom_RECO R²=0.83 RMSE=0.95
 nt_reco vs Custom_RECO R²=0.92 RMSE=0.57
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.44 RMSE=1.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.44 RMSE=1.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2335,13 +2335,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.087823 | Val Loss: 0.083376 | Train R²: -2.1052 | Val R²: -1.8838 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8900 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8100
-Epoch   500 | Train Loss: 0.007520 | Val Loss: 0.007448 | Train R²: 0.7341 | Val R²: 0.7424 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002211 | Val Loss: 0.002214 | Train R²: 0.9218 | Val R²: 0.9234 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001782 | Val Loss: 0.001759 | Train R²: 0.9370 | Val R²: 0.9392 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001656 | Val Loss: 0.001633 | Train R²: 0.9415 | Val R²: 0.9435 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001555 | Train R²: 0.9444 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001513 | Val Loss: 0.001505 | Train R²: 0.9465 | Val R²: 0.9480 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.087823 | Val Loss: 0.083376 | Train R²: -2.1052 | Val R²: -1.8838 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.1000 | NightHrsTrueNee vs NightHrsModelNee R²: -27.9900
+Epoch   500 | Train Loss: 0.007520 | Val Loss: 0.007448 | Train R²: 0.7341 | Val R²: 0.7424 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.9300 | NightHrsTrueNee vs NightHrsModelNee R²: -1.9400
+Epoch  1000 | Train Loss: 0.002211 | Val Loss: 0.002214 | Train R²: 0.9218 | Val R²: 0.9234 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6800
+Epoch  1500 | Train Loss: 0.001782 | Val Loss: 0.001759 | Train R²: 0.9370 | Val R²: 0.9392 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001656 | Val Loss: 0.001633 | Train R²: 0.9415 | Val R²: 0.9435 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001555 | Train R²: 0.9444 | Val R²: 0.9462 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.001513 | Val Loss: 0.001505 | Train R²: 0.9465 | Val R²: 0.9480 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3492 due to flat/negative trend (slope=0.000002)
 Epoch  3492 | Train Loss: 0.001471 | Val Loss: 0.001469 | Train R²: 0.9480 | Val R²: 0.9492
 Unpickling models
@@ -2375,8 +2375,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.28
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.51
 dt_reco vs Custom_RECO R²=0.84 RMSE=0.94
 nt_reco vs Custom_RECO R²=0.92 RMSE=0.57
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.48 RMSE=1.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.48 RMSE=1.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2403,13 +2403,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.087581 | Val Loss: 0.083097 | Train R²: -2.0966 | Val R²: -1.8741 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.9200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8200
-Epoch   500 | Train Loss: 0.007633 | Val Loss: 0.007567 | Train R²: 0.7301 | Val R²: 0.7383 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002241 | Val Loss: 0.002270 | Train R²: 0.9208 | Val R²: 0.9215 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001796 | Val Loss: 0.001772 | Train R²: 0.9365 | Val R²: 0.9387 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001657 | Val Loss: 0.001625 | Train R²: 0.9414 | Val R²: 0.9438 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001562 | Val Loss: 0.001538 | Train R²: 0.9448 | Val R²: 0.9468 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001505 | Val Loss: 0.001487 | Train R²: 0.9468 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.087581 | Val Loss: 0.083097 | Train R²: -2.0966 | Val R²: -1.8741 | NightHrsTrueNEE vs NightHrsModelReco R²: -9.5200 | NightHrsTrueNee vs NightHrsModelNee R²: -27.7900
+Epoch   500 | Train Loss: 0.007633 | Val Loss: 0.007567 | Train R²: 0.7301 | Val R²: 0.7383 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0000 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0000
+Epoch  1000 | Train Loss: 0.002241 | Val Loss: 0.002270 | Train R²: 0.9208 | Val R²: 0.9215 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  1500 | Train Loss: 0.001796 | Val Loss: 0.001772 | Train R²: 0.9365 | Val R²: 0.9387 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001657 | Val Loss: 0.001625 | Train R²: 0.9414 | Val R²: 0.9438 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001562 | Val Loss: 0.001538 | Train R²: 0.9448 | Val R²: 0.9468 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  3000 | Train Loss: 0.001505 | Val Loss: 0.001487 | Train R²: 0.9468 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3450 due to flat/negative trend (slope=0.000002)
 Epoch  3450 | Train Loss: 0.001474 | Val Loss: 0.001458 | Train R²: 0.9479 | Val R²: 0.9496
 Unpickling models
@@ -2443,8 +2443,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.28
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.49
 dt_reco vs Custom_RECO R²=0.84 RMSE=0.94
 nt_reco vs Custom_RECO R²=0.93 RMSE=0.54
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.44 RMSE=1.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.44 RMSE=1.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.76 RMSE=0.99
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.76 RMSE=0.99
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2471,13 +2471,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.089648 | Val Loss: 0.085157 | Train R²: -2.1697 | Val R²: -1.9454 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5300 | NightHrsTrueNee vs NightHrsModelNee R²: -0.9500
-Epoch   500 | Train Loss: 0.007691 | Val Loss: 0.007632 | Train R²: 0.7281 | Val R²: 0.7360 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002143 | Val Loss: 0.002138 | Train R²: 0.9242 | Val R²: 0.9261 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001789 | Val Loss: 0.001769 | Train R²: 0.9367 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001644 | Val Loss: 0.001604 | Train R²: 0.9419 | Val R²: 0.9445 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001567 | Val Loss: 0.001528 | Train R²: 0.9446 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001520 | Val Loss: 0.001486 | Train R²: 0.9463 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.089648 | Val Loss: 0.085157 | Train R²: -2.1697 | Val R²: -1.9454 | NightHrsTrueNEE vs NightHrsModelReco R²: -15.2400 | NightHrsTrueNee vs NightHrsModelNee R²: -27.4100
+Epoch   500 | Train Loss: 0.007691 | Val Loss: 0.007632 | Train R²: 0.7281 | Val R²: 0.7360 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0100 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0200
+Epoch  1000 | Train Loss: 0.002143 | Val Loss: 0.002138 | Train R²: 0.9242 | Val R²: 0.9261 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7300
+Epoch  1500 | Train Loss: 0.001789 | Val Loss: 0.001769 | Train R²: 0.9367 | Val R²: 0.9388 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  2000 | Train Loss: 0.001644 | Val Loss: 0.001604 | Train R²: 0.9419 | Val R²: 0.9445 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  2500 | Train Loss: 0.001567 | Val Loss: 0.001528 | Train R²: 0.9446 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001520 | Val Loss: 0.001486 | Train R²: 0.9463 | Val R²: 0.9486 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3447 due to flat/negative trend (slope=0.000002)
 Epoch  3447 | Train Loss: 0.001488 | Val Loss: 0.001453 | Train R²: 0.9474 | Val R²: 0.9498
 Unpickling models
@@ -2511,8 +2511,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.27
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.50
 dt_reco vs Custom_RECO R²=0.85 RMSE=0.92
 nt_reco vs Custom_RECO R²=0.93 RMSE=0.54
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.48 RMSE=1.75
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.48 RMSE=1.75
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.77 RMSE=0.98
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.77 RMSE=0.98
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2539,13 +2539,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.086870 | Val Loss: 0.082282 | Train R²: -2.0715 | Val R²: -1.8459 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3800 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8800
-Epoch   500 | Train Loss: 0.007680 | Val Loss: 0.007621 | Train R²: 0.7285 | Val R²: 0.7364 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8700
-Epoch  1000 | Train Loss: 0.002198 | Val Loss: 0.002210 | Train R²: 0.9223 | Val R²: 0.9236 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001810 | Val Loss: 0.001783 | Train R²: 0.9360 | Val R²: 0.9383 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001663 | Val Loss: 0.001621 | Train R²: 0.9412 | Val R²: 0.9439 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001527 | Train R²: 0.9444 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001521 | Val Loss: 0.001479 | Train R²: 0.9462 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.086870 | Val Loss: 0.082282 | Train R²: -2.0715 | Val R²: -1.8459 | NightHrsTrueNEE vs NightHrsModelReco R²: -14.0900 | NightHrsTrueNee vs NightHrsModelNee R²: -26.5000
+Epoch   500 | Train Loss: 0.007680 | Val Loss: 0.007621 | Train R²: 0.7285 | Val R²: 0.7364 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0100 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0200
+Epoch  1000 | Train Loss: 0.002198 | Val Loss: 0.002210 | Train R²: 0.9223 | Val R²: 0.9236 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  1500 | Train Loss: 0.001810 | Val Loss: 0.001783 | Train R²: 0.9360 | Val R²: 0.9383 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2000 | Train Loss: 0.001663 | Val Loss: 0.001621 | Train R²: 0.9412 | Val R²: 0.9439 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  2500 | Train Loss: 0.001572 | Val Loss: 0.001527 | Train R²: 0.9444 | Val R²: 0.9472 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001521 | Val Loss: 0.001479 | Train R²: 0.9462 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
 Early stopping at epoch 3202 due to flat/negative trend (slope=0.000002)
 Epoch  3202 | Train Loss: 0.001506 | Val Loss: 0.001467 | Train R²: 0.9467 | Val R²: 0.9493
 Unpickling models
@@ -2579,8 +2579,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.27
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.50
 dt_reco vs Custom_RECO R²=0.84 RMSE=0.93
 nt_reco vs Custom_RECO R²=0.93 RMSE=0.52
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.44 RMSE=1.77
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.44 RMSE=1.77
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.77 RMSE=0.98
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.77 RMSE=0.98
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2607,14 +2607,14 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.088498 | Val Loss: 0.083791 | Train R²: -2.1291 | Val R²: -1.8981 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.8700 | NightHrsTrueNee vs NightHrsModelNee R²: -0.8400
-Epoch   500 | Train Loss: 0.007759 | Val Loss: 0.007700 | Train R²: 0.7257 | Val R²: 0.7337 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.2200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8600
-Epoch  1000 | Train Loss: 0.002137 | Val Loss: 0.002148 | Train R²: 0.9244 | Val R²: 0.9257 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9100
-Epoch  1500 | Train Loss: 0.001826 | Val Loss: 0.001808 | Train R²: 0.9354 | Val R²: 0.9375 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3100 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001701 | Val Loss: 0.001674 | Train R²: 0.9399 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2500 | Train Loss: 0.001610 | Val Loss: 0.001587 | Train R²: 0.9431 | Val R²: 0.9451 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001550 | Val Loss: 0.001529 | Train R²: 0.9452 | Val R²: 0.9471 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3500 | Train Loss: 0.001499 | Val Loss: 0.001479 | Train R²: 0.9470 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.088498 | Val Loss: 0.083791 | Train R²: -2.1291 | Val R²: -1.8981 | NightHrsTrueNEE vs NightHrsModelReco R²: -11.7200 | NightHrsTrueNee vs NightHrsModelNee R²: -27.9700
+Epoch   500 | Train Loss: 0.007759 | Val Loss: 0.007700 | Train R²: 0.7257 | Val R²: 0.7337 | NightHrsTrueNEE vs NightHrsModelReco R²: -2.0400 | NightHrsTrueNee vs NightHrsModelNee R²: -2.0400
+Epoch  1000 | Train Loss: 0.002137 | Val Loss: 0.002148 | Train R²: 0.9244 | Val R²: 0.9257 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  1500 | Train Loss: 0.001826 | Val Loss: 0.001808 | Train R²: 0.9354 | Val R²: 0.9375 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7500
+Epoch  2000 | Train Loss: 0.001701 | Val Loss: 0.001674 | Train R²: 0.9399 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  2500 | Train Loss: 0.001610 | Val Loss: 0.001587 | Train R²: 0.9431 | Val R²: 0.9451 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001550 | Val Loss: 0.001529 | Train R²: 0.9452 | Val R²: 0.9471 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3500 | Train Loss: 0.001499 | Val Loss: 0.001479 | Train R²: 0.9470 | Val R²: 0.9488 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7800
 Early stopping at epoch 3869 due to flat/negative trend (slope=0.000002)
 Epoch  3869 | Train Loss: 0.001456 | Val Loss: 0.001435 | Train R²: 0.9485 | Val R²: 0.9503
 Unpickling models
@@ -2648,8 +2648,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.29
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.47
 dt_reco vs Custom_RECO R²=0.84 RMSE=0.94
 nt_reco vs Custom_RECO R²=0.94 RMSE=0.51
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.42 RMSE=1.73
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.42 RMSE=1.73
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.77 RMSE=0.98
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.77 RMSE=0.98
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2676,13 +2676,13 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.059166 | Val Loss: 0.056300 | Train R²: -1.0919 | Val R²: -0.9473 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: -0.4300
-Epoch   500 | Train Loss: 0.002539 | Val Loss: 0.002589 | Train R²: 0.9102 | Val R²: 0.9105 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.1400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.8900
-Epoch  1000 | Train Loss: 0.001887 | Val Loss: 0.001891 | Train R²: 0.9333 | Val R²: 0.9346 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9200
-Epoch  1500 | Train Loss: 0.001688 | Val Loss: 0.001666 | Train R²: 0.9403 | Val R²: 0.9424 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.4900 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  2000 | Train Loss: 0.001580 | Val Loss: 0.001557 | Train R²: 0.9441 | Val R²: 0.9461 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001512 | Val Loss: 0.001495 | Train R²: 0.9465 | Val R²: 0.9483 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  3000 | Train Loss: 0.001469 | Val Loss: 0.001458 | Train R²: 0.9480 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.5800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.059166 | Val Loss: 0.056300 | Train R²: -1.0919 | Val R²: -0.9473 | NightHrsTrueNEE vs NightHrsModelReco R²: -17.9900 | NightHrsTrueNee vs NightHrsModelNee R²: -16.2100
+Epoch   500 | Train Loss: 0.002539 | Val Loss: 0.002589 | Train R²: 0.9102 | Val R²: 0.9105 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.6800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.6700
+Epoch  1000 | Train Loss: 0.001887 | Val Loss: 0.001891 | Train R²: 0.9333 | Val R²: 0.9346 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7600
+Epoch  1500 | Train Loss: 0.001688 | Val Loss: 0.001666 | Train R²: 0.9403 | Val R²: 0.9424 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  2000 | Train Loss: 0.001580 | Val Loss: 0.001557 | Train R²: 0.9441 | Val R²: 0.9461 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7700 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  2500 | Train Loss: 0.001512 | Val Loss: 0.001495 | Train R²: 0.9465 | Val R²: 0.9483 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
+Epoch  3000 | Train Loss: 0.001469 | Val Loss: 0.001458 | Train R²: 0.9480 | Val R²: 0.9496 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7800 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7700
 Early stopping at epoch 3001 due to flat/negative trend (slope=0.000002)
 Epoch  3001 | Train Loss: 0.001469 | Val Loss: 0.001458 | Train R²: 0.9480 | Val R²: 0.9496
 Unpickling models
@@ -2716,8 +2716,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.29
 nt_gpp vs Custom_GPP R²=0.95 RMSE=1.56
 dt_reco vs Custom_RECO R²=0.83 RMSE=0.96
 nt_reco vs Custom_RECO R²=0.88 RMSE=0.71
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.60 RMSE=1.75
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.60 RMSE=1.75
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.77 RMSE=0.98
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.77 RMSE=0.98
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2744,12 +2744,12 @@ SNN_RECO(
 )
 Custom will use the Tram vars
 Params are min slope: 2e-06, trend window: 100
-Epoch     0 | Train Loss: 0.049107 | Val Loss: 0.047799 | Train R²: -0.7363 | Val R²: -0.6532 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.6200 | NightHrsTrueNee vs NightHrsModelNee R²: -0.2900
-Epoch   500 | Train Loss: 0.002716 | Val Loss: 0.002723 | Train R²: 0.9040 | Val R²: 0.9058 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.2600 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9000
-Epoch  1000 | Train Loss: 0.001954 | Val Loss: 0.001908 | Train R²: 0.9309 | Val R²: 0.9340 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3000 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9300
-Epoch  1500 | Train Loss: 0.001729 | Val Loss: 0.001675 | Train R²: 0.9389 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2000 | Train Loss: 0.001661 | Val Loss: 0.001608 | Train R²: 0.9413 | Val R²: 0.9444 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3400 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
-Epoch  2500 | Train Loss: 0.001600 | Val Loss: 0.001545 | Train R²: 0.9434 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: -1.3500 | NightHrsTrueNee vs NightHrsModelNee R²: 0.9400
+Epoch     0 | Train Loss: 0.049107 | Val Loss: 0.047799 | Train R²: -0.7363 | Val R²: -0.6532 | NightHrsTrueNEE vs NightHrsModelReco R²: -28.7600 | NightHrsTrueNee vs NightHrsModelNee R²: -12.6600
+Epoch   500 | Train Loss: 0.002716 | Val Loss: 0.002723 | Train R²: 0.9040 | Val R²: 0.9058 | NightHrsTrueNEE vs NightHrsModelReco R²: -0.5300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.5500
+Epoch  1000 | Train Loss: 0.001954 | Val Loss: 0.001908 | Train R²: 0.9309 | Val R²: 0.9340 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7100
+Epoch  1500 | Train Loss: 0.001729 | Val Loss: 0.001675 | Train R²: 0.9389 | Val R²: 0.9421 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7200 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  2000 | Train Loss: 0.001661 | Val Loss: 0.001608 | Train R²: 0.9413 | Val R²: 0.9444 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
+Epoch  2500 | Train Loss: 0.001600 | Val Loss: 0.001545 | Train R²: 0.9434 | Val R²: 0.9466 | NightHrsTrueNEE vs NightHrsModelReco R²: 0.7300 | NightHrsTrueNee vs NightHrsModelNee R²: 0.7200
 Early stopping at epoch 2870 due to flat/negative trend (slope=0.000002)
 Epoch  2870 | Train Loss: 0.001565 | Val Loss: 0.001519 | Train R²: 0.9447 | Val R²: 0.9475
 Unpickling models
@@ -2783,8 +2783,8 @@ dt_gpp vs Custom_GPP R²=0.97 RMSE=1.28
 nt_gpp vs Custom_GPP R²=0.96 RMSE=1.46
 dt_reco vs Custom_RECO R²=0.83 RMSE=0.96
 nt_reco vs Custom_RECO R²=0.91 RMSE=0.60
-night_hours_true_nee vs Custom_night_hours_model_reco R²=-1.36 RMSE=1.74
-night_hours_true_nee vs Custom_night_hours_model_nee R²=-1.36 RMSE=1.74
+night_hours_true_nee vs Custom_night_hours_model_reco R²=0.71 RMSE=1.09
+night_hours_true_nee vs Custom_night_hours_model_nee R²=0.71 RMSE=1.09
 dt_gpp vs nt_gpp R²=0.95 RMSE=1.56
 dt_reco vs nt_reco R²=0.85 RMSE=1.00
 
@@ -2818,12 +2818,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.22
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.23,
-                "rmse": 8.16
+                "r2": -0.44,
+                "rmse": 2.42
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.23,
-                "rmse": 8.16
+                "r2": -0.44,
+                "rmse": 2.42
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -2866,12 +2866,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.56
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -2.18,
-                "rmse": 13.13
+                "r2": 0.41,
+                "rmse": 1.55
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.84,
-                "rmse": 2.96
+                "r2": 0.45,
+                "rmse": 1.5
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -2916,12 +2916,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.18
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.23,
-                "rmse": 8.17
+                "r2": -0.35,
+                "rmse": 2.34
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.23,
-                "rmse": 8.17
+                "r2": -0.35,
+                "rmse": 2.34
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -2970,12 +2970,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 4.62
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -3.86,
-                "rmse": 16.23
+                "r2": -0.51,
+                "rmse": 2.48
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.86,
-                "rmse": 2.74
+                "r2": 0.46,
+                "rmse": 1.49
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3026,12 +3026,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.43
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -2.8,
-                "rmse": 14.35
+                "r2": -0.3,
+                "rmse": 2.3
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.87,
-                "rmse": 2.68
+                "r2": 0.43,
+                "rmse": 1.52
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3084,12 +3084,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 5.44
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -4.17,
-                "rmse": 16.73
+                "r2": -2.28,
+                "rmse": 3.65
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.88,
-                "rmse": 2.52
+                "r2": 0.47,
+                "rmse": 1.46
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3144,12 +3144,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.12
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.23,
-                "rmse": 8.15
+                "r2": -0.2,
+                "rmse": 2.2
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.23,
-                "rmse": 8.15
+                "r2": -0.2,
+                "rmse": 2.2
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3208,12 +3208,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.99
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.1,
+                "rmse": 3.55
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.79,
-                "rmse": 3.37
+                "r2": -2.11,
+                "rmse": 3.55
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3256,12 +3256,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 4.08
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -2.22,
-                "rmse": 13.21
+                "r2": -3.5,
+                "rmse": 4.27
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.21,
-                "rmse": 6.53
+                "r2": -4.04,
+                "rmse": 4.52
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3316,12 +3316,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 1.45
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.37,
-                "rmse": 11.33
+                "r2": 0.6,
+                "rmse": 1.27
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.89,
-                "rmse": 2.46
+                "r2": 0.6,
+                "rmse": 1.27
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3380,12 +3380,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.99
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.1,
+                "rmse": 3.55
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.91,
-                "rmse": 2.24
+                "r2": -2.1,
+                "rmse": 3.55
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3446,12 +3446,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.51
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.36,
-                "rmse": 11.3
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.73
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3514,12 +3514,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.99
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.11,
+                "rmse": 3.55
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.11,
+                "rmse": 3.55
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3582,12 +3582,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.99
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.11,
+                "rmse": 3.55
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.22,
-                "rmse": 8.12
+                "r2": -2.11,
+                "rmse": 3.55
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3652,12 +3652,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.92
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -0.21,
-                "rmse": 8.09
+                "r2": 0.38,
+                "rmse": 1.58
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": -0.21,
-                "rmse": 8.09
+                "r2": 0.38,
+                "rmse": 1.58
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3726,12 +3726,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.52
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.35,
-                "rmse": 11.28
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.74
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3791,12 +3791,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.44
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.39,
-                "rmse": 11.38
+                "r2": -1.22,
+                "rmse": 3.0
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.91,
-                "rmse": 2.23
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3856,12 +3856,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 1.54
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.44,
-                "rmse": 11.5
+                "r2": 0.0,
+                "rmse": 2.01
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.79
+                "r2": 0.75,
+                "rmse": 1.01
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3921,12 +3921,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.64
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.55,
-                "rmse": 11.74
+                "r2": -1.61,
+                "rmse": 3.26
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.69
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -3986,12 +3986,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.99
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.46,
-                "rmse": 11.56
+                "r2": -2.26,
+                "rmse": 3.64
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.76
+                "r2": 0.74,
+                "rmse": 1.02
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4051,12 +4051,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.07
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.52,
-                "rmse": 11.69
+                "r2": -2.53,
+                "rmse": 3.79
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.69
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4116,12 +4116,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.23
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.6,
-                "rmse": 11.86
+                "r2": -2.79,
+                "rmse": 3.92
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.71
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4181,12 +4181,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 3.32
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.6,
-                "rmse": 11.86
+                "r2": -2.94,
+                "rmse": 4.0
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.81
+                "r2": 0.73,
+                "rmse": 1.04
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4246,12 +4246,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 2.59
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.5,
-                "rmse": 11.64
+                "r2": -1.52,
+                "rmse": 3.2
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.79
+                "r2": 0.74,
+                "rmse": 1.02
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4311,12 +4311,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.58
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.37,
-                "rmse": 11.33
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.83
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4376,12 +4376,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 1.33
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.98,
-                "rmse": 12.71
+                "r2": 0.49,
+                "rmse": 1.43
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.69
+                "r2": 0.75,
+                "rmse": 1.0
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4441,12 +4441,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.49
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.36,
-                "rmse": 11.31
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.71
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4506,12 +4506,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 1.4
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.56,
-                "rmse": 11.78
+                "r2": 0.28,
+                "rmse": 1.71
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.87
+                "r2": 0.73,
+                "rmse": 1.04
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4571,12 +4571,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.62
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.54,
-                "rmse": 11.72
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.95,
-                "rmse": 1.73
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4636,12 +4636,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.55
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.34,
-                "rmse": 11.25
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.77
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4701,12 +4701,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.56
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.37,
-                "rmse": 11.33
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.76
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4766,12 +4766,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.57
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.46,
-                "rmse": 11.54
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.73
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4831,12 +4831,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.57
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.44,
-                "rmse": 11.51
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.74
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4896,12 +4896,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.57
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.48,
-                "rmse": 11.6
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.74
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -4961,12 +4961,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.54
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.44,
-                "rmse": 11.5
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.74
+                "r2": 0.76,
+                "rmse": 0.99
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5026,12 +5026,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.54
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.48,
-                "rmse": 11.6
+                "r2": 0.77,
+                "rmse": 0.98
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.75
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5091,12 +5091,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.52
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.44,
-                "rmse": 11.49
+                "r2": 0.77,
+                "rmse": 0.98
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.77
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5156,12 +5156,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.51
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.42,
-                "rmse": 11.44
+                "r2": 0.77,
+                "rmse": 0.97
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.73
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5221,12 +5221,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.71
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.6,
-                "rmse": 11.86
+                "r2": 0.77,
+                "rmse": 0.98
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.75
+                "r2": 0.76,
+                "rmse": 0.98
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5286,12 +5286,12 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
                 "rmse": 0.6
             },
             "night_hours_true_nee_vs_night_hours_model_reco": {
-                "r2": -1.36,
-                "rmse": 11.32
+                "r2": 0.71,
+                "rmse": 1.08
             },
             "night_hours_true_nee_vs_night_hours_model_nee": {
-                "r2": 0.94,
-                "rmse": 1.74
+                "r2": 0.71,
+                "rmse": 1.09
             },
             "dt_gpp_vs_nt_gpp": {
                 "r2": 0.95,
@@ -5305,50 +5305,48 @@ dt_reco vs nt_reco R²=0.85 RMSE=1.00
         }
     }
 }
-0.0869,-0.26,-0.24,-1.36,-1.53,-0.23,-0.23
-0.8615,0.81,0.76,-0.24,-0.6,-2.18,0.84
-0.0919,-0.26,-0.24,-1.31,-1.45,-0.23,-0.23
-0.8771,0.55,0.48,-2.71,-4.2,-3.86,0.86
-0.8796,0.72,0.68,-1.11,-1.87,-2.8,0.87
-0.8934,0.4,0.33,-4.24,-6.2,-4.17,0.88
-0.1061,-0.26,-0.24,-1.23,-1.36,-0.23,-0.23
-0.6845,0.72,0.72,-2.34,-2.88,-0.22,0.79
-0.1898,0.04,0.02,-2.39,-3.06,-2.22,0.21
-0.9032,0.91,0.89,0.5,0.49,-1.37,0.89
-0.7621,0.79,0.8,-2.34,-2.88,-0.22,0.91
-0.9507,0.97,0.96,0.83,0.94,-1.36,0.94
--0.0002,-0.26,-0.24,-2.34,-2.88,-0.22,-0.22
--0.0001,-0.26,-0.24,-2.34,-2.88,-0.22,-0.22
-0.1499,-0.26,-0.24,-1.01,-1.08,-0.21,-0.21
-0.9501,0.97,0.96,0.82,0.93,-1.35,0.94
-
-0.9273,0.84,0.82,-0.36,-0.45,-1.39,0.91
-0.9469,0.93,0.91,0.37,0.42,-1.44,0.94
-0.9515,0.84,0.82,-0.52,-0.7,-1.55,0.95
-0.9481,0.8,0.78,-0.92,-1.17,-1.46,0.94
-0.9516,0.79,0.77,-1.02,-1.3,-1.52,0.95
-0.9516,0.77,0.75,-1.16,-1.54,-1.6,0.95
-0.9452,0.76,0.74,-1.28,-1.68,-1.6,0.94
-0.9468,0.84,0.82,-0.49,-0.64,-1.5,0.94
-0.9457,0.96,0.95,0.81,0.92,-1.37,0.94
-0.9517,0.95,0.93,0.69,0.57,-1.98,0.95
-0.9508,0.97,0.96,0.82,0.94,-1.36,0.95
-0.9431,0.93,0.92,0.55,0.52,-1.56,0.94
-
-0.9503,0.97,0.95,0.84,0.91,-1.54,0.95
-0.9491,0.97,0.95,0.81,0.93,-1.34,0.94
-0.9488,0.97,0.95,0.82,0.92,-1.37,0.94
-0.9497,0.97,0.95,0.83,0.92,-1.46,0.94
-0.949,0.97,0.95,0.83,0.92,-1.44,0.94
-0.9492,0.97,0.95,0.84,0.92,-1.48,0.94
-0.9496,0.97,0.96,0.84,0.93,-1.44,0.94
-0.9498,0.97,0.96,0.85,0.93,-1.48,0.94
-0.9493,0.97,0.96,0.84,0.93,-1.44,0.94
-0.9503,0.97,0.96,0.84,0.94,-1.42,0.94
-0.9496,0.97,0.95,0.83,0.88,-1.6,0.94
-0.9475,0.97,0.96,0.83,0.91,-1.36,0.94
-
-Compare DT and NT methods' Reco predictions during night to true nee measured during nightnight_hours_true_nee_vs_night_hours_dt_reco R2 -1.65,
-night_hours_true_nee_vs_night_hours_nt_reco R2 -1.46,
-Run ended at:   2025-08-14 22:09:35
-Total duration: 0:13:49 (hh:mm:ss)
+0.0869,-0.26,-0.24,-1.36,-1.53,-0.44,-0.44
+0.8615,0.81,0.76,-0.24,-0.6,0.41,0.45
+0.0919,-0.26,-0.24,-1.31,-1.45,-0.35,-0.35
+0.8771,0.55,0.48,-2.71,-4.2,-0.51,0.46
+0.8796,0.72,0.68,-1.11,-1.87,-0.3,0.43
+0.8934,0.4,0.33,-4.24,-6.2,-2.28,0.47
+0.1061,-0.26,-0.24,-1.23,-1.36,-0.2,-0.2
+0.6845,0.72,0.72,-2.34,-2.88,-2.1,-2.11
+0.1898,0.04,0.02,-2.39,-3.06,-3.5,-4.04
+0.9032,0.91,0.89,0.5,0.49,0.6,0.6
+0.7621,0.79,0.8,-2.34,-2.88,-2.1,-2.1
+0.9507,0.97,0.96,0.83,0.94,0.76,0.76
+-0.0002,-0.26,-0.24,-2.34,-2.88,-2.11,-2.11
+-0.0001,-0.26,-0.24,-2.34,-2.88,-2.11,-2.11
+0.1499,-0.26,-0.24,-1.01,-1.08,0.38,0.38
+0.9501,0.97,0.96,0.82,0.93,0.76,0.76
+0.9273,0.84,0.82,-0.36,-0.45,-1.22,0.75
+0.9469,0.93,0.91,0.37,0.42,0.0,0.75
+0.9515,0.84,0.82,-0.52,-0.7,-1.61,0.75
+0.9481,0.8,0.78,-0.92,-1.17,-2.26,0.74
+0.9516,0.79,0.77,-1.02,-1.3,-2.53,0.75
+0.9516,0.77,0.75,-1.16,-1.54,-2.79,0.75
+0.9452,0.76,0.74,-1.28,-1.68,-2.94,0.73
+0.9468,0.84,0.82,-0.49,-0.64,-1.52,0.74
+0.9457,0.96,0.95,0.81,0.92,0.75,0.75
+0.9517,0.95,0.93,0.69,0.57,0.49,0.75
+0.9508,0.97,0.96,0.82,0.94,0.76,0.76
+0.9431,0.93,0.92,0.55,0.52,0.28,0.73
+0.9503,0.97,0.95,0.84,0.91,0.76,0.76
+0.9491,0.97,0.95,0.81,0.93,0.76,0.76
+0.9488,0.97,0.95,0.82,0.92,0.76,0.76
+0.9497,0.97,0.95,0.83,0.92,0.76,0.76
+0.949,0.97,0.95,0.83,0.92,0.76,0.76
+0.9492,0.97,0.95,0.84,0.92,0.76,0.76
+0.9496,0.97,0.96,0.84,0.93,0.76,0.76
+0.9498,0.97,0.96,0.85,0.93,0.77,0.76
+0.9493,0.97,0.96,0.84,0.93,0.77,0.76
+0.9503,0.97,0.96,0.84,0.94,0.77,0.76
+0.9496,0.97,0.95,0.83,0.88,0.77,0.76
+0.9475,0.97,0.96,0.83,0.91,0.71,0.71
+Compare DT and NT methods' Reco predictions during night to true nee measured during night
+night_hours_true_nee_vs_night_hours_dt_reco R2 0.63,
+night_hours_true_nee_vs_night_hours_nt_reco R2 0.74,
+Run ended at:   2025-08-14 23:04:51
+Total duration: 0:13:41 (hh:mm:ss)
