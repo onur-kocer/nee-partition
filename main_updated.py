@@ -1462,6 +1462,8 @@ basic_info_tensor, feature_names = load_data("{}".format(normalized_file_name), 
 all_preds_feature_names.extend(feature_names)
 
 all_predictions = torch.cat((sw_in_raw_and_nee_raw, basic_info_tensor), 1)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+all_predictions = all_predictions.to(device)
 
 
 for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
