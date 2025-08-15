@@ -703,7 +703,8 @@ def threshold_zero(tensor: torch.Tensor, threshold: float) -> torch.Tensor:
 
 def filter_by_threshold(sw_in_raw, other_tensor, threshold=10):
     """
-    Keep only rows where sw_in_raw > threshold.
+    Keep only rows where sw_in_raw <= threshold.
+    This will get return the night data.
 
     sw_in_raw: 1D torch tensor of floats/ints
     other_tensor: torch tensor (same first dimension as sw_in_raw)
@@ -712,7 +713,7 @@ def filter_by_threshold(sw_in_raw, other_tensor, threshold=10):
     Returns:
         sw_in_raw_filtered, other_tensor_filtered
     """
-    mask = sw_in_raw > threshold
+    mask = sw_in_raw <= threshold
     return sw_in_raw[mask], other_tensor[mask]
 
 
