@@ -1532,7 +1532,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     results_dict[f"experiment_{experiment_id+1}"]['metrics']['val_r2'] = round(val_r2, 4)
     
     # ADD THE MODEL VALUES TO THE OUTPUT TENSOR
-    model_val_names = [f"e{experiment_id}_GPP", f"e{experiment_id}_RECO", f"e{experiment_id}_NEE"]
+    model_val_names = [f"e{experiment_id+1}_GPP", f"e{experiment_id+1}_RECO", f"e{experiment_id+1}_NEE"]
     experiment_predictions = torch.cat((gpp_pred_raw, reco_pred_raw, nee_pred_raw), 1)
 
 
