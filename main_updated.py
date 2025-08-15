@@ -1575,7 +1575,7 @@ _, night_hours_nt_reco = filter_by_threshold(sw_in_raw, nt_reco)
 _, night_hours_true_nee = filter_by_threshold(sw_in_raw, raw_nee)
 
 
-print(f"Compare DT and NT methods' Reco predictions during night to true nee measured during night"
+print(f"Compare DT and NT methods' Reco predictions during night to true nee measured during night\n"
       f"night_hours_true_nee_vs_night_hours_dt_reco R2 {round(r2_score(night_hours_true_nee, night_hours_dt_reco), 2)},\n"
       f"night_hours_true_nee_vs_night_hours_nt_reco R2 {round(r2_score(night_hours_true_nee, night_hours_nt_reco), 2)},"
       )
