@@ -964,6 +964,7 @@ def evaluate_single_model (gpp_inputs, reco_inputs, time, sw_in_raw, model_input
             sw_in_raw = sw_in_raw.to(device)
             gpp_pred = gpp_pred * sw_in_raw
             gpp_pred = torch.relu(gpp_pred)
+            sw_in_raw = sw_in_raw.cpu()
 
 
 
@@ -1542,6 +1543,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 # save_predictions = True
 save_location = (f"./model_predictions")
 save_str = (f"{save_location}/{site_name}_{run_type_str}.csv")
+all_predictions = all_predictions.cpu() # move to cpu before numpying.
 df = pd.DataFrame(all_predictions.numpy(), columns=all_preds_feature_names)
 df.to_csv(save_str, index=False)
 
