@@ -746,10 +746,13 @@ def prepare_data_using_csv (file_name, block_size):
     #    DT_GPP,NT_GPP,DT_RECO,NT_RECO will not be normalized as they are only used for metric calculation purposes
     #    The remaining raw features will be normalized later, once the gaps have been dealt with.
 
+    #REMARK #OKOCER
     # USDMG
     # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity", "WV"]
     # CADSM USSRR USEDN DON'T HAVE WV
-    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # USPLM DON'T HAVE TS_3 AND WV
+    measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, feature_name = load_data("data/{}".format(file_name), measured_features_raw)
     all_feature_names.extend(feature_name)
 
@@ -1134,10 +1137,12 @@ print(f"pre_processing: {pre_processing}\
 
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025 IGNORE
 # file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025 IGNORE
-file_name = "CADSM_nee_partition_202109170000_202505292359.csv" # 2021-2025
+# file_name = "CADSM_nee_partition_202109170000_202505292359.csv" # 2021-2025
 # file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
 # file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
 # file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
+file_name = "USPLM_nee_partition_201704130000_202012312359.csv" # 2017-2020
+# file_name = "USPLO_nee_partition_202206110000_202312312359.csv"
 site_name = get_first_5_letters(filename=file_name)
 # site_name = "temp"
 if site_name is None:
@@ -1204,10 +1209,13 @@ if drop_na:
 if normalize_raw_features:
     # all feature_names ['DOY_sin', 'DOY_cos', 'NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'WD_COS', 'WD_SIN', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
 
+    #REMARK #OKOCER
     # USDMG (does have WV)
     # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff', 'WV']
     # CADSM USSRR USEDN (don't have WV)
     raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    # USPLM doesn't have TS_3 and WV
+    raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, raw_feature_name = load_data("{}".format(clean_file_name), raw_feature_names)
     
@@ -1460,7 +1468,7 @@ all_predictions = torch.tensor
 sw_in_raw_and_nee_raw, _ = load_data("{}".format(clean_file_name), ['SW_IN', 'NEE'])
 all_preds_feature_names.extend(['SW_IN_RAW', 'NEE_RAW'])
 
-basic_info_tensor, feature_names = load_data("{}".format(normalized_file_name), ['Year', 'Month', 'Day', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO'])
+basic_info_tensor, feature_names = load_data("{}".format(normalized_file_name), ['Year', 'Month', 'Day', 'TIME', 'DT_GPP', 'NT_GPP', 'DT_RECO', 'NT_RECO'])
 all_preds_feature_names.extend(feature_names)
 
 all_predictions = torch.cat((sw_in_raw_and_nee_raw, basic_info_tensor), 1)
