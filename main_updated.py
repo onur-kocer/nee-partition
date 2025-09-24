@@ -1149,7 +1149,8 @@ print(f"pre_processing: {pre_processing}\
 # file_name = "USPLO_nee_partition_202206110000_202312312359.csv"
 # file_name = "CARBM_nee_partition_202206140000_202509122359.csv"
 # file_name = "USHPY_nee_partition_202201020000_202412312359.csv"
-file_name = "USSTJ_nee_partition_201801020000_202012312359.csv"
+# file_name = "USSTJ_nee_partition_201801020000_202012312359.csv"
+file_name = "USEDN_nee_partition_202001020000_202412312359.csv"
 site_name = get_first_5_letters(filename=file_name)
 # site_name = "temp"
 if site_name is None:
