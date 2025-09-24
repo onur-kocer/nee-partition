@@ -753,6 +753,10 @@ def prepare_data_using_csv (file_name, block_size):
     measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_3", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     # USPLM DON'T HAVE TS_3 AND WV
     # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "TS_4", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # USHPY DON'T HAVE TS_3, TS_4 AND WV
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "TS_2", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
+    # USSTJ DON'T HAVE TS_2, TS_3, TS_4 AND WV
+    # measured_features_raw = ["NEE", "SW_IN", "VPD", "TA", "TS_1", "WS", "DT_GPP", "NT_GPP", "DT_RECO", "NT_RECO", "Salinity"]
     measured_features_tensor_raw, feature_name = load_data("data/{}".format(file_name), measured_features_raw)
     all_feature_names.extend(feature_name)
 
@@ -1143,7 +1147,9 @@ print(f"pre_processing: {pre_processing}\
 # file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
 # file_name = "USPLM_nee_partition_201704130000_202012312359.csv" # 2017-2020
 # file_name = "USPLO_nee_partition_202206110000_202312312359.csv"
-file_name = "CARBM_nee_partition_202206140000_202509122359.csv"
+# file_name = "CARBM_nee_partition_202206140000_202509122359.csv"
+# file_name = "USHPY_nee_partition_202201020000_202412312359.csv"
+file_name = "USSTJ_nee_partition_201801020000_202012312359.csv"
 site_name = get_first_5_letters(filename=file_name)
 # site_name = "temp"
 if site_name is None:
@@ -1217,6 +1223,10 @@ if normalize_raw_features:
     raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # USPLM doesn't have TS_3 and WV
     # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'TS_4', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    # USHPY doesn't have TS_3 TS_4 and WV
+    # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'TS_2', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
+    # USSTJ doesn't have TS_2 TS_3 TS_4 and WV
+    # raw_feature_names =  ['NEE', 'SW_IN', 'VPD', 'TA', 'TS_1', 'WS', 'PotRad', 'PotRadHalfHourlyDiff', 'PotRadDailyAvg', 'PotRadDailyDiff', 'GPP_PROX', 'NIGHTLY_NEE_AVG', 'Salinity', 'WTD', 'WTD_HalfHourlyDiff', 'WTD_DailyAvg', 'WTD_DailyDiff']
     # WHEN NORMALIZING RAW VALUES, IF YOUR DATA SET ALREADY HAS THE DOY_SIN AND DOY_COS, YOU WANT TO SET prep_doy_sin_cos TO FALSE.
     raw_features, raw_feature_name = load_data("{}".format(clean_file_name), raw_feature_names)
     
