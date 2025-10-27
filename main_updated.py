@@ -1603,7 +1603,8 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
                 f"RECO inputs: {RECO_INPUT_FEATURES}:")
     save_plot = True
     # prep the plot saving str
-    plot_saving_location = (f"./experiment_figures/{site_name}")
+    experiment_type = "/day_split_exps"
+    plot_saving_location = (f".{experiment_type}/experiment_figures/{site_name}")
     plot_saving_str = (f"{plot_saving_location}/{site_name}_{run_type_str}_{experiment_id + 1}"
                     #    f"gpp_{'_'.join(GPP_INPUT_FEATURES)}_"
                     #    f"reco_{'_'.join(RECO_INPUT_FEATURES)}"
@@ -1630,7 +1631,7 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 
 # Save all predictions to the file
 # save_predictions = True
-save_location = (f"./model_predictions")
+save_location = (f".{experiment_type}/model_predictions")
 save_str = (f"{save_location}/{site_name}_{run_type_str}.csv")
 all_predictions = all_predictions.cpu() # move to cpu before numpying.
 df = pd.DataFrame(all_predictions.numpy(), columns=all_preds_feature_names)
