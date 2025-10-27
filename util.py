@@ -1,713 +1,153 @@
-def compare_two_models ():
-  print(f"Hello!")
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.stattools import acf
 
-results_dict = {
-    "experiment_0": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.38,
-                "rmse": 5.62
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.35,
-                "rmse": 5.7
-            },
-            "DT_RECO_vs_model": {
-                "r2": -4.67,
-                "rmse": 5.53
-            },
-            "NT_RECO_vs_model": {
-                "r2": -6.22,
-                "rmse": 5.42
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_1": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.8,
-                "rmse": 3.17
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.78,
-                "rmse": 3.35
-            },
-            "DT_RECO_vs_model": {
-                "r2": -0.64,
-                "rmse": 2.97
-            },
-            "NT_RECO_vs_model": {
-                "r2": -1.23,
-                "rmse": 3.01
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_2": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.95,
-                "rmse": 1.58
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.94,
-                "rmse": 1.8
-            },
-            "DT_RECO_vs_model": {
-                "r2": 0.83,
-                "rmse": 0.96
-            },
-            "NT_RECO_vs_model": {
-                "r2": 0.83,
-                "rmse": 0.84
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_3": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.89,
-                "rmse": 2.33
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.87,
-                "rmse": 2.57
-            },
-            "DT_RECO_vs_model": {
-                "r2": 0.26,
-                "rmse": 2.0
-            },
-            "NT_RECO_vs_model": {
-                "r2": -0.02,
-                "rmse": 2.03
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_4": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.96,
-                "rmse": 1.52
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.94,
-                "rmse": 1.73
-            },
-            "DT_RECO_vs_model": {
-                "r2": 0.82,
-                "rmse": 0.97
-            },
-            "NT_RECO_vs_model": {
-                "r2": 0.82,
-                "rmse": 0.85
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_5": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.18,
-                "rmse": 6.48
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.1,
-                "rmse": 6.71
-            },
-            "DT_RECO_vs_model": {
-                "r2": -6.95,
-                "rmse": 6.55
-            },
-            "NT_RECO_vs_model": {
-                "r2": -9.77,
-                "rmse": 6.61
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_6": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": -1.53,
-                "rmse": 11.37
-            },
-            "NT_GPP_vs_model": {
-                "r2": -1.68,
-                "rmse": 11.58
-            },
-            "DT_RECO_vs_model": {
-                "r2": -23.25,
-                "rmse": 11.43
-            },
-            "NT_RECO_vs_model": {
-                "r2": -31.75,
-                "rmse": 11.54
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_7": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.4,
-                "rmse": 5.56
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.34,
-                "rmse": 5.74
-            },
-            "DT_RECO_vs_model": {
-                "r2": -4.75,
-                "rmse": 5.57
-            },
-            "NT_RECO_vs_model": {
-                "r2": -6.71,
-                "rmse": 5.6
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_8": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "WD_COS",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.86,
-                "rmse": 2.65
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.82,
-                "rmse": 2.97
-            },
-            "DT_RECO_vs_model": {
-                "r2": -0.07,
-                "rmse": 2.4
-            },
-            "NT_RECO_vs_model": {
-                "r2": -0.6,
-                "rmse": 2.55
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_9": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_SIN",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.76,
-                "rmse": 3.52
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.72,
-                "rmse": 3.74
-            },
-            "DT_RECO_vs_model": {
-                "r2": -1.08,
-                "rmse": 3.35
-            },
-            "NT_RECO_vs_model": {
-                "r2": -1.9,
-                "rmse": 3.43
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_10": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "GPP_PROX"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.89,
-                "rmse": 2.35
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.87,
-                "rmse": 2.6
-            },
-            "DT_RECO_vs_model": {
-                "r2": 0.1,
-                "rmse": 2.2
-            },
-            "NT_RECO_vs_model": {
-                "r2": -0.18,
-                "rmse": 2.19
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
-    },
-    "experiment_11": {
-        "run_type": "Custom",
-        "gpp_inputs": [
-            "SW_IN",
-            "VPD",
-            "TA",
-            "WTD",
-            "WS",
-            "PotRad",
-            "PotRadHalfHourlyDiff",
-            "PotRadDailyAvg",
-            "PotRadDailyDiff",
-            "WD_COS",
-            "WD_SIN"
-        ],
-        "reco_inputs": [
-            "DOY_sin",
-            "DOY_cos",
-            "TA",
-            "TS_1",
-            "TS_2",
-            "TS_3",
-            "TS_4",
-            "WTD",
-            "WS",
-            "WD_COS",
-            "WD_SIN",
-            "NIGHTLY_NEE_AVG"
-        ],
-        "metrics": {
-            "DT_GPP_vs_model": {
-                "r2": 0.94,
-                "rmse": 1.82
-            },
-            "NT_GPP_vs_model": {
-                "r2": 0.92,
-                "rmse": 2.01
-            },
-            "DT_RECO_vs_model": {
-                "r2": 0.7,
-                "rmse": 1.27
-            },
-            "NT_RECO_vs_model": {
-                "r2": 0.64,
-                "rmse": 1.22
-            },
-            "DT_GPP_vs_NT_GPP": {
-                "r2": 0.95,
-                "rmse": 1.55
-            },
-            "DT_RECO_vs_NT_RECO": {
-                "r2": 0.85,
-                "rmse": 1
-            }
-        }
+def calculate_acf (clean_file_name):
+    # ===============================================================
+    # LOAD AND PREPARE DATA
+    # ===============================================================
+    # use the clean_file_name as that one has the gaps.
+    df = pd.read_csv(clean_file_name)   # columns: Year, Month, Day, TIME, NEE
+    # other_features, other_feature_names = load_data("{}".format(processed_file_name), other_feature_names)
+    print(df)
+    df = df.sort_values(by=["Year", "Month", "Day", "TIME"]).reset_index(drop=True)
+
+    # Build datetime index
+    df["datetime"] = pd.to_datetime(df[["Year", "Month", "Day"]]) + \
+                    pd.to_timedelta(df["TIME"] * 60, unit="m")
+    df = df.set_index("datetime")
+
+    # Ensure half-hourly grid
+    expected_freq = "30T"
+    full_index = pd.date_range(df.index.min(), df.index.max(), freq=expected_freq)
+    s = df["NEE"].reindex(full_index)
+
+    # Identify missing data
+    is_missing = s.isna()
+
+    # ===============================================================
+    # SPLIT INTO CONTIGUOUS SEGMENTS
+    # ===============================================================
+    segments = []
+    current_segment = []
+
+    for val, missing in zip(s, is_missing):
+        if not missing:
+            current_segment.append(val)
+        else:
+            if current_segment:
+                segments.append(np.array(current_segment))
+                current_segment = []
+    if current_segment:
+        segments.append(np.array(current_segment))
+
+    # Optionally filter out very short fragments (<3 days)
+    # segments = [seg for seg in segments if len(seg) >= 3 * 48]
+
+    print(f"Found {len(segments)} contiguous segments.")
+    print(f"Mean segment length: {np.mean([len(x) for x in segments]):.0f} points")
+    print(f"Median segment length: {np.median([len(x) for x in segments]):.0f} points")
+    print(f"Mode segment length: {pd.Series([len(x) for x in segments]).mode().iloc[0]} points")
+    # ===============================================================
+    # Seg length trends
+    # ===============================================================
+
+    # Compute segment lengths
+    segment_lengths = np.array([len(x) for x in segments])
+
+    # Descriptive statistics
+    desc = pd.Series(segment_lengths).describe()
+    print("\nSegment length descriptives:")
+    print(desc)
+
+    # Frequency table (top 10)
+    freq_table = pd.Series(segment_lengths).value_counts().sort_index()
+    print("\nFrequency table (first 10 entries):")
+    print(freq_table.head(10))
+
+    # Plot histogram
+    plt.figure(figsize=(10, 5))
+    plt.hist(segment_lengths, bins=50, edgecolor='black', alpha=0.7)
+    plt.title("Distribution of Contiguous Segment Lengths")
+    plt.xlabel("Segment length (number of points)")
+    plt.ylabel("Frequency")
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.show()
+
+    # Optional: Cumulative distribution plot (CDF)
+    plt.figure(figsize=(10, 5))
+    sorted_lengths = np.sort(segment_lengths)
+    cdf = np.arange(1, len(sorted_lengths) + 1) / len(sorted_lengths)
+    plt.plot(sorted_lengths, cdf, lw=2)
+    plt.title("Cumulative Distribution of Segment Lengths")
+    plt.xlabel("Segment length (number of points)")
+    plt.ylabel("Cumulative proportion")
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.show()
+
+
+    # ===============================================================
+    # DEFINE MULTIPLE LAG WINDOWS
+    # ===============================================================
+    points_per_day = 48  # half-hours/day
+    lag_windows = {
+        "1 day": 1 * points_per_day,
+        "3 days": 3 * points_per_day,
+        # "1 week": 7 * points_per_day,
+        # "10 days": 10 * points_per_day,
+        # "14 days": 14 * points_per_day,
+        # "1 month (~30d)": 30 * points_per_day,
+        # "1.5 months (~45)": 45 * points_per_day,
+        # "3 months (~90d)": 90 * points_per_day,
+        # "1 year (~365d)": 365 * points_per_day,
     }
-}
-  
-# print(results_dict)
-for experiment_id in results_dict:
-  experiment = results_dict[experiment_id]
-  print(f""
-        # f"{experiment_id}\n"
-        # f"gpp inputs {'_'.join(experiment['gpp_inputs'])}\n"
-        # f"reco inputs {'_'.join(experiment['reco_inputs'])}\n"
-        f"{experiment['metrics']['DT_GPP_vs_model']['r2']},"
-        f"{experiment['metrics']['NT_GPP_vs_model']['r2']},"
-        f"{experiment['metrics']['DT_RECO_vs_model']['r2']},"
-        f"{experiment['metrics']['NT_RECO_vs_model']['r2']}"
-        # f"\n"
-        )
 
-list = ['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
+    # ===============================================================
+    # COMPUTE AND PLOT ACFs
+    # ===============================================================
+    plt.figure(figsize=(12, 6))
 
-for index in range(len(list)):
-  temp_list = list.copy()
-  temp_list.pop(index)
-  print(temp_list)
-"""
-['DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'WTD', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WS', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WD_COS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_SIN', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'NIGHTLY_NEE_AVG']
-['DOY_sin', 'DOY_cos', 'TA', 'TS_1', 'TS_2', 'TS_3', 'TS_4', 'WTD', 'WS', 'WD_COS', 'WD_SIN']
+    for label, max_lag in lag_windows.items():
+        acfs = []
+        for seg in segments:
+            if len(seg) > max_lag:
+                acf_vals = acf(seg, nlags=max_lag, fft=True)
+                acfs.append(acf_vals)
+        if len(acfs) == 0:
+            print(f"⚠️ No segments long enough for {label} (need > {max_lag} points)")
+            continue
 
-"""
+        mean_acf = np.mean(acfs, axis=0)
+        lags = np.arange(len(mean_acf))
+
+        plt.plot(lags / points_per_day, mean_acf, label=label)
+
+    plt.axhline(0, color='black', lw=0.7)
+    plt.xlabel("Lag (days)")
+    plt.ylabel("Mean ACF")
+    plt.title("ACF of NEE for Multiple Lag Windows")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # ===============================================================
+    # OPTIONAL: Report decorrelation lag for each window
+    # ===============================================================
+    threshold = 0.1
+    for label, max_lag in lag_windows.items():
+        acfs = []
+        for seg in segments:
+            if len(seg) > max_lag:
+                acf_vals = acf(seg, nlags=max_lag, fft=True)
+                acfs.append(acf_vals)
+        if len(acfs) == 0:
+            continue
+        mean_acf = np.mean(acfs, axis=0)
+        below = np.where(np.abs(mean_acf) < threshold)[0]
+        if len(below) > 0:
+            decor = below[0]
+            print(f"{label}: decorrelation lag ≈ {decor} half-hours ({decor/points_per_day:.2f} days)")
+        else:
+            print(f"{label}: ACF never dropped below {threshold} within {max_lag/points_per_day:.1f} days.")
+    
