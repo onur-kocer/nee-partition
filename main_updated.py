@@ -15,6 +15,8 @@ from datetime import datetime, timedelta
 import os
 # from torcheval.metrics import R2Score
 # from torchmetrics.functional import r2_score
+import util
+from util import calculate_acf
 
 class SNN_GPP_Tram(nn.Module):
     def __init__(self, input_dim, hidden_layer_size):
@@ -834,49 +836,104 @@ def load_and_clean_csv(file_path: str, block_size: int, drop_value: float = -999
 
     return clean_df
 
-def split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2, seed=42):
-    assert gpp_inputs.shape[0] == reco_inputs.shape[0] == true_nee.shape[0] == time.shape[0] == sw_in_raw.shape[0], "Inputs must have same number of rows"
 
+
+
+def split_data(
+    gpp_inputs, reco_inputs, true_nee, time, sw_in_raw,
+    Year, Month, Day,
+    train_ratio=0.6, val_ratio=0.2, test_ratio=0.2,
+    seed=42, split_by='point'  # options: 'point', 'day', 'week'
+):
+    """
+    Splits data into train/val/test sets either by data points, days, or weeks.
+
+    Args:
+        gpp_inputs, reco_inputs, true_nee, time, sw_in_raw: torch tensors (N,)
+        Year, Month, Day: arrays or tensors with same length as inputs
+        split_by: one of {'point', 'day', 'week'}
+        train_ratio, val_ratio, test_ratio: float ratios that sum to 1
+        seed: random seed for reproducibility
+    """
+
+    # --- Consistency check ---
     N = gpp_inputs.shape[0]
+    assert all(x.shape[0] == N for x in [reco_inputs, true_nee, time, sw_in_raw, Year, Month, Day]), \
+        "All inputs must have the same number of rows."
+
     torch.manual_seed(seed)
-    
-    # Shuffle indices
-    indices = torch.randperm(N)
+
+    # Convert torch tensors or lists to numpy arrays
+    def to_np(x):
+        if isinstance(x, torch.Tensor):
+            return x.cpu().numpy().flatten()
+        return x
+    # --- Create group IDs based on desired split type ---
+    if split_by == 'day':
+        df = pd.DataFrame({
+            'Year': to_np(Year),
+            'Month': to_np(Month),
+            'Day': to_np(Day)
+        })
+        groups = df.groupby(['Year', 'Month', 'Day']).ngroup()
+    elif split_by == 'week':
+        # Combine into a date and use ISO week numbers
+        df = pd.DataFrame({
+            'Year': to_np(Year),
+            'Month': to_np(Month),
+            'Day': to_np(Day)
+        })        
+        dates = pd.to_datetime(df[['Year', 'Month', 'Day']])
+        week_ids = dates.dt.isocalendar().week
+        groups = (df['Year'].astype(str) + '_' + week_ids.astype(str)).astype('category').cat.codes
+    else:
+        # Default: each point is its own group
+        # TODO not sure if this is working.
+        groups = torch.arange(N)
+
+    # --- Unique groups for splitting ---
+    unique_groups = torch.tensor(pd.unique(groups))
+    num_groups = len(unique_groups)
+
+    # Shuffle groups
+    perm = torch.randperm(num_groups)
+    unique_groups = unique_groups[perm]
 
     # Compute split sizes
-    n_train = int(N * train_ratio)
-    n_val = int(N * val_ratio)
-    n_test = N - n_train - n_val
+    n_train = int(num_groups * train_ratio)
+    n_val = int(num_groups * val_ratio)
+    n_test = num_groups - n_train - n_val
 
-    # Split indices
-    train_idx = indices[:n_train]
-    val_idx = indices[n_train:n_train + n_val]
-    test_idx = indices[n_train + n_val:]
+    # Assign groups
+    train_groups = unique_groups[:n_train]
+    val_groups = unique_groups[n_train:n_train + n_val]
+    test_groups = unique_groups[n_train + n_val:]
 
-    # Return split tensors
-    return {
-        'train': {
-            'gpp': gpp_inputs[train_idx],
-            'reco': reco_inputs[train_idx],
-            'nee': true_nee[train_idx],
-            'sw_in_raw': sw_in_raw[train_idx],
-            'time': time[train_idx]
-        },
-        'val': {
-            'gpp': gpp_inputs[val_idx],
-            'reco': reco_inputs[val_idx],
-            'nee': true_nee[val_idx],
-            'sw_in_raw': sw_in_raw[val_idx],
-            'time': time[val_idx]
-        },
-        'test': {
-            'gpp': gpp_inputs[test_idx],
-            'reco': reco_inputs[test_idx],
-            'nee': true_nee[test_idx],
-            'sw_in_raw': sw_in_raw[test_idx],
-            'time': time[test_idx]
+    # Map group IDs to indices
+    group_tensor = torch.tensor(groups)
+    train_idx = torch.isin(group_tensor, train_groups).nonzero(as_tuple=True)[0]
+    val_idx = torch.isin(group_tensor, val_groups).nonzero(as_tuple=True)[0]
+    test_idx = torch.isin(group_tensor, test_groups).nonzero(as_tuple=True)[0]
+
+    # --- Return split tensors ---
+    def subset(idx):
+        return {
+            'gpp': gpp_inputs[idx],
+            'reco': reco_inputs[idx],
+            'nee': true_nee[idx],
+            'sw_in_raw': sw_in_raw[idx],
+            'time': time[idx],
+            'year': Year[idx],
+            'month': Month[idx],
+            'day': Day[idx]
         }
+
+    return {
+        'train': subset(train_idx),
+        'val': subset(val_idx),
+        'test': subset(test_idx)
     }
+
 
 def get_first_5_letters(filename):
     """
@@ -1127,7 +1184,7 @@ hidden_size = 12
 ##############################################
 #### Use Tramontana model or Custom Model ####
 ##############################################
-tramontana_run = False
+tramontana_run = True
 run_type_str = get_run_type_str(tramontana_run=tramontana_run)
 
 print(f"pre_processing: {pre_processing}\
@@ -1141,12 +1198,12 @@ print(f"pre_processing: {pre_processing}\
 
 # file_name = "USEDN_nee_partition_201801020000_202512312359.csv" # non filled Salinity - 2018 to 2025 IGNORE
 # file_name = "USEDN_nee_partition_202001020000_202505222359.csv" # uses filled salinity - 2020 to 2025 IGNORE
-# file_name = "CADSM_nee_partition_202109170000_202505292359.csv" # 2021-2025
+file_name = "CADSM_nee_partition_202109170000_202505292359.csv" # 2021-2025
 # file_name = "USEDN_nee_partition_202001020000_202112312359.csv" # uses filled salinity - 2020 to 2021
 # file_name = "USSRR_nee_partition_201601020000_201712312359.csv" # uses filled salinity and NEE_PI_JSZ_MAD_RP_uStar_f - 2016-2017
 # file_name = "USDMG_nee_partition_202101020000_202412312359.csv"
 # file_name = "USPLM_nee_partition_201704130000_202012312359.csv" # 2017-2020
-file_name = "USPLO_nee_partition_202206110000_202312312359.csv"
+# file_name = "USPLO_nee_partition_202206110000_202312312359.csv"
 # file_name = "CARBM_nee_partition_202206140000_202509122359.csv"
 # file_name = "USHPY_nee_partition_202201020000_202412312359.csv"
 # file_name = "USSTJ_nee_partition_201801020000_202012312359.csv"
@@ -1303,6 +1360,10 @@ if observe_diurnal_variable_patterns:
     plt.title(f"WTD and TS over Hour of Day ({mean_or_median.capitalize()} ± 1 STD)")
     fig.tight_layout()
     plt.show()
+
+calculate_autocorrelation = False
+if calculate_autocorrelation:
+    calculate_acf(clean_file_name)
 
 
 if not run_experiments:
@@ -1496,6 +1557,9 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
     reco_inputs, reco_input_names = load_data("{}".format(normalized_file_name), RECO_INPUT_FEATURES)
     true_nee, true_nee_name = load_data("{}".format(normalized_file_name), NEE)
     time, time_name = load_data("{}".format(normalized_file_name), TIME)
+    year, _ = load_data("{}".format(normalized_file_name), ['Year'])
+    month, _ = load_data("{}".format(normalized_file_name), ['Month'])
+    day, _ = load_data("{}".format(normalized_file_name), ['Day'])
 
     print(f"gpp_input_names,  {gpp_input_names} \n"
         f"reco_input_names,  {reco_input_names} \n"
@@ -1509,7 +1573,11 @@ for experiment_id in range(len(GPP_INPUT_FEATURES_SETS)):
 
 
     # splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2)
-    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw, train_ratio=0.8, val_ratio=0.2, test_ratio=0)
+    splits = split_data(gpp_inputs, reco_inputs, true_nee, time, sw_in_raw,
+                        year, month, day,
+                        train_ratio=0.8, val_ratio=0.2, test_ratio=0,
+                        split_by='day')
+
 
     val_r2 = float('-inf')
     if train_models:
