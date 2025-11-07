@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import torch
 import matplotlib.pyplot as plt
 from statsmodels.tsa.stattools import acf
 
@@ -151,3 +152,136 @@ def calculate_acf (clean_file_name):
         else:
             print(f"{label}: ACF never dropped below {threshold} within {max_lag/points_per_day:.1f} days.")
     
+def split_data(
+    gpp_inputs, reco_inputs, true_nee, time, sw_in_raw,
+    Year, Month, Day,
+    train_ratio=0.6, val_ratio=0.2, test_ratio=0.2,
+    seed=42, split_by='point'  # options: 'point', 'day', 'week'
+):
+    """
+    Splits data into train/val/test sets either by data points, days, or weeks.
+
+    Args:
+        gpp_inputs, reco_inputs, true_nee, time, sw_in_raw: torch tensors (N,)
+        Year, Month, Day: arrays or tensors with same length as inputs
+        split_by: one of {'point', 'day', 'week'}
+        train_ratio, val_ratio, test_ratio: float ratios that sum to 1
+        seed: random seed for reproducibility
+    """
+
+    # --- Consistency check ---
+    N = gpp_inputs.shape[0]
+    assert all(x.shape[0] == N for x in [reco_inputs, true_nee, time, sw_in_raw, Year, Month, Day]), \
+        "All inputs must have the same number of rows."
+
+    torch.manual_seed(seed)
+
+    # Convert torch tensors or lists to numpy arrays
+    def to_np(x):
+        if isinstance(x, torch.Tensor):
+            return x.cpu().numpy().flatten()
+        return x
+    # --- Create group IDs based on desired split type ---
+    if split_by == 'day':
+        df = pd.DataFrame({
+            'Year': to_np(Year),
+            'Month': to_np(Month),
+            'Day': to_np(Day)
+        })
+        groups = df.groupby(['Year', 'Month', 'Day']).ngroup()
+    elif split_by == 'week':
+        # Combine into a date and use ISO week numbers
+        df = pd.DataFrame({
+            'Year': to_np(Year),
+            'Month': to_np(Month),
+            'Day': to_np(Day)
+        })        
+        dates = pd.to_datetime(df[['Year', 'Month', 'Day']])
+        week_ids = dates.dt.isocalendar().week
+        groups = (df['Year'].astype(str) + '_' + week_ids.astype(str)).astype('category').cat.codes
+    else:
+        # Default: each point is its own group
+        # TODO not sure if this is working.
+        groups = torch.arange(N)
+
+    # --- Unique groups for splitting ---
+    unique_groups = torch.tensor(pd.unique(groups))
+    num_groups = len(unique_groups)
+
+    # Shuffle groups
+    perm = torch.randperm(num_groups)
+    unique_groups = unique_groups[perm]
+
+    # Compute split sizes
+    n_train = int(num_groups * train_ratio)
+    n_val = int(num_groups * val_ratio)
+    n_test = num_groups - n_train - n_val
+
+    # Assign groups
+    train_groups = unique_groups[:n_train]
+    val_groups = unique_groups[n_train:n_train + n_val]
+    test_groups = unique_groups[n_train + n_val:]
+
+    # Map group IDs to indices
+    group_tensor = torch.tensor(groups)
+    train_idx = torch.isin(group_tensor, train_groups).nonzero(as_tuple=True)[0]
+    val_idx = torch.isin(group_tensor, val_groups).nonzero(as_tuple=True)[0]
+    test_idx = torch.isin(group_tensor, test_groups).nonzero(as_tuple=True)[0]
+
+    # --- Return split tensors ---
+    def subset(idx):
+        return {
+            'gpp': gpp_inputs[idx],
+            'reco': reco_inputs[idx],
+            'nee': true_nee[idx],
+            'sw_in_raw': sw_in_raw[idx],
+            'time': time[idx],
+            'year': Year[idx],
+            'month': Month[idx],
+            'day': Day[idx]
+        }
+
+    return {
+        'train': subset(train_idx),
+        'val': subset(val_idx),
+        'test': subset(test_idx)
+    }
+
+def filter_by_threshold(sw_in_raw, other_tensor, threshold=10):
+    """
+    Keep only rows where sw_in_raw <= threshold.
+    This will get return the night data.
+
+    sw_in_raw: 1D torch tensor of floats/ints
+    other_tensor: torch tensor (same first dimension as sw_in_raw)
+    threshold: numeric value
+
+    Returns:
+        sw_in_raw_filtered, other_tensor_filtered
+    """
+    mask = sw_in_raw <= threshold
+    return sw_in_raw[mask], other_tensor[mask]
+
+
+def unnormalize_features(X_norm: torch.Tensor, X_min: torch.Tensor, X_max: torch.Tensor) -> torch.Tensor:
+    """
+    Un-normalizes a normalized tensor using:
+        X = ((X_norm / 2) + 0.5) * (X_max - X_min) + X_min
+
+    Args:
+        X_norm (torch.Tensor): Normalized tensor of shape [N, D]
+        X_min (torch.Tensor): Minimums per feature [D]
+        X_max (torch.Tensor): Maximums per feature [D]
+
+    Returns:
+        X (torch.Tensor): Un-normalized tensor of shape [N, D]
+    """
+    # Make sure all data is on the same device before any computation:
+    device = X_norm.device
+    X_min = X_min.to(device)
+    X_max = X_max.to(device)
+
+    x_abs_max = torch.maximum(abs(X_min), abs(X_max)).clamp(min=1e-8)
+    X = X_norm * x_abs_max
+
+    return X
