@@ -141,6 +141,10 @@ def bootstrap_evaluation(
         _, true_nee_night = filter_by_threshold(test_sw_in, raw_test_set_nee, threshold=10)
         _, pred_nee_night = filter_by_threshold(test_sw_in, nee_pred, threshold=10)
 
+        # Ensure both are on CPU for consistent calculation
+        pred_nee_night = pred_nee_night.detach().cpu()
+        true_nee_night = true_nee_night.detach().cpu()
+
         # --- RMSE_night ---
         rmse_night = torch.sqrt(torch.mean((pred_nee_night - true_nee_night) ** 2)).item()
 
