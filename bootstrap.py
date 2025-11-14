@@ -65,7 +65,10 @@ def bootstrap_evaluation(
 
     print(f"Bootstrapping {num_bootstraps} models on {device.upper()} ...")
 
+
     for b in range(num_bootstraps):
+        # Use the bootstrap iteration number as the random seed for reproducibility of bootstrap resamples
+        torch.manual_seed(b + 42)
         print(f"→ Bootstrap {b+1}/{num_bootstraps}")
 
         # --- Resample train indices ---
