@@ -33,7 +33,8 @@ def bootstrap_evaluation(
     run_type_str="DEMO",
     num_bootstraps=200,
     save_dir="./bootstrap_results",
-    device="cuda" if torch.cuda.is_available() else "cpu"
+    device="cuda" if torch.cuda.is_available() else "cpu",
+    experiment_id = "0",
 ):
     """
     Perform bootstrapping on training data and evaluate on a fixed test set.
@@ -58,7 +59,6 @@ def bootstrap_evaluation(
 
     # Prepare save dir
     os.makedirs(save_dir, exist_ok=True)
-    results_path = os.path.join(save_dir, f"{site_name}_bootstrap_results.csv")
 
     # Prepare storage
     all_results = []
@@ -153,13 +153,9 @@ def bootstrap_evaluation(
             "nee_mean": torch.mean(nee_pred).item(),
         })
 
-        # Save interim every 20 iterations
-        if (b + 1) % 20 == 0:
-            pd.DataFrame(all_results).to_csv(results_path, index=False)
 
     # Final save
     df_results = pd.DataFrame(all_results)
-    df_results.to_csv(results_path, index=False)
 
     # --- Compute statistics ---
     mean_rmse, ci_rmse = bootstrap_confidence_interval(df_results["rmse_night"])
@@ -168,7 +164,6 @@ def bootstrap_evaluation(
     mean_nee, ci_nee = bootstrap_confidence_interval(df_results["nee_mean"])
 
     print("\n✅ Bootstrapping complete.")
-    print(f"Results saved to {results_path}")
 
     summary = {
         "RMSE_night": (mean_rmse, ci_rmse),
@@ -183,4 +178,43 @@ def bootstrap_evaluation(
     print(f"RECO Mean  = {mean_reco:.3f}, 95% CI = [{ci_reco[0]:.3f}, {ci_reco[1]:.3f}]")
     print(f"NEE Mean   = {mean_nee:.3f}, 95% CI = [{ci_nee[0]:.3f}, {ci_nee[1]:.3f}]")
 
+    # ============================================================
+    # Append per-bootstrap results horizontally using experiment_id
+    # ============================================================
+    summary_path = os.path.join(save_dir, f"{site_name}_bootstrap_summary.csv")
+    # Ensure experiment_id is a string
+    exp = str(experiment_id)
+    # Convert current bootstrap results to a DataFrame (num_bootstraps rows)
+    df_current = pd.DataFrame(all_results)[["rmse_night", "gpp_mean", "reco_mean", "nee_mean"]]
+    df_current = df_current.rename(columns={
+        "rmse_night": f"rmse_night_{exp}",
+        "gpp_mean":   f"gpp_mean_{exp}",
+        "reco_mean":  f"reco_mean_{exp}",
+        "nee_mean":   f"nee_mean_{exp}",
+    })
+
+    if not os.path.exists(summary_path):
+        # First experiment: create the file
+        df_current.to_csv(summary_path, index=False)
+    elif (experiment_id == 1):
+        # If file exists, but just running the first experiment: create the file
+        df_current.to_csv(summary_path, index=False)
+    else:
+        # Load previous experiments
+        df_existing = pd.read_csv(summary_path)
+
+        # Safety check: ensure same number of rows
+        if len(df_existing) != len(df_current):
+            raise ValueError(
+                f"Bootstrap iteration mismatch: existing file has {len(df_existing)} rows "
+                f"but this experiment produced {len(df_current)} rows."
+            )
+
+        # Attach new columns horizontally
+        df_merged = pd.concat([df_existing, df_current], axis=1)
+
+        df_merged.to_csv(summary_path, index=False)
+
+    print(f"Horizontal multi-experiment summary saved to {summary_path}")
+    # ===============================================================
     return summary
